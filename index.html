@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ListPull | Blobby's Woodland Wonder & Nature Tech</title>
   <meta name="description" content="Discover Blobby's Woodland Wonder - a magical 3D puzzle merge game, and explore high-definition wildlife media by ListPull.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+  <link rel="icon" type="image/jpeg" href="favicon.ico">
+
   <style>
     :root {
       --bg-deep: #060b13;
@@ -40,17 +37,6 @@
       line-height: 1.6;
     }
 
-    #webgl-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* Ambient Glow Overlay */
     .ambient-glow {
       position: fixed;
       inset: 0;
@@ -65,7 +51,25 @@
       z-index: 2;
     }
 
-    /* Glass Navbar */
+    /* SVG Icon Helpers */
+    .icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      vertical-align: middle;
+      display: inline-block;
+    }
+
+    .icon-lg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Navbar */
     .navbar {
       position: sticky;
       top: 16px;
@@ -97,8 +101,8 @@
 
     .brand-badge {
       background: linear-gradient(135deg, var(--blobby-orange), var(--neon-cyan));
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -106,7 +110,7 @@
       box-shadow: 0 0 15px rgba(255, 140, 43, 0.6);
       color: #fff;
       font-weight: 900;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .nav-links {
@@ -145,21 +149,20 @@
       box-shadow: 0 0 30px rgba(255, 123, 0, 0.7);
     }
 
-    /* Container */
     .container {
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
-    /* Hero Section */
+    /* Hero */
     .hero {
-      padding: 90px 0 60px;
+      padding: 80px 0 60px;
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       gap: 50px;
       align-items: center;
-      min-height: calc(90vh - 80px);
+      min-height: calc(85vh - 80px);
     }
 
     .tag-badge {
@@ -210,7 +213,7 @@
     .btn-store {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       padding: 12px 24px;
       border-radius: 16px;
       text-decoration: none;
@@ -223,24 +226,18 @@
 
     .btn-store:hover {
       background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-3px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     }
 
     .btn-store.apple:hover {
       border-color: #00f2fe;
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.35);
     }
 
     .btn-store.google:hover {
       border-color: #10b981;
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
-    }
-
-    .btn-store-icon {
-      font-size: 1.6rem;
-      display: flex;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
     }
 
     .btn-store-text small {
@@ -277,7 +274,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Blobby Interactive Hologram Preview */
+    /* Blobby Mascot Hologram Card */
     .blobby-card-wrapper {
       position: relative;
       display: flex;
@@ -386,66 +383,7 @@
       margin: 10px auto 0;
     }
 
-    /* Interactive Gameplay Demo Board */
-    .interactive-demo-section {
-      padding: 90px 0;
-      position: relative;
-    }
 
-    .mini-game-container {
-      background: linear-gradient(145deg, rgba(16, 24, 40, 0.8), rgba(11, 15, 25, 0.95));
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 32px;
-      padding: 40px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(20px);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .board-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 20px;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .tile-isometric {
-      aspect-ratio: 1;
-      background: linear-gradient(135deg, rgba(255, 140, 43, 0.2), rgba(157, 78, 221, 0.25));
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      font-size: 1.8rem;
-      position: relative;
-    }
-
-    .tile-isometric:hover {
-      transform: scale(1.08) translateY(-4px);
-      border-color: var(--blobby-orange);
-      box-shadow: 0 0 20px rgba(255, 140, 43, 0.5);
-    }
-
-    .tile-isometric.matched {
-      animation: matchPop 0.4s ease forwards;
-    }
-
-    @keyframes matchPop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3) rotate(15deg); background: rgba(0, 242, 254, 0.5); }
-      100% { transform: scale(1); }
-    }
 
     .demo-controls {
       display: flex;
@@ -515,7 +453,7 @@
       font-size: 0.92rem;
     }
 
-    /* Wildlife Ecosystem Section (ListPull Brand) */
+    /* Wildlife Showcase */
     .wildlife-section {
       padding: 100px 0;
       position: relative;
@@ -543,7 +481,7 @@
     }
 
     .wildlife-media {
-      height: 240px;
+      height: 250px;
       position: relative;
       background-size: cover;
       background-position: center;
@@ -554,7 +492,7 @@
       position: absolute;
       top: 16px;
       left: 16px;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(8px);
       padding: 6px 14px;
       border-radius: 999px;
@@ -637,7 +575,6 @@
       gap: 20px;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
@@ -653,9 +590,7 @@
       .hero-metrics {
         justify-content: center;
       }
-      .mini-game-container {
-        grid-template-columns: 1fr;
-      }
+
       .nav-links {
         display: none;
       }
@@ -664,12 +599,11 @@
 </head>
 <body>
 
-  <!-- Background 3D Particles / Ambient Canvas -->
-  <canvas id="webgl-canvas"></canvas>
+
   <div class="ambient-glow"></div>
 
   <div class="content-wrapper">
-    <!-- Navbar -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
       <a href="#" class="brand-logo">
         <div class="brand-badge">L</div>
@@ -677,8 +611,6 @@
       </a>
       <ul class="nav-links">
         <li><a href="#game">Blobby's Wonder</a></li>
-        <li><a href="#play">Mini-Game Demo</a></li>
-        <li><a href="#features">Key Features</a></li>
         <li><a href="#wildlife">Wildlife Media</a></li>
         <li><a href="#community">Community</a></li>
       </ul>
@@ -692,7 +624,7 @@
       <section class="hero" id="game">
         <div class="hero-text">
           <div class="tag-badge">
-            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+            <svg class="icon" viewBox="0 0 24 24" style="width: 15px; height: 15px;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
             Featured Release • 5.0 Rating
           </div>
           <h1 class="hero-title">
@@ -704,18 +636,14 @@
 
           <div class="store-buttons">
             <a href="https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429" target="_blank" rel="noopener noreferrer" class="btn-store apple">
-              <div class="btn-store-icon">
-                <i data-lucide="apple"></i>
-              </div>
+              <svg class="icon icon-lg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.74 1.03-1.77.91-2.8-.88.04-1.95.59-2.58 1.33-.56.65-.95 1.7-1.01 2.72.99.08 2.07-.51 2.68-1.25z"/></svg>
               <div class="btn-store-text">
                 <small>Download on the</small>
                 <span>Apple App Store</span>
               </div>
             </a>
             <a href="https://play.google.com/store/apps/details?id=com.listpull.matchblock4" target="_blank" rel="noopener noreferrer" class="btn-store google">
-              <div class="btn-store-icon">
-                <i data-lucide="play"></i>
-              </div>
+              <svg class="icon icon-lg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               <div class="btn-store-text">
                 <small>Get it on</small>
                 <span>Google Play</span>
@@ -739,17 +667,17 @@
           </div>
         </div>
 
-        <!-- Blobby Mascot Spotlight -->
+        <!-- Mascot Spotlight Card -->
         <div class="blobby-card-wrapper">
           <div class="blobby-hologram">
             <div class="blobby-avatar-glow"></div>
-            <img src="blobby-no-bg.png" alt="Blobby character" class="blobby-img" onerror="this.src='blobby-no-bg.png'">
+            <img src="blobby-no-bg.png" alt="Blobby character" class="blobby-img" onerror="this.src='blobby-promo-cut.png'">
             <div class="blobby-info">
               <h4>Meet Blobby</h4>
-              <p>Your cheerful woodland farmer & builder</p>
+              <p>Your cheerful woodland alchemist & builder</p>
               <div class="gameplay-pill-bar">
                 <span class="game-pill">Build</span>
-                <span class="game-pill">Merge 3</span>
+                <span class="game-pill">Merge</span>
                 <span class="game-pill">Sort</span>
                 <span class="game-pill">Explore</span>
               </div>
@@ -757,69 +685,28 @@
           </div>
         </div>
       </section>
+        <!-- Social Community Channels -->
+        <div class="social-showcase" id="community">
+          <h3 style="font-size: 1.8rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">Join 150,000+ Nature Enthusiasts</h3>
+          <p style="color: var(--text-muted); margin-top: 6px;">Connect with ListPull across all major streaming and social networks.</p>
 
-      <!-- Interactive Mini-Game Section -->
-      <section class="interactive-demo-section" id="play">
-        <div class="section-head">
-          <h2>Interactive Match & Merge Demo</h2>
-          <p>Tap matching creatures to merge them and free them into the sanctuary!</p>
-        </div>
-
-        <div class="mini-game-container">
-          <div class="board-grid" id="gameGrid">
-            <!-- Dynamically populated isometric tiles -->
-          </div>
-          <div class="demo-controls">
-            <div class="score-badge">
-              <i data-lucide="trophy" style="color: #ffaa5a;"></i>
-              <div>
-                <span style="display:block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Wildlife Score</span>
-                <span class="score-value" id="scoreDisplay">0</span>
-              </div>
-            </div>
-            <h3 style="font-size: 1.5rem; font-weight: 700;">Tactical Match System</h3>
-            <p style="color: var(--text-muted);">
-              Experience the satisfying rhythm of removing blocking pieces, clustering wildlife units, and unleashing cascades on multi-tiered isometric blocks.
-            </p>
-            <div style="display: flex; gap: 12px;">
-              <button id="resetDemoBtn" style="padding: 12px 24px; border-radius: 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--glass-border); color: #fff; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Shuffle Grid
-              </button>
-              <a href="https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429" target="_blank" rel="noopener noreferrer" style="padding: 12px 24px; border-radius: 12px; background: var(--blobby-orange); color: #fff; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
-                Play Full Game <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
-              </a>
-            </div>
+          <div class="social-channels">
+            <a href="https://www.instagram.com/listpull/" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram
+            </a>
+            <a href="https://www.youtube.com/@listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg> YouTube
+            </a>
+            <a href="https://www.tiktok.com/@listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg> TikTok
+            </a>
+            <a href="https://www.facebook.com/listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook
+            </a>
           </div>
         </div>
-      </section>
 
-      <!-- Core Game Features -->
-      <section class="features-section" id="features">
-        <div class="section-head">
-          <h2>Engineered for Wonder</h2>
-          <p>Carefully balanced physics, vibrant glowing visuals, and rewarding progression.</p>
-        </div>
-
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon"><i data-lucide="layers"></i></div>
-            <h3>Multi-Tier Isometric Boards</h3>
-            <p>Strategically peel away top-layer animals to uncover hidden paths and cascading match combos.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon"><i data-lucide="home"></i></div>
-            <h3>Woodland Sanctuary Village</h3>
-            <p>Upgrade cozy treetop houses, unlock glowing lanterns, and expand mystical floating islands.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon"><i data-lucide="feather"></i></div>
-            <h3>Diverse Wildlife Companions</h3>
-            <p>Interact with songbirds, foxes, and rare endangered species inspired by real-world wildlife research.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ListPull Wildlife Brand & Media Section -->
+      <!-- ListPull Wildlife Media Grid -->
       <section class="wildlife-section" id="wildlife">
         <div class="section-head">
           <h2>Powered by ListPull Wildlife Media</h2>
@@ -828,65 +715,46 @@
 
         <div class="wildlife-grid">
           <div class="wildlife-card">
-            <div class="wildlife-media" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('wildlife.jpg');">
+            <div class="wildlife-media" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('magnific-5h1S5Pe2As9h5lGYfbxQ-IMG_2709-min.jpeg');">
               <span class="wildlife-badge">Instagram • 154K</span>
             </div>
             <div class="wildlife-content">
               <h3>High-Definition Media</h3>
               <p>Capturing the raw majesty of predatory felines, bears, and rare avian biodiversity across the globe.</p>
               <a href="https://www.instagram.com/listpull/" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                Explore Instagram <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                Explore Instagram <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
           </div>
 
           <div class="wildlife-card">
-            <div class="wildlife-media" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('blobby-promo-cut.png');">
+            <div class="wildlife-media" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('wildlife.jpg');">
               <span class="wildlife-badge">Conservation & Gaming</span>
             </div>
             <div class="wildlife-content">
               <h3>Art Meets Living Nature</h3>
               <p>Every download of Blobby's Woodland Wonder supports ListPull's creative mission to advocate for global fauna.</p>
               <a href="https://listpull.com" target="_blank" rel="noopener noreferrer" style="color: var(--blobby-orange); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                Visit listpull.com <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                Visit listpull.com <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
           </div>
 
           <div class="wildlife-card">
-            <div class="wildlife-media" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('magnific-5h1S5Pe2As9h5lGYfbxQ-IMG_2709-min.jpeg');">
+            <div class="wildlife-media" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('blobby-promo-cut.png'), url('blobby-promo.png');">
               <span class="wildlife-badge">Cross-Platform</span>
             </div>
             <div class="wildlife-content">
               <h3>Ecosystem Synergy</h3>
               <p>Follow our video shorts, interactive apps, and community stories across social media channels.</p>
               <a href="https://www.youtube.com/@listpull" target="_blank" rel="noopener noreferrer" style="color: var(--neon-purple); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                Watch on YouTube <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                Watch on YouTube <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Social Community Channels -->
-        <div class="social-showcase" id="community">
-          <h3 style="font-size: 1.8rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">Join 150,000+ Nature Enthusiasts</h3>
-          <p style="color: var(--text-muted); margin-top: 6px;">Connect with ListPull across all major streaming and social networks.</p>
 
-          <div class="social-channels">
-            <a href="https://www.instagram.com/listpull/" target="_blank" rel="noopener noreferrer" class="social-btn">
-              <i data-lucide="instagram"></i> Instagram
-            </a>
-            <a href="https://www.youtube.com/@listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
-              <i data-lucide="youtube"></i> YouTube
-            </a>
-            <a href="https://www.tiktok.com/@listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
-              <i data-lucide="video"></i> TikTok
-            </a>
-            <a href="https://www.facebook.com/listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
-              <i data-lucide="facebook"></i> Facebook
-            </a>
-          </div>
-        </div>
       </section>
     </main>
 
@@ -903,120 +771,6 @@
     </footer>
   </div>
 
-  <script>
-    // Initialize Lucide Icons
-    lucide.createIcons();
 
-    // Three.js Interactive Starfield / Ambient Particle Background
-    const canvas = document.getElementById('webgl-canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 80;
-
-    // Particle Cloud
-    const particleCount = 450;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-
-    const colorA = new THREE.Color('#ff8c2b');
-    const colorB = new THREE.Color('#00f2fe');
-    const colorC = new THREE.Color('#9d4edd');
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 160;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 160;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 120;
-
-      const choice = Math.random();
-      const c = choice < 0.4 ? colorA : (choice < 0.7 ? colorB : colorC);
-      colors[i * 3] = c.r;
-      colors[i * 3 + 1] = c.g;
-      colors[i * 3 + 2] = c.b;
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    const material = new THREE.PointsMaterial({
-      size: 2.2,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.7,
-      blending: THREE.AdditiveBlending
-    });
-
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-
-    // Mouse Parallax
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
-    });
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      particles.rotation.y += 0.001;
-      particles.rotation.x += 0.0005;
-
-      camera.position.x += (mouseX - camera.position.x) * 0.05;
-      camera.position.y += (-mouseY - camera.position.y) * 0.05;
-      camera.lookAt(scene.position);
-
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // Interactive Mini Game Logic
-    const animals = ['🐥', '🦉', '🦊', '🌸', '🍄'];
-    let score = 0;
-    const grid = document.getElementById('gameGrid');
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    const resetBtn = document.getElementById('resetDemoBtn');
-
-    function populateGrid() {
-      grid.innerHTML = '';
-      for (let i = 0; i < 16; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'tile-isometric';
-        const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
-        tile.textContent = randomAnimal;
-        tile.dataset.type = randomAnimal;
-
-        tile.addEventListener('click', () => {
-          tile.classList.add('matched');
-          score += 150;
-          scoreDisplay.textContent = score.toLocaleString();
-          setTimeout(() => {
-            tile.textContent = animals[Math.floor(Math.random() * animals.length)];
-            tile.dataset.type = tile.textContent;
-            tile.classList.remove('matched');
-          }, 350);
-        });
-
-        grid.appendChild(tile);
-      }
-    }
-
-    resetBtn.addEventListener('click', () => {
-      score = 0;
-      scoreDisplay.textContent = '0';
-      populateGrid();
-    });
-
-    populateGrid();
-  </script>
 </body>
 </html>
