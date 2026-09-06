@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | ListPull</title>
+<meta
+  name="description"
+  content="Contact ListPull for support, business inquiries, or feedback."
+>
+  <link rel="icon" type="image/jpeg" href="/favicon.ico">
+
+  <style>
+    :root {
+      --bg-deep: #060b13;
+      --bg-dark: #0a111e;
+      --blobby-orange: #ff8c2b;
+      --blobby-glow: #ff5500;
+      --neon-cyan: #00f2fe;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --glass-bg: rgba(15, 23, 42, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-card: rgba(26, 35, 54, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 80% 15%, rgba(255, 140, 43, 0.15), transparent 35%),
+        radial-gradient(circle at 10% 80%, rgba(0, 242, 254, 0.10), transparent 42%);
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: min(100% - 48px, 940px);
+      margin: 0 auto;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 16px 24px;
+      padding: 14px 28px;
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .brand-badge {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blobby-orange), var(--neon-cyan));
+      box-shadow: 0 0 15px rgba(255, 140, 43, 0.6);
+      color: #fff;
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .back-link:hover,
+    .back-link:focus-visible {
+      color: #fff;
+    }
+
+    .legal-page {
+      padding: 62px 0 88px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 6px 14px;
+      border: 1px solid rgba(255, 140, 43, 0.4);
+      border-radius: 999px;
+      background: rgba(255, 140, 43, 0.12);
+      color: #ffb56e;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 750px;
+      margin-bottom: 14px;
+      font-size: clamp(2.35rem, 6vw, 4.3rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ff9e44, #ff5e36 45%, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-intro {
+      max-width: 720px;
+      margin-bottom: 38px;
+      color: var(--text-muted);
+      font-size: 1.08rem;
+    }
+
+    .updated {
+      margin-bottom: 28px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .legal-card {
+      padding: clamp(24px, 4vw, 46px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      background: var(--glass-card);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .legal-card h2 {
+      margin: 38px 0 12px;
+      color: #fff;
+      font-size: 1.42rem;
+      line-height: 1.25;
+    }
+
+    .legal-card h2:first-child {
+      margin-top: 0;
+    }
+
+    .legal-card h3 {
+      margin: 24px 0 8px;
+      color: #fff;
+      font-size: 1.08rem;
+    }
+
+    .legal-card p,
+    .legal-card li {
+      color: var(--text-muted);
+    }
+
+    .legal-card p + p {
+      margin-top: 14px;
+    }
+
+    .legal-card ul {
+      margin: 12px 0 0 22px;
+    }
+
+    .legal-card li + li {
+      margin-top: 8px;
+    }
+
+    .legal-card a {
+      color: var(--neon-cyan);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .legal-card a:hover,
+    .legal-card a:focus-visible {
+      text-decoration: underline;
+    }
+
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--glass-border);
+      background: #04070d;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      color: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .navbar {
+        margin: 12px;
+        padding: 12px 18px;
+      }
+
+      .container {
+        width: min(100% - 32px, 940px);
+      }
+
+      .legal-page {
+        padding-top: 46px;
+      }
+
+      .footer-inner,
+      .footer-links {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient-glow"></div>
+
+  <div class="content-wrapper">
+    <nav class="navbar" aria-label="Primary navigation">
+      <a class="brand-logo" href="/">
+        <span class="brand-badge">L</span>
+        <span>ListPull</span>
+      </a>
+
+      <a class="back-link" href="/">← Back to home</a>
+    </nav>
+
+    <main class="container legal-page">
+      <section>
+  <span class="eyebrow">Support & inquiries</span>
+  <h1>Contact <span class="gradient-text">ListPull</span></h1>
+  <p class="page-intro">
+    Need help with Blobby’s Woodland Wonder, have a question about ListPull
+    wildlife media, or want to discuss a partnership? Send us a message.
+  </p>
+
+  <article class="legal-card">
+    <h2>Email us</h2>
+    <p>
+      For general questions, support, privacy requests, or business inquiries,
+      contact:
+    </p>
+
+    <p>
+      <a href="mailto:support@yourdomain.com">support@yourdomain.com</a>
+    </p>
+
+    <h2>Include these details for support</h2>
+    <ul>
+      <li>Your device type and operating-system version.</li>
+      <li>The game or ListPull service you are contacting us about.</li>
+      <li>A clear description of the issue, including steps to reproduce it when applicable.</li>
+      <li>Screenshots or screen recordings, if they help explain the issue.</li>
+    </ul>
+
+    <h2>Social channels</h2>
+    <p>
+      You can also follow ListPull on
+      <a href="https://www.instagram.com/listpull" target="_blank" rel="noopener noreferrer">Instagram</a>,
+      <a href="https://www.youtube.com/listpull" target="_blank" rel="noopener noreferrer">YouTube</a>,
+      <a href="https://www.tiktok.com/listpull" target="_blank" rel="noopener noreferrer">TikTok</a>,
+      and
+      <a href="https://www.facebook.com/listpull" target="_blank" rel="noopener noreferrer">Facebook</a>.
+    </p>
+
+    <h2>Privacy requests</h2>
+    <p>
+      For a privacy-related request, please include “Privacy Request” in the
+      email subject and describe the request. Review our
+      <a href="/policies/privacy-policy/">Privacy Policy</a> for more details.
+    </p>
+  </article>
+</section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div><strong>ListPull, LLC</strong> · High-Quality Wildlife Media · Interactive Gaming</div>
+
+        <nav class="footer-links" aria-label="Legal and support">
+          <a href="/contact/">Contact Us</a>
+          <a href="/policies/privacy-policy/">Privacy Policy</a>
+          <a href="/policies/terms-of-service/">Terms of Service</a>
+        </nav>
+
+        <div>© 2026 ListPull. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

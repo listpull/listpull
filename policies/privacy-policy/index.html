@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | ListPull</title>
+    <meta
+    name="description"
+    content="ListPull's Privacy Policy for its website, wildlife media, and Blobby's Woodland Wonder."
+    >
+  <link rel="icon" type="image/jpeg" href="/favicon.ico">
+
+  <style>
+    :root {
+      --bg-deep: #060b13;
+      --bg-dark: #0a111e;
+      --blobby-orange: #ff8c2b;
+      --blobby-glow: #ff5500;
+      --neon-cyan: #00f2fe;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --glass-bg: rgba(15, 23, 42, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-card: rgba(26, 35, 54, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 80% 15%, rgba(255, 140, 43, 0.15), transparent 35%),
+        radial-gradient(circle at 10% 80%, rgba(0, 242, 254, 0.10), transparent 42%);
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: min(100% - 48px, 940px);
+      margin: 0 auto;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 16px 24px;
+      padding: 14px 28px;
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .brand-badge {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blobby-orange), var(--neon-cyan));
+      box-shadow: 0 0 15px rgba(255, 140, 43, 0.6);
+      color: #fff;
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .back-link:hover,
+    .back-link:focus-visible {
+      color: #fff;
+    }
+
+    .legal-page {
+      padding: 62px 0 88px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 6px 14px;
+      border: 1px solid rgba(255, 140, 43, 0.4);
+      border-radius: 999px;
+      background: rgba(255, 140, 43, 0.12);
+      color: #ffb56e;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 750px;
+      margin-bottom: 14px;
+      font-size: clamp(2.35rem, 6vw, 4.3rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ff9e44, #ff5e36 45%, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-intro {
+      max-width: 720px;
+      margin-bottom: 38px;
+      color: var(--text-muted);
+      font-size: 1.08rem;
+    }
+
+    .updated {
+      margin-bottom: 28px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .legal-card {
+      padding: clamp(24px, 4vw, 46px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      background: var(--glass-card);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .legal-card h2 {
+      margin: 38px 0 12px;
+      color: #fff;
+      font-size: 1.42rem;
+      line-height: 1.25;
+    }
+
+    .legal-card h2:first-child {
+      margin-top: 0;
+    }
+
+    .legal-card h3 {
+      margin: 24px 0 8px;
+      color: #fff;
+      font-size: 1.08rem;
+    }
+
+    .legal-card p,
+    .legal-card li {
+      color: var(--text-muted);
+    }
+
+    .legal-card p + p {
+      margin-top: 14px;
+    }
+
+    .legal-card ul {
+      margin: 12px 0 0 22px;
+    }
+
+    .legal-card li + li {
+      margin-top: 8px;
+    }
+
+    .legal-card a {
+      color: var(--neon-cyan);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .legal-card a:hover,
+    .legal-card a:focus-visible {
+      text-decoration: underline;
+    }
+
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--glass-border);
+      background: #04070d;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      color: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .navbar {
+        margin: 12px;
+        padding: 12px 18px;
+      }
+
+      .container {
+        width: min(100% - 32px, 940px);
+      }
+
+      .legal-page {
+        padding-top: 46px;
+      }
+
+      .footer-inner,
+      .footer-links {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient-glow"></div>
+
+  <div class="content-wrapper">
+    <nav class="navbar" aria-label="Primary navigation">
+      <a class="brand-logo" href="/">
+        <span class="brand-badge">L</span>
+        <span>ListPull</span>
+      </a>
+
+      <a class="back-link" href="/">← Back to home</a>
+    </nav>
+
+    <main class="container legal-page">
+      <section>
+  <span class="eyebrow">Legal</span>
+  <h1>Privacy <span class="gradient-text">Policy</span></h1>
+  <p class="page-intro">
+    This policy explains how ListPull, LLC handles information when you visit
+    our website, interact with our content, or use our games and related services.
+  </p>
+  <p class="updated">Last updated: September 6, 2026</p>
+
+  <article class="legal-card">
+    <h2>1. Who we are</h2>
+    <p>
+      ListPull, LLC (“ListPull,” “we,” “us,” or “our”) operates the ListPull
+      website, wildlife-media content, and related interactive experiences,
+      including Blobby’s Woodland Wonder.
+    </p>
+
+    <h2>2. Information we collect</h2>
+    <p>
+      We may collect information in the following ways:
+    </p>
+    <ul>
+      <li>
+        Information you provide directly, such as your name, email address,
+        and the contents of a message you send to us.
+      </li>
+      <li>
+        Technical and usage information, such as device type, browser type,
+        IP address, pages viewed, approximate location derived from IP address,
+        referral source, and interactions with our website.
+      </li>
+      <li>
+        Information collected by app stores, platforms, or service providers
+        when you download, purchase, or use a game or platform feature.
+      </li>
+    </ul>
+
+    <h2>3. How we use information</h2>
+    <p>We may use information to:</p>
+    <ul>
+      <li>Operate, maintain, secure, and improve our website, games, and services.</li>
+      <li>Respond to support questions, feedback, or other messages you send us.</li>
+      <li>Understand site and product performance, including aggregate usage trends.</li>
+      <li>Prevent fraud, abuse, security incidents, and violations of our terms.</li>
+      <li>Comply with applicable legal obligations and enforce our rights.</li>
+    </ul>
+
+    <h2>4. Cookies and similar technologies</h2>
+    <p>
+      Our website or service providers may use cookies, local storage, pixels,
+      or similar technologies to remember preferences, maintain functionality,
+      measure performance, and understand site usage. You can control cookies
+      through your browser settings. Disabling some technologies may affect how
+      parts of a website or service function.
+    </p>
+
+    <h2>5. Games, app stores, and third parties</h2>
+    <p>
+      Our games may be distributed through third-party stores and platforms,
+      such as Apple’s App Store or Google Play. Those providers may collect and
+      process information under their own privacy notices. We encourage you to
+      review the privacy policies and settings of any store, device platform,
+      social network, analytics provider, or other third-party service you use
+      in connection with our content.
+    </p>
+
+    <h2>6. How we share information</h2>
+    <p>
+      We do not sell personal information for money. We may share information
+      with service providers that help us host, secure, analyze, distribute, or
+      support our services; with professional advisers; when required by law;
+      to protect people, property, or our rights; or in connection with a
+      business transaction such as a merger, financing, acquisition, or sale of
+      assets.
+    </p>
+
+    <h2>7. Data retention</h2>
+    <p>
+      We retain information only for as long as reasonably necessary for the
+      purposes described in this policy, including to provide services, resolve
+      disputes, maintain security, meet legal requirements, and enforce
+      agreements.
+    </p>
+
+    <h2>8. Security</h2>
+    <p>
+      We use reasonable administrative, technical, and organizational measures
+      designed to protect information. No internet transmission or storage
+      system is completely secure, so we cannot guarantee absolute security.
+    </p>
+
+    <h2>9. Children’s privacy</h2>
+    <p>
+      Our services are not intended to knowingly collect personal information
+      from children under 13 without appropriate consent. If you believe a
+      child has provided us personal information, please contact us so we can
+      investigate and take appropriate action.
+    </p>
+
+    <h2>10. Your privacy choices</h2>
+    <p>
+      Depending on where you live, you may have rights to request access to,
+      correction of, deletion of, or a copy of certain personal information.
+      You may also have rights to object to or limit certain processing. To
+      make a request, contact us using the information below. We may need to
+      verify your request before responding.
+    </p>
+
+    <h2>11. Changes to this policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time. When we do, we will
+      post the revised policy here and update the “Last updated” date. Your
+      continued use of our services after an update is subject to the revised
+      policy to the extent permitted by law.
+    </p>
+
+    <h2>12. Contact us</h2>
+    <p>
+      For privacy questions or requests, please visit our
+      <a href="/contact/">Contact Us</a> page or email
+      <a href="mailto:support@listpull.com">support@listpull.com</a>.
+    </p>
+  </article>
+</section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div><strong>ListPull, LLC</strong> · High-Quality Wildlife Media · Interactive Gaming</div>
+
+        <nav class="footer-links" aria-label="Legal and support">
+          <a href="/contact/">Contact Us</a>
+          <a href="/policies/privacy-policy/">Privacy Policy</a>
+          <a href="/policies/terms-of-service/">Terms of Service</a>
+        </nav>
+
+        <div>© 2026 ListPull. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
