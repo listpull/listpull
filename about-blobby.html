@@ -507,6 +507,100 @@
       font-size: 0.95rem;
     }
 
+.blobby-video-wrap {
+    display: inline-block;
+
+    height: 500px;
+
+    border-radius: inherit;
+}
+
+  .blobby-video-wrap .blobby-img {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 15px 30px rgba(255, 100, 0, 0.45));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .blobby-hologram:hover .blobby-img {
+    transform: scale(1.08) translateY(-6px);
+  }
+
+.blobby-preview-video {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  object-fit: contain;
+}
+
+.blobby-video-wrap.is-playing .blobby-preview-video {
+  display: block;
+}
+
+/* Keep the image's dimensions in the layout while making it invisible. */
+.blobby-video-wrap.is-playing .blobby-img {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* The overlay button should be completely absent during playback. */
+.blobby-video-wrap.is-playing .blobby-play-button {
+  display: none;
+}
+  .blobby-play-button {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 76px;
+    height: 76px;
+    padding: 0;
+    place-items: center;
+    color: #fff;
+    background: rgba(15, 26, 20, 0.72);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  }
+
+  .blobby-play-button:hover {
+    background: rgba(241, 130, 36, 0.94);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  .blobby-play-button:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+  }
+
+  .blobby-play-button svg {
+    width: 34px;
+    height: 34px;
+    margin-left: 4px;
+    fill: currentColor;
+  }
+
+  @media (max-width: 600px) {
+    .blobby-play-button {
+      width: 60px;
+      height: 60px;
+    }
+
+    .blobby-play-button svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
     /* Wildlife ListPull Bar */
     .wildlife-bar {
       margin: 30px 0 70px;
@@ -709,7 +803,35 @@
         <div class="blobby-card-wrapper">
           <div class="blobby-hologram">
             <div class="blobby-avatar-glow"></div>
-            <img src="blobby-no-bg.png" alt="Blobby character holding paintbrush" class="blobby-img" onerror="this.src='blobby-no-bg.png'">
+            <div class="blobby-video-wrap">
+              <img
+                class="blobby-img"
+                src="blobby-no-bg.png"
+                alt="Blobby's Woodland Wonder preview"
+              >
+
+              <button
+                class="blobby-play-button"
+                type="button"
+                aria-label="Play Blobby preview"
+                aria-controls="blobby-preview-video"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M8 5.5v13l10-6.5-10-6.5Z"></path>
+                </svg>
+              </button>
+
+              <video
+                id="blobby-preview-video"
+                class="blobby-preview-video"
+                controls
+                preload="metadata"
+                playsinline
+                aria-label="Blobby game preview"
+              >
+                <source src="blobby-preview.mp4" type="video/mp4">
+              </video>
+            </div>
             <div class="blobby-info">
               <h4>Meet Blobby</h4>
               <p>Woodland Alchemist & Master Builder</p>
@@ -831,5 +953,34 @@
       </div>
     </footer>
   </div>
+<script>
+  document.querySelectorAll('.blobby-video-wrap').forEach((wrapper) => {
+    const button = wrapper.querySelector('.blobby-play-button');
+    const video = wrapper.querySelector('.blobby-preview-video');
+
+    const showPreview = () => {
+      video.pause();
+      video.currentTime = 0;
+      wrapper.classList.remove('is-playing');
+    };
+
+    button.addEventListener('click', async () => {
+      wrapper.classList.add('is-playing');
+
+      try {
+        await video.play();
+      } catch (error) {
+        showPreview();
+      }
+    });
+
+    video.addEventListener('pause', () => {
+      if (!video.ended) showPreview();
+    });
+
+    video.addEventListener('ended', showPreview);
+  });
+</script>
 </body>
+
 </html>
