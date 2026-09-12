@@ -112,7 +112,23 @@
     ]
   }
   </script>
-
+  <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoObject",
+          "name": "Blobby's Woodland Wonder Gameplay Preview",
+          "description": "Watch Blobby's Woodland Wonder gameplay featuring colorful animal sorting, 3D merge puzzles, and magical floating forest adventures.",
+          "thumbnailUrl": [
+            "https://listpull.com/blobby-real-round-shadow.png"
+          ],
+          "uploadDate": "2026-09-12T00:00:00-04:00",
+          "duration": "PT27S",
+          "contentUrl": "https://listpull.com/blobby-preview.mp4",
+          "embedUrl": "https://listpull.com/about-blobby",
+          "url": "https://listpull.com/about-blobby",
+          "isFamilyFriendly": true
+        }
+  </script>
   <style>
     :root {
       --bg-deep: #060b13;
@@ -821,16 +837,17 @@
                 </svg>
               </button>
 
-              <video
-                id="blobby-preview-video"
-                class="blobby-preview-video"
-                controls
-                preload="metadata"
-                playsinline
-                aria-label="Blobby game preview"
-              >
-                <source src="blobby-preview.mp4" type="video/mp4">
-              </video>
+            <video
+              id="blobby-preview-video"
+              class="blobby-preview-video"
+              controls
+              preload="metadata"
+              playsinline
+              poster="blobby-real-round-shadow.png"
+              aria-label="Blobby's Woodland Wonder gameplay preview"
+            >
+              <source src="blobby-preview.mp4" type="video/mp4">
+            </video>
             </div>
             <div class="blobby-info">
               <h4>Meet Blobby</h4>
