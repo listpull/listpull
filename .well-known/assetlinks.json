@@ -1,1 +1,15 @@
-https://listpull.com/
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.listpull.matchblock4",
+      "sha256_cert_fingerprints": [
+        "A7:08:15:0E:17:ED:FC:2F:AE:3A:4B:2D:15:3D:21:EF:2D:78:08:D1:2F:73:D0:7E:46:EB:49:44:F7:75:5F:DE"
+      ]
+    }
+  }
+]
