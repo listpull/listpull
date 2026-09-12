@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Primary Tags -->
+  <title>Blobby | Official Game Website — Blobby's Woodland Wonder</title>
+  <meta name="description" content="Meet Blobby in Blobby's Woodland Wonder! Download the official free 3D wildlife merge & puzzle game on iOS and Android. Match, sort, and build your magical forest village.">
+  <meta name="keywords" content="Blobby, Blobby game, Blobby's Woodland Wonder, Blobby merge game, download Blobby, ListPull, woodland puzzle game, animal sort 3d">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://blobby.listpull.com/">
+  
+  <!-- Deep Linking & App Indexing -->
+  <link rel="alternate" href="android-app://com.listpull.matchblock4/https/blobby.listpull.com/" />
+  <link rel="alternate" href="ios-app://1507379429/https/blobby.listpull.com/" />
+  <link rel="icon" type="image/jpeg" href="blobby-no-bg.png">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blobby's Woodland Wonder by ListPull">
+  <meta property="og:title" content="Blobby — Official Game & Downloads (iOS & Android)">
+  <meta property="og:description" content="Play Blobby's Woodland Wonder for free! Merge items, sort cute wildlife animals, and build a vibrant 3D forest with Blobby.">
+  <meta property="og:url" content="https://blobby.listpull.com/">
+  <meta property="og:image" content="https://blobby.listpull.com/blobby-real-round-shadow.png">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blobby — Official Game Website & App Store Links">
+  <meta name="twitter:description" content="Meet Blobby! Match colorful treasures, explore floating forest islands, and build your woodland paradise.">
+  <meta name="twitter:image" content="https://blobby.listpull.com/blobby-real-round-shadow.png">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: SoftwareApplication & VideoGame for Google Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://blobby.listpull.com/#app",
+        "name": "Blobby's Woodland Wonder",
+        "alternateName": ["Blobby Game", "Blobby Woodland Wonder", "Blobby"],
+        "operatingSystem": "iOS, Android",
+        "applicationCategory": "GameApplication",
+        "genre": ["Merge Puzzle", "Casual", "Animal Sort", "Family"],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "ratingCount": "1280",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "ListPull, LLC",
+          "url": "https://listpull.com/"
+        },
+        "downloadUrl": [
+          "https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429",
+          "https://play.google.com/store/apps/details?id=com.listpull.matchblock4"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://blobby.listpull.com/#website",
+        "url": "https://blobby.listpull.com/",
+        "name": "Blobby Official Website",
+        "publisher": {
+          "@type": "Organization",
+          "name": "ListPull, LLC"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Blobby's Woodland Wonder?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Blobby's Woodland Wonder is a free-to-play 3D wildlife merge and animal puzzle game starring Blobby, a cheerful woodland alchemist. Players merge tiles, rescue adorable forest animals, and build a magical forest paradise."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can I download Blobby's Woodland Wonder?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can download Blobby's Woodland Wonder for free on the Apple App Store for iPhone/iPad and Google Play Store for Android devices."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Blobby free to play?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Blobby's Woodland Wonder is 100% free to download and play, developed and published by ListPull."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-deep: #060b13;
+      --bg-dark: #0a111e;
+      --blobby-orange: #ff8c2b;
+      --blobby-glow: #ff5500;
+      --neon-cyan: #00f2fe;
+      --neon-purple: #9d4edd;
+      --neon-emerald: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --glass-bg: rgba(15, 23, 42, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-card: rgba(26, 35, 54, 0.65);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 85% 15%, rgba(255, 140, 43, 0.18) 0%, transparent 40%),
+                  radial-gradient(circle at 10% 75%, rgba(0, 242, 254, 0.14) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content-wrapper { position: relative; z-index: 2; }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      vertical-align: middle;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .icon-lg { width: 28px; height: 28px; }
+
+    /* Top Nav */
+    .navbar {
+      position: sticky;
+      top: 16px;
+      margin: 0 24px;
+      padding: 14px 28px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 9999px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .brand-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #ff8c2b;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      object-fit: cover;
+      box-shadow: 0 0 15px rgba(255, 140, 43, 0.6);
+    }
+
+    .nav-links { display: flex; gap: 26px; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, #ff7b00, #ff5500);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 0 20px rgba(255, 123, 0, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(255, 123, 0, 0.7); }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    /* Hero */
+    .hero {
+      padding: 70px 0 50px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 50px;
+      align-items: center;
+      min-height: calc(85vh - 80px);
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(255, 140, 43, 0.15);
+      border: 1px solid rgba(255, 140, 43, 0.4);
+      border-radius: 9999px;
+      color: #ffaa5a;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.7rem, 5.8vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      margin-bottom: 18px;
+      letter-spacing: -1.5px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ff9e44 0%, #ff5e36 45%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      max-width: 580px;
+    }
+
+    .store-buttons { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
+
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 24px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: #fff;
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+    .btn-store:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .btn-store.apple:hover { border-color: #00f2fe; box-shadow: 0 0 25px rgba(0, 242, 254, 0.35); }
+    .btn-store.google:hover { border-color: #10b981; box-shadow: 0 0 25px rgba(16, 185, 129, 0.35); }
+
+    .btn-store-text small {
+      display: block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+    }
+    .btn-store-text span { font-size: 1.05rem; font-weight: 700; }
+
+    .hero-metrics {
+      display: flex;
+      gap: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 22px;
+    }
+    .metric h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .metric p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Blobby Mascot Card */
+    .blobby-card-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .blobby-hologram {
+      width: 100%;
+      max-width: 440px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(255, 140, 43, 0.16) 0%, rgba(10, 17, 30, 0.9) 100%);
+      border: 1px solid rgba(255, 140, 43, 0.35);
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 140, 43, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blobby-avatar-glow {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(255, 140, 43, 0.45) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(22px);
+      z-index: 0;
+      animation: pulse 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+      100% { transform: translate(-50%, -50%) scale(1.18); opacity: 0.95; }
+    }
+
+    .blobby-img {
+      position: relative;
+      z-index: 1;
+      width: 84%;
+      max-width: 290px;
+      height: auto;
+      filter: drop-shadow(0 15px 30px rgba(255, 100, 0, 0.45));
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .blobby-hologram:hover .blobby-img {
+      transform: scale(1.08) translateY(-6px);
+    }
+
+    .blobby-info { position: relative; z-index: 1; margin-top: 16px; }
+    .blobby-info h4 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .blobby-info p { font-size: 0.88rem; color: var(--text-muted); margin-top: 4px; }
+
+    .gameplay-pill-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .game-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ffd0a0;
+    }
+
+    /* Game Showcase Gallery */
+    .showcase-section {
+      padding: 80px 0;
+    }
+    .section-head { text-align: center; margin-bottom: 48px; }
+    .section-head h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .section-head p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 650px;
+      margin: 10px auto 0;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .gallery-card {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .gallery-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--blobby-orange);
+      box-shadow: 0 16px 36px rgba(255, 140, 43, 0.15);
+    }
+    .gallery-img-wrap {
+      height: 280px;
+      overflow: hidden;
+      background: #111a2e;
+      position: relative;
+    }
+    .gallery-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.4s ease;
+    }
+    .gallery-card:hover .gallery-img-wrap img {
+      transform: scale(1.05);
+    }
+    .gallery-body {
+      padding: 22px;
+      flex-grow: 1;
+    }
+    .gallery-body h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .gallery-body p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      padding: 60px 0 90px;
+    }
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .faq-item {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 24px 28px;
+    }
+    .faq-item h3 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .faq-item p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Wildlife ListPull Bar */
+    .wildlife-bar {
+      margin: 30px 0 70px;
+      background: linear-gradient(135deg, rgba(255, 140, 43, 0.1), rgba(0, 242, 254, 0.1));
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 40px;
+      text-align: center;
+    }
+    .social-channels {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.25s;
+    }
+    .social-btn:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 50px 0 30px;
+      margin-top: 60px;
+      background: #04070d;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+
+    /* Mobile Responsive Rules */
+    @media (max-width: 900px) {
+      .navbar { margin: 0 16px; padding: 12px 20px; }
+      .nav-links { display: none; }
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 40px 0 30px;
+        gap: 36px;
+      }
+      /* Blobby Card appears before hero-text on smaller devices */
+      .blobby-card-wrapper { order: 1; }
+      .hero-text { order: 2; }
+      .hero-description { margin-inline: auto; }
+      .store-buttons { justify-content: center; }
+      .hero-metrics { justify-content: center; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 16px; }
+      .navbar { margin: 0 12px; padding: 10px 16px; }
+      .hero-title { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+      .btn-store { width: 100%; justify-content: center; }
+      .hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .metric h3 { font-size: 1.25rem; }
+      .metric p { font-size: 0.72rem; }
+      .social-btn { width: 100%; justify-content: center; }
+      .footer-inner, .footer-links {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <div class="content-wrapper">
+    <!-- Navbar -->
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="brand-logo" aria-label="Blobby Home">
+        <img src="blobby-no-bg.png" alt="Blobby Icon" class="brand-avatar" onerror="this.src='blobby-no-bg.png'">
+        <span>Blobby</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About Blobby</a></li>
+        <li><a href="#features">Game Features</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://listpull.com" target="_blank" rel="noopener">ListPull Media</a></li>
+      </ul>
+      <a href="#download" class="nav-cta">Download Game</a>
+    </nav>
+
+    <main class="container">
+      <!-- Hero Section with Mobile Priority -->
+      <section class="hero" id="about">
+        <div class="hero-text">
+          <div class="tag-badge">
+            <svg class="icon" viewBox="0 0 24 24" style="width: 15px; height: 15px;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+            OFFICIAL BLOBBY GAME • FREE 3D PUZZLE
+          </div>
+          <h1 class="hero-title">
+            Build a Magical Forest with <span class="gradient-text">Blobby</span>
+          </h1>
+          <p class="hero-description">
+            Join Blobby, your cheerful woodland alchemist and builder! Match, merge, and solve vibrant 3D puzzles to rescue woodland animals and grow your personal floating forest village.
+          </p>
+
+          <div class="store-buttons" id="download">
+            <a href="https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429" target="_blank" rel="noopener noreferrer" class="btn-store apple" aria-label="Download Blobby's Woodland Wonder on Apple App Store">
+              <svg class="icon icon-lg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.74 1.03-1.77.91-2.8-.88.04-1.95.59-2.58 1.33-.56.65-.95 1.7-1.01 2.72.99.08 2.07-.51 2.68-1.25z"/></svg>
+              <div class="btn-store-text">
+                <small>Download on</small>
+                <span>Apple App Store</span>
+              </div>
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.listpull.matchblock4" target="_blank" rel="noopener noreferrer" class="btn-store google" aria-label="Get Blobby's Woodland Wonder on Google Play">
+              <svg class="icon icon-lg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <div class="btn-store-text">
+                <small>Get it on</small>
+                <span>Google Play</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="hero-metrics" aria-label="Blobby player ratings and stats">
+            <div class="metric">
+              <h3>5.0 ★</h3>
+              <p>Player Rating</p>
+            </div>
+            <div class="metric">
+              <h3>251K+</h3>
+              <p>Wildlife Community</p>
+            </div>
+            <div class="metric">
+              <h3>Free</h3>
+              <p>No In-App Paywalls</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blobby Hologram Visual (order 1 on mobile) -->
+        <div class="blobby-card-wrapper">
+          <div class="blobby-hologram">
+            <div class="blobby-avatar-glow"></div>
+            <img src="blobby-no-bg.png" alt="Blobby character holding paintbrush" class="blobby-img" onerror="this.src='blobby-no-bg.png'">
+            <div class="blobby-info">
+              <h4>Meet Blobby</h4>
+              <p>Woodland Alchemist & Master Builder</p>
+              <div class="gameplay-pill-bar">
+                <span class="game-pill">3D Merge</span>
+                <span class="game-pill">Animal Sort</span>
+                <span class="game-pill">Floating Islands</span>
+                <span class="game-pill">Village Build</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gameplay & Features Showcase -->
+      <section class="showcase-section" id="features">
+        <div class="section-head">
+          <h2>Explore Blobby's Magical World</h2>
+          <p>Experience relaxing 3D puzzles, vibrant floating islands, and rewarding creature sorting mechanics powered by ListPull nature visuals.</p>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <div class="gallery-img-wrap">
+              <img src="IMG_4905-4.jpg" alt="Blobby 3D Floating Islands and Animal Merge Puzzle Board">
+            </div>
+            <div class="gallery-body">
+              <h3>Floating Sanctuary Islands</h3>
+              <p>Solve layered isometric tile puzzles to guide baby owls, foxes, and wild birds across floating cloud sanctuaries.</p>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-img-wrap">
+              <img src="IMG_0166-8.jpg" alt="Blobby Barn Animal Sorting Stack Challenge">
+            </div>
+            <div class="gallery-body">
+              <h3>Tactical Animal Sort</h3>
+              <p>Match tiered stacks of wild animal blocks in the rustic barn to complete challenging puzzle levels and unlock companions.</p>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-img-wrap">
+              <img src="IMG_0159-12.jpg" alt="Blobby Airplane Rescue Power-up">
+            </div>
+            <div class="gallery-body">
+              <h3>Blobby's Rescue Plane</h3>
+              <p>Deploy Blobby in his trusty orange airplane to airlift trapped creatures and clear tricky board obstacles.</p>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-img-wrap">
+              <img src="IMG_0164-15.jpg" alt="Blobby Global World Map and Biomes">
+            </div>
+            <div class="gallery-body">
+              <h3>World Map & Biomes</h3>
+              <p>Journey from Owl Paradise to Wolf Valley across a living globe of diverse wildlife habitats and wonder.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ListPull Community Bar -->
+      <div class="wildlife-bar">
+        <h3 style="font-size: 1.8rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">Connect with the ListPull Wildlife Universe</h3>
+        <p style="color: var(--text-muted); margin-top: 6px; max-width: 700px; margin-inline: auto;">Blobby's Woodland Wonder is part of ListPull's global mission uniting high-definition nature documentaries, wildlife preservation, and interactive gaming.</p>
+        <div class="social-channels">
+          <a href="https://www.instagram.com/listpull/" target="_blank" rel="noopener noreferrer" class="social-btn">
+            <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram (154K)
+          </a>
+          <a href="https://www.youtube.com/@listpull" target="_blank" rel="noopener noreferrer" class="social-btn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9 10 15"/></svg> YouTube
+          </a>
+          <a href="https://listpull.com" target="_blank" rel="noopener noreferrer" class="social-btn" style="background: rgba(255, 140, 43, 0.2); border-color: rgba(255, 140, 43, 0.4);">
+            ListPull.com Main Site →
+          </a>
+        </div>
+      </div>
+
+      <!-- SEO-Boosting FAQ Section for Google Search Snippets -->
+      <section class="faq-section" id="faq">
+        <div class="section-head">
+          <h2>Frequently Asked Questions</h2>
+          <p>Everything you need to know about Blobby and the game.</p>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h3>Who is Blobby?</h3>
+            <p>Blobby is the cheerful orange woodland alchemist, artist, and builder who guides players through magical floating forest biomes in Blobby's Woodland Wonder.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Is Blobby's Woodland Wonder available on both iOS and Android?</h3>
+            <p>Yes! Blobby's Woodland Wonder is officially available on the Apple App Store for iPhone & iPad, as well as the Google Play Store for Android smartphones and tablets.</p>
+          </div>
+          <div class="faq-item">
+            <h3>What makes Blobby unique compared to other puzzle games?</h3>
+            <p>Blobby combines 3D isometric merge mechanics, 3D cube animal sorting puzzles, flying rescue power-ups, and real-world wildlife inspiration backed by ListPull Media.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-inner">
+        <div>
+          <strong>Blobby's Woodland Wonder</strong> by ListPull, LLC<br>
+          Dedicated official promotional portal for Blobby and ListPull games.
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="https://listpull.com/about-listpull/">About ListPull</a>
+          <a href="https://listpull.com/policies/privacy-policy/">Privacy Policy</a>
+          <a href="https://listpull.com/policies/terms-of-service/">Terms of Service</a>
+          <a href="https://listpull.com/contact/">Contact</a>
+        </nav>
+        <div>© 2026 ListPull, LLC. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
