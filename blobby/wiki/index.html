@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Official gameplay guide for Blobby's Woodland Wonder: animal match puzzles, Animal Sort barn levels, village building, world map, and power-ups.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#13264d">
+  <link rel="canonical" href="https://listpull.com/blobby/wiki/">
+  <title>Blobby's Woodland Wonder Wiki | Official Gameplay Guide</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Blobby's Woodland Wonder Wiki | Official Gameplay Guide">
+  <meta property="og:description" content="Learn how to match animals, sort animal stacks, build a woodland village, use power-ups, and explore the world map.">
+  <meta property="og:url" content="https://listpull.com/blobby/wiki/">
+  <meta property="og:image" content="assets/images/blobby/IMG_0159-12-8.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root { --navy:#0b1935; --navy2:#142a55; --ink:#14213a; --muted:#536179; --cream:#fff8ef; --white:#fff; --peach:#ffd3b6; --orange:#ef823d; --gold:#f8bf4c; --mint:#53bb9a; --line:rgba(20,33,58,.12); --shadow:0 18px 50px rgba(8,25,53,.14); --radius:22px; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:linear-gradient(180deg,#eff8ff 0,#fff8ef 28%,#f7fbff 100%); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.6; }
+    a { color:#a64d20; text-decoration-thickness:1.5px; text-underline-offset:3px; }
+    a:hover { color:#73300f; }
+    .container { width:min(1180px,calc(100% - 32px)); margin:0 auto; }
+    .skip-link { position:absolute; left:-999px; top:0; z-index:100; padding:.7rem 1rem; background:#fff; color:#000; }
+    .skip-link:focus { left:1rem; top:1rem; }
+    .site-header { background:rgba(11,25,53,.96); color:#fff; position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(255,255,255,.1); backdrop-filter:blur(12px); }
+    .nav { min-height:66px; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .brand { color:#fff; font-size:1.06rem; font-weight:850; text-decoration:none; letter-spacing:.01em; }
+    .brand span { color:#ffc96e; }
+    .nav-links { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .nav-links a { color:#eaf3ff; font-size:.92rem; font-weight:700; text-decoration:none; }
+    .nav-links a:hover { color:#ffc96e; }
+    .hero { color:#fff; background:radial-gradient(circle at 80% 10%,rgba(84,181,255,.42),transparent 27%),radial-gradient(circle at 12% 42%,rgba(255,154,89,.31),transparent 24%),linear-gradient(130deg,#07162f,#16396a 57%,#0d234b); overflow:hidden; }
+    .hero-grid { min-height:500px; padding:72px 0 52px; display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:42px; }
+    .eyebrow { display:inline-flex; padding:.35rem .72rem; border:1px solid rgba(255,255,255,.28); border-radius:999px; background:rgba(255,255,255,.12); color:#fff1d4; font-size:.79rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+    h1,h2,h3 { line-height:1.16; }
+    h1 { font-size:clamp(2.45rem,5.8vw,4.8rem); margin:.8rem 0 1rem; letter-spacing:-.045em; }
+    .hero p { max-width:650px; margin:0; color:#e6f0ff; font-size:1.12rem; }
+    .hero-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1.65rem; }
+    .button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:.7rem 1.05rem; border-radius:999px; text-decoration:none; font-weight:850; transition:transform .18s ease,box-shadow .18s ease; }
+    .button:hover { transform:translateY(-2px); }
+    .button-primary { background:linear-gradient(135deg,#ffd56e,#ee7e39); color:#35200f; box-shadow:0 8px 24px rgba(0,0,0,.22); }
+    .button-secondary { color:#fff; border:1px solid rgba(255,255,255,.42); background:rgba(255,255,255,.08); }
+    .hero-image { margin:0; filter:drop-shadow(0 28px 32px rgba(0,0,0,.28)); }
+    .hero-image img { width:100%; max-height:445px; object-fit:cover; object-position:center; border-radius:30px; border:5px solid rgba(255,255,255,.24); display:block; }
+    .quick-nav { margin-top:-28px; position:relative; z-index:2; display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .quick-nav a { text-decoration:none; color:var(--ink); background:#fff; border:1px solid var(--line); box-shadow:0 10px 26px rgba(8,25,53,.09); border-radius:16px; padding:1rem; font-weight:850; text-align:center; }
+    .quick-nav a:hover { background:#fff4e8; }
+    main { padding:42px 0 78px; }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 290px; gap:34px; align-items:start; }
+    .content { min-width:0; }
+    section { scroll-margin-top:90px; margin-bottom:54px; }
+    h2 { margin:0 0 .8rem; font-size:clamp(1.7rem,3vw,2.4rem); letter-spacing:-.025em; }
+    h3 { margin:0 0 .35rem; font-size:1.18rem; }
+    .intro { color:var(--muted); font-size:1.08rem; max-width:820px; }
+    .callout { background:linear-gradient(135deg,#fff5dc,#ffeedf); border:1px solid #f3c285; border-radius:var(--radius); padding:1.2rem 1.3rem; margin:1.2rem 0 1.45rem; }
+    .callout strong { color:#75320e; }
+    .mode-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:1.4rem; }
+    .mode-card { background:#fff; overflow:hidden; border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 12px 30px rgba(10,33,73,.08); }
+    .mode-card img { width:100%; height:auto; max-height: 550px; object-fit:cover; display:block; }
+    .mode-card div { padding:1.1rem 1.1rem 1.25rem; }
+    .mode-card p { margin:.35rem 0 0; color:var(--muted); }
+    .steps { counter-reset:guide; display:grid; gap:13px; padding:0; margin:1.25rem 0 0; list-style:none; }
+    .steps li { counter-increment:guide; position:relative; min-height:56px; padding:1rem 1rem 1rem 4.4rem; background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 6px 18px rgba(10,33,73,.05); }
+    .steps li::before { content:counter(guide); position:absolute; left:1rem; top:50%; transform:translateY(-50%); width:2.35rem; height:2.35rem; display:grid; place-items:center; color:#fff; font-weight:900; border-radius:50%; background:linear-gradient(135deg,#f49c43,#e86b37); }
+    .gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; margin-top:1.3rem; }
+    figure { margin:0; overflow:hidden; background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:0 8px 24px rgba(10,33,73,.07); }
+    figure img { width:100%; height:auto; max-height: 550px;object-fit:cover; display:block; }
+    figcaption { padding:.72rem .82rem .84rem; font-size:.88rem; color:var(--muted); }
+    .tips { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:1.2rem; }
+    .tip { background:linear-gradient(145deg,#ecfff7,#f4fbff); padding:1.1rem; border:1px solid rgba(50,140,120,.2); border-radius:17px; }
+    .tip p { margin:.36rem 0 0; color:#41546a; }
+    .video-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:1.25rem; }
+    .video-card { padding:1rem; border:1px dashed rgba(20,33,58,.36); border-radius:18px; background:rgba(255,255,255,.67); }
+    .video-card {
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(10, 33, 73, 0.07);
+    }
+
+    .video-card video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      margin-bottom: 0.9rem;
+      border-radius: 13px;
+      background: #102651;
+    }
+
+    .video-card h3 {
+      margin: 0;
+    }
+
+    .video-card p {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+    .video-card p { margin:.3rem 0 0; color:var(--muted); font-size:.93rem; }
+    .details { background:#fff; border:1px solid var(--line); border-radius:14px; margin:.75rem 0; overflow:hidden; }
+    summary { cursor:pointer; padding:1rem 1.05rem; font-weight:800; }
+    details p { padding:0 1.05rem 1rem; margin:0; color:var(--muted); }
+    .toc { position:sticky; top:88px; padding:1.15rem; background:#fff; border:1px solid var(--line); border-radius:18px; box-shadow:0 10px 28px rgba(10,33,73,.08); }
+    .toc h2 { font-size:1.05rem; margin-bottom:.55rem; }
+    .toc a { display:block; padding:.35rem 0; color:#526176; text-decoration:none; font-size:.91rem; }
+    .toc a:hover { color:#a64d20; }
+    .meta { margin-top:1rem; font-size:.84rem; color:var(--muted); }
+    footer { color:#dbe9ff; background:#091a37; padding:30px 0; }
+    footer p { margin:.3rem 0; }
+    @media (max-width:900px) { .hero-grid,.layout { grid-template-columns:1fr; } .hero-grid { padding-top:52px; } .quick-nav { grid-template-columns:repeat(2,1fr); } .toc { display:none; } }
+    @media (max-width:620px) { .container { width:min(100% - 22px,1180px); } .nav { padding:.65rem 0; } .nav-links { gap:.65rem; } .nav-links a { font-size:.8rem; } .hero-grid { gap:25px; min-height:0; } .mode-grid,.tips,.video-grid,.gallery { grid-template-columns:1fr; } .quick-nav { margin-top:-16px; grid-template-columns:1fr 1fr; } figure img { height:auto; aspect-ratio:4/3; } }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://listpull.com/blobby/wiki/#webpage","url":"https://listpull.com/blobby/wiki/","name":"Blobby's Woodland Wonder Wiki | Official Gameplay Guide","description":"Official gameplay guide for Blobby's Woodland Wonder.","isPartOf":{"@type":"WebSite","name":"ListPull","url":"https://listpull.com/"},"about":{"@type":"VideoGame","name":"Blobby's Woodland Wonder","genre":["Puzzle","Family","Casual"],"gamePlatform":["iOS","Android"],"publisher":{"@type":"Organization","name":"ListPull"}}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I play the main animal match board?","acceptedAnswer":{"@type":"Answer","text":"Place and match three or more of the same animal on the colorful cube board to clear animals and advance."}},{"@type":"Question","name":"What is Animal Sort mode?","acceptedAnswer":{"@type":"Answer","text":"Animal Sort is a barn puzzle mode in which players move stacked animal segments so each completed stack contains only one animal type."}},{"@type":"Question","name":"How do I access the world map?","acceptedAnswer":{"@type":"Answer","text":"Tap the globe icon in the bottom menu to browse wildlife biomes and choose an available destination."}}]}]}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to guide content</a>
+  <header class="site-header">
+    <nav class="container nav" aria-label="Primary navigation">
+      <a class="brand" href="/">LIST<span>PULL</span></a>
+      <div class="nav-links">
+        <a href="../../about-blobby.html">About Blobby</a>
+        <a href="#modes">Game modes</a>
+        <a href="#getting-started">Getting started</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+  </header>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Official ListPull Gameplay Guide</span>
+        <h1>Blobby’s Woodland Wonder Wiki</h1>
+        <p>Everything you need to match animals, master barn sorting, build a magical village, use puzzle tools, and explore Blobby’s floating wildlife worlds.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#getting-started">Start playing</a>
+          <a class="button button-secondary" href="#modes">Explore game modes</a>
+        </div>
+      </div>
+      <figure class="hero-image">
+        <img src="assets/images/blobby/IMG_0159-12-8.jpg" alt="Blobby’s Woodland Wonder main animal puzzle board with floating forest islands">
+      </figure>
+    </div>
+  </header>
+
+  <div class="container quick-nav" aria-label="Popular guide sections">
+    <a href="#match-mode">Animal match</a>
+    <a href="#sort-mode">Animal sort</a>
+    <a href="#village-mode">Village building</a>
+    <a href="#world-map">World map</a>
+  </div>
+
+  <main id="content" class="container">
+    <div class="layout">
+      <article class="content">
+        <section id="overview">
+          <h2>Welcome to Blobby’s World</h2>
+          <p class="intro">Blobby’s Woodland Wonder is a family-friendly puzzle adventure from ListPull. Join Blobby, a cheerful woodland alchemist and builder, as you rescue animals, solve colorful 3D boards, sort animal stacks, and develop a growing woodland village.</p>
+          <div class="callout"><strong>Quick idea:</strong> Each mode teaches a different puzzle skill. Match mode emphasizes pattern recognition, Animal Sort rewards planning and empty-space management, and village mode focuses on creating efficient merge chains.</div>
+        </section>
+
+        <section id="getting-started">
+          <h2>Getting Started</h2>
+          <p class="intro">Your first visit includes a guided tutorial. Follow the highlighted animal, board tile, and hand prompts before trying the full puzzle board on your own.</p>
+          <ol class="steps">
+            <li><strong>Meet Blobby.</strong> Blobby introduces the puzzle board and the woodland animals that need help.</li>
+            <li><strong>Match animals.</strong> Select compatible animals to make a match of three or more and clear space on the board.</li>
+            <li><strong>Use a tool when needed.</strong> The Remove Animal tool clears one blocking animal so you can reopen a path to a match.</li>
+          </ol>
+          <div class="gallery">
+            <figure><img src="assets/images/blobby/IMG_0168-4.jpg" alt="Blobby tutorial opening screen introducing the main puzzle board"><figcaption>Tutorial 1: Blobby introduces the board.</figcaption></figure>
+            <figure><img src="assets/images/blobby/IMG_0156-10-7.jpg" alt="Tutorial screen showing animal placement and board interaction"><figcaption>Tutorial 2: Learn the basic board interaction.</figcaption></figure>
+            <figure><img src="assets/images/blobby/IMG_0157-11-6.jpg" alt="Tutorial screen showing a match of three or more animals"><figcaption>Tutorial 3: Match three or more animals.</figcaption></figure>
+          </div>
+        </section>
+
+        <section id="modes">
+          <h2>Game Modes</h2>
+          <p class="intro">Blobby’s Woodland Wonder includes interconnected puzzle activities. Use the bottom menu and globe map to switch between available locations and modes.</p>
+          <div class="mode-grid">
+            <article class="mode-card"><img src="assets/images/blobby/IMG_0159-12-8.jpg" alt="Animal match board in Blobby’s Woodland Wonder"><div><h3>Animal Match</h3><p>Match groups of animals across a layered cube board surrounded by floating woodland islands.</p></div></article>
+            <article class="mode-card"><img src="assets/images/blobby/IMG_0162-14-11.jpg" alt="Beginning level of the Animal Sort barn puzzle"><div><h3>Animal Sort</h3><p>Move animal segments between stacks until every stack contains a single animal type.</p></div></article>
+            <article class="mode-card"><img src="assets/images/blobby/IMG_0167-14.jpg" alt="House merge village board in Blobby’s Woodland Wonder"><div><h3>Village Building</h3><p>Merge matching houses to create increasingly developed homes for the woodland village.</p></div></article>
+            <article class="mode-card"><img src="assets/images/blobby/IMG_0165-16-10.jpg" alt="Blobby world map with Owl Paradise and Wolf Valley"><div><h3>World Map</h3><p>Travel through themed wildlife biomes, including Owl Paradise and Wolf Valley.</p></div></article>
+          </div>
+        </section>
+
+        <section id="match-mode">
+          <h2>Animal Match Mode</h2>
+          <p class="intro">The Animal Match board is the main game mode shown when Blobby’s Woodland Wonder opens. Animals appear on a 3D arrangement of glowing cube tiles, with nearby islands showing the surrounding habitat and upcoming activity.</p>
+          <h3>Goal</h3>
+          <p>Create matches of three or more identical animals to remove them from the board, clear room for new moves, and progress through the level.</p>
+          <div class="tips">
+            <article class="tip"><h3>Build larger matches</h3><p>Before making the first available move, scan the board for an opportunity to connect four or more compatible animals.</p></article>
+            <article class="tip"><h3>Protect open tiles</h3><p>Do not fill your only easy-access tiles with animals that cannot be matched soon. Keeping space open makes recovery easier.</p></article>
+            <article class="tip"><h3>Read the board layers</h3><p>Animals on elevated and recessed cubes can create visual bottlenecks. Prioritize moves that open the center of the board.</p></article>
+            <article class="tip"><h3>Save tools for blockers</h3><p>Use Remove Animal when a single piece prevents a high-value match or has no realistic pairing path.</p></article>
+          </div>
+        </section>
+
+        <section id="sort-mode">
+          <h2>Animal Sort Mode</h2>
+          <p class="intro">Access Animal Sort from the second button in the main-screen bottom menu. The game takes place in a rustic barn and plays like a ball-sort puzzle, except each vertical stack is made from animal-themed segments.</p>
+          <figure style="margin-top:1.2rem"><img src="assets/images/blobby/IMG_0162-14-11.jpg" alt="Animal Sort level 1 in a rustic barn"><figcaption>Animal Sort begins with a smaller number of mixed stacks and develops into more complex layouts.</figcaption></figure>
+          <h3>How to solve a board</h3>
+          <ol class="steps">
+            <li><strong>Identify the top segment.</strong> You can move only the exposed top segment from a stack.</li>
+            <li><strong>Move it to a legal destination.</strong> Use an empty stack or place it onto a compatible animal segment when permitted by the board.</li>
+            <li><strong>Complete a stack.</strong> Keep moving segments until every finished stack contains the parts of one animal only.</li>
+          </ol>
+          <h3>Strategy for advanced levels</h3>
+          <p>As layouts become denser, treat one open stack as a buffer. Avoid filling every available stack immediately: an empty destination is often the difference between a solvable board and a dead end. On higher levels, work from the most constrained animals first and try to expose needed segments without burying them under unrelated pieces.</p>
+          <figure style="margin-top:1.2rem"><img src="assets/images/blobby/IMG_4909-7-12.jpg" alt="Advanced Animal Sort level 60 with many animal stacks"><figcaption>Level 60 demonstrates the larger number of stacks and animal types found in advanced Animal Sort play.</figcaption></figure>
+        </section>
+
+        <section id="tools">
+          <h2>Power-Ups and Board Tools</h2>
+          <p class="intro">Tools are designed to recover from blocked layouts without removing the satisfaction of planning the puzzle yourself.</p>
+          <h3>Remove Animal</h3>
+          <p>Tap the Remove Animal button, then select an animal on the board to clear it. This is most effective when the selected animal blocks a large match, occupies a critical tile, or has become isolated from compatible pieces.</p>
+          <div class="gallery" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+            <figure><img src="assets/images/blobby/IMG_0160-13-13.jpg" alt="Remove Animal tutorial highlighting an owl on the puzzle board"><figcaption>Select the Remove Animal tool, then choose the blocking animal.</figcaption></figure>
+            <figure><img src="assets/images/blobby/IMG_0169-5.jpg" alt="Blobby puzzle world and village interface"><figcaption>Return to your puzzle world after clearing space and continue building matches.</figcaption></figure>
+          </div>
+        </section>
+
+        <section id="village-mode">
+          <h2>Village Building Mode</h2>
+          <p class="intro">Village Building uses the same satisfying cube-board structure as Animal Match, but swaps animals for houses. Combine matching homes to create a more developed woodland village.</p>
+          <h3>House merging basics</h3>
+          <ol class="steps">
+            <li><strong>Place compatible houses.</strong> Arrange like houses so they can merge.</li>
+            <li><strong>Make a merge.</strong> Combining matching houses produces a higher-tier home.</li>
+            <li><strong>Plan your next tier.</strong> Preserve space near related houses so future merges remain possible.</li>
+          </ol>
+          <div class="callout"><strong>Village strategy:</strong> Build toward a planned chain rather than merging every pair as soon as it appears. A small reserve of free tiles makes it easier to stage several house tiers and avoid a crowded board.</div>
+          <figure><img src="assets/images/blobby/IMG_0167-14.jpg" alt="Village house merge board with colorful houses on cube tiles"><figcaption>In Village Building, matching houses replace the animals from the main board.</figcaption></figure>
+        </section>
+
+        <section id="world-map">
+          <h2>World Map and Biomes</h2>
+          <p class="intro">Tap the globe in the bottom menu to open Blobby’s world map. The map presents a living planet and a carousel of wildlife regions, allowing players to explore themed destinations as they become available.</p>
+          <div class="mode-grid">
+            <article class="mode-card"><img src="assets/images/blobby/IMG_0165-16-10.jpg" alt="World map showing Owl Paradise and Wolf Valley"><div><h3>Choose a biome</h3><p>Swipe through the map, use the arrows, and select a destination such as Owl Paradise or Wolf Valley.</p></div></article>
+            <article class="mode-card"><img src="assets/images/blobby/IMG_0166-8-9.jpg" alt="Floating owl island board in Blobby’s Woodland Wonder"><div><h3>Play a destination</h3><p>Each location can introduce different animals, level paths, and board themes.</p></div></article>
+          </div>
+        </section>
+
+        <section id="video-guides">
+          <h2>Watch Blobby in Action</h2>
+          <p class="intro">
+            Explore quick gameplay videos covering the opening tutorial, Animal Sort puzzle strategy,
+            woodland village building, and the world map.
+          </p>
+
+          <div class="video-grid">
+
+            <article class="video-card">
+              <video
+                controls
+                preload="metadata"
+                playsinline
+                poster="assets/images/blobby/IMG_0168-4.jpg"
+                aria-label="Blobby first-time tutorial video">
+                <source src="assets/videos/blobby/first-time-tutorial.mp4" type="video/mp4">
+                <source src="assets/videos/blobby/first-time-tutorial.webm" type="video/webm">
+                Your browser does not support embedded video.
+              </video>
+
+              <h3>First-Time Tutorial</h3>
+              <p>
+                Meet Blobby, learn how the puzzle board works, make an opening animal match,
+                and see how the Remove Animal tool can clear a blocked tile.
+              </p>
+            </article>
+
+            <article class="video-card">
+              <video
+                controls
+                preload="metadata"
+                playsinline
+                poster="assets/images/blobby/IMG_4909-7-12.jpg"
+                aria-label="Blobby Animal Sort strategy video">
+                <source src="assets/videos/blobby/animal-sort-strategy.mp4" type="video/mp4">
+                <source src="assets/videos/blobby/animal-sort-strategy.webm" type="video/webm">
+                Your browser does not support embedded video.
+              </video>
+
+              <h3>Animal Sort Strategy</h3>
+              <p>
+                Learn how to organize mixed animal stacks, preserve a useful empty buffer stack,
+                and solve more complex barn puzzles.
+              </p>
+            </article>
+
+            <article class="video-card">
+              <video
+                controls
+                preload="metadata"
+                playsinline
+                poster="assets/images/blobby/IMG_0167-14.jpg"
+                aria-label="Blobby village building video">
+                <source src="assets/videos/blobby/village-merge-chain.mp4" type="video/mp4">
+                <source src="assets/videos/blobby/village-merge-chain.webm" type="video/webm">
+                Your browser does not support embedded video.
+              </video>
+
+              <h3>Village Building</h3>
+              <p>
+                Combine matching houses, create higher-tier buildings, and make room for new
+                village upgrades across the colorful cube board.
+              </p>
+            </article>
+
+            <article class="video-card">
+              <video
+                controls
+                preload="metadata"
+                playsinline
+                poster="assets/images/blobby/IMG_0165-16-10.jpg"
+                aria-label="Blobby world map and biome tour video">
+                <source src="assets/videos/blobby/biome-tour.mp4" type="video/mp4">
+                <source src="assets/videos/blobby/biome-tour.webm" type="video/webm">
+                Your browser does not support embedded video.
+              </video>
+
+              <h3>World Map and Biomes</h3>
+              <p>
+                Travel from the globe menu into wildlife regions including Owl Paradise and Wolf Valley,
+                then discover new puzzle destinations as they unlock.
+              </p>
+            </article>
+
+          </div>
+        </section>
+
+        <section id="faq">
+          <h2>Frequently Asked Questions</h2>
+          <details class="details"><summary>How do I make a match in the main board?</summary><p>Match three or more of the same animal. Prioritize moves that leave open tiles and create room for future matches.</p></details>
+          <details class="details"><summary>What should I do when the board feels blocked?</summary><p>First look for a larger match or a move that opens a central tile. If one animal is preventing progress, use the Remove Animal tool strategically.</p></details>
+          <details class="details"><summary>How does Animal Sort differ from the main board?</summary><p>Animal Sort is a stack-management puzzle. Move exposed animal segments between stacks until each stack contains one animal type, using open stacks as temporary buffers.</p></details>
+          <details class="details"><summary>Where can I find new game areas?</summary><p>Open the globe menu in the bottom navigation and browse the available wildlife biomes on the world map.</p></details>
+          <details class="details"><summary>Is Blobby’s Woodland Wonder available on iOS and Android?</summary><p>Yes. Blobby’s Woodland Wonder is available for iPhone and iPad through the <a href="https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429" target="_blank" rel="noopener noreferrer" class="btn-store apple" aria-label="Download Blobby's Woodland Wonder on the Apple App Store">
+            Apple App Store
+            </a> and for Android devices through <a href="https://play.google.com/store/apps/details?id=com.listpull.matchblock4" target="_blank" rel="noopener noreferrer" class="btn-store google" aria-label="Get Blobby's Woodland Wonder on Google Play">
+            Google Play
+            </a>.</p></details>
+          <p class="meta">Last updated: September 2026 · Published by ListPull · This guide is intended for players of Blobby’s Woodland Wonder.</p>
+        </section>
+      </article>
+
+      <aside class="toc" aria-label="On this page">
+        <h2>On this page</h2>
+        <a href="#overview">Welcome</a>
+        <a href="#getting-started">Getting started</a>
+        <a href="#modes">Game modes</a>
+        <a href="#match-mode">Animal Match</a>
+        <a href="#sort-mode">Animal Sort</a>
+        <a href="#tools">Power-ups</a>
+        <a href="#village-mode">Village Building</a>
+        <a href="#world-map">World Map</a>
+        <a href="#video-guides">Video guides</a>
+        <a href="#faq">FAQ</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container"><p><strong>ListPull</strong> · Blobby’s Woodland Wonder</p><p>Official game guide and player resource. <a href="/blobby/" style="color:#ffc96e">Return to the Blobby game page</a>.</p></div>
+  </footer>
+</body>
+</html>
