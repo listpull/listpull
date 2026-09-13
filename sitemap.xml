@@ -44,28 +44,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-    <video:video>
-      <video:thumbnail_loc>
-        https://listpull.com/blobby-real-round-shadow.png
-      </video:thumbnail_loc>
 
-      <video:title>Blobby's Woodland Wonder Gameplay Preview</video:title>
-
-      <video:description>
-        Watch Blobby's Woodland Wonder gameplay featuring colorful animal sorting,
-        3D merge puzzles, and magical floating forest adventures.
-      </video:description>
-
-      <video:content_loc>
-        https://listpull.com/blobby-preview.mp4
-      </video:content_loc>
-
-      <video:publication_date>2026-09-12T00:00:00-04:00</video:publication_date>
-
-      <video:duration>27</video:duration>
-
-      <video:family_friendly>yes</video:family_friendly>
-    </video:video>
   <!-- Blobby wiki main page with images and videos -->
   <url>
     <loc>https://listpull.com/blobby/wiki/</loc>
@@ -115,7 +94,28 @@
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_4909-7-12.jpg</image:loc>
     </image:image>
+    <video:video>
+      <video:thumbnail_loc>
+        https://listpull.com/blobby-real-round-shadow.png
+      </video:thumbnail_loc>
 
+      <video:title>Blobby's Woodland Wonder Gameplay Preview</video:title>
+
+      <video:description>
+        Watch Blobby's Woodland Wonder gameplay featuring colorful animal sorting,
+        3D merge puzzles, and magical floating forest adventures.
+      </video:description>
+
+      <video:content_loc>
+        https://listpull.com/blobby-preview.mp4
+      </video:content_loc>
+
+      <video:publication_date>2026-09-12T00:00:00-04:00</video:publication_date>
+
+      <video:duration>27</video:duration>
+
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
     <!-- Wiki videos -->
     <video:video>
       <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0159-12-8.jpg</video:thumbnail_loc>
