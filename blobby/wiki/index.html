@@ -72,35 +72,135 @@
     .tip { background:linear-gradient(145deg,#ecfff7,#f4fbff); padding:1.1rem; border:1px solid rgba(50,140,120,.2); border-radius:17px; }
     .tip p { margin:.36rem 0 0; color:#41546a; }
     .video-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:1.25rem; }
-    .video-card { padding:1rem; border:1px dashed rgba(20,33,58,.36); border-radius:18px; background:rgba(255,255,255,.67); }
-    .video-card {
-      padding: 1rem;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #ffffff;
-      box-shadow: 0 8px 24px rgba(10, 33, 73, 0.07);
-    }
+.video-card {
+  padding: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(10, 33, 73, 0.07);
+}
 
-    .video-card video {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      margin-bottom: 0.9rem;
-      border-radius: 13px;
-      background: #102651;
-    }
+.guide-video-wrap {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  max-height: 500px;
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+  border-radius: 13px;
+  background: #102651;
+}
 
-    .video-card h3 {
-      margin: 0;
-    }
+/* Screenshot is always visible unless the video is actively playing */
+.guide-video-poster {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
 
-    .video-card p {
-      margin: 0.35rem 0 0;
-      color: var(--muted);
-      font-size: 0.93rem;
-    }
-    .video-card p { margin:.3rem 0 0; color:var(--muted); font-size:.93rem; }
+/* Video remains absent until custom play button starts playback */
+.guide-preview-video {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000000;
+}
+
+/* Play button is visible anytime the video is not playing */
+.guide-play-button {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 76px;
+  height: 76px;
+  padding: 0;
+  place-items: center;
+  color: #ffffff;
+  background: rgba(15, 26, 20, 0.72);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.guide-play-button:hover {
+  background: rgba(241, 130, 36, 0.94);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.guide-play-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 4px;
+}
+
+.guide-play-button svg {
+  width: 34px;
+  height: 34px;
+  margin-left: 4px;
+  fill: currentColor;
+}
+
+/* Only during active playback */
+.guide-video-wrap.is-playing .guide-preview-video {
+  display: block;
+}
+
+.guide-video-wrap.is-playing .guide-video-poster {
+  display: none;
+}
+
+.guide-video-wrap.is-playing .guide-play-button {
+  display: none;
+}
+
+.video-card h3 {
+  margin: 0;
+}
+
+.video-card p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+@media (max-width: 900px) {
+  .guide-video-wrap {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 600px) {
+  .guide-play-button {
+    width: 60px;
+    height: 60px;
+  }
+
+  .guide-play-button svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+
     .details { background:#fff; border:1px solid var(--line); border-radius:14px; margin:.75rem 0; overflow:hidden; }
     summary { cursor:pointer; padding:1rem 1.05rem; font-weight:800; }
     details p { padding:0 1.05rem 1rem; margin:0; color:var(--muted); }
@@ -252,93 +352,174 @@
           </div>
         </section>
 
-        <section id="video-guides">
-          <h2>Watch Blobby in Action</h2>
-          <p class="intro">
-            Explore quick gameplay videos covering the opening tutorial, Animal Sort puzzle strategy,
-            woodland village building, and the world map.
-          </p>
+<section id="video-guides">
+  <h2>Watch Blobby in Action</h2>
 
-          <div class="video-grid">
+  <p class="intro">
+    Watch gameplay highlights from Blobby’s Woodland Wonder, including the opening
+    tutorial, Animal Sort challenges, village building, and wildlife world exploration.
+  </p>
 
-            <article class="video-card">
-              <video
-                controls
-                preload="metadata"
-                playsinline
-                poster="assets/images/blobby/IMG_0168-4.jpg"
-                aria-label="Blobby first-time tutorial video">
-                <source src="assets/videos/blobby/first-time-tutorial.mp4" type="video/mp4">
-                <source src="assets/videos/blobby/first-time-tutorial.webm" type="video/webm">
-                Your browser does not support embedded video.
-              </video>
+  <div class="video-grid">
 
-              <h3>First-Time Tutorial</h3>
-              <p>
-                Meet Blobby, learn how the puzzle board works, make an opening animal match,
-                and see how the Remove Animal tool can clear a blocked tile.
-              </p>
-            </article>
+    <article class="video-card">
+      <div class="guide-video-wrap">
+        <img
+          class="guide-video-poster"
+          src="assets/images/blobby/IMG_0168-4.jpg"
+          alt="Blobby introducing the opening puzzle tutorial">
 
-            <article class="video-card">
-              <video
-                controls
-                preload="metadata"
-                playsinline
-                poster="assets/images/blobby/IMG_4909-7-12.jpg"
-                aria-label="Blobby Animal Sort strategy video">
-                <source src="assets/videos/blobby/animal-sort-strategy.mp4" type="video/mp4">
-                <source src="assets/videos/blobby/animal-sort-strategy.webm" type="video/webm">
-                Your browser does not support embedded video.
-              </video>
+        <button
+          class="guide-play-button"
+          type="button"
+          aria-label="Play First-Time Tutorial video"
+          aria-controls="first-time-tutorial-video">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 5.5v13l10-6.5-10-6.5Z"></path>
+          </svg>
+        </button>
 
-              <h3>Animal Sort Strategy</h3>
-              <p>
-                Learn how to organize mixed animal stacks, preserve a useful empty buffer stack,
-                and solve more complex barn puzzles.
-              </p>
-            </article>
+        <video
+          id="first-time-tutorial-video"
+          class="guide-preview-video"
+          controls
+          preload="metadata"
+          playsinline
+          poster="assets/images/blobby/IMG_0168-4.jpg"
+          aria-label="First-Time Tutorial gameplay video">
+          <source
+            src="assets/videos/blobby/first-time-tutorial.mp4"
+            type="video/mp4">
+        </video>
+      </div>
 
-            <article class="video-card">
-              <video
-                controls
-                preload="metadata"
-                playsinline
-                poster="assets/images/blobby/IMG_0167-14.jpg"
-                aria-label="Blobby village building video">
-                <source src="assets/videos/blobby/village-merge-chain.mp4" type="video/mp4">
-                <source src="assets/videos/blobby/village-merge-chain.webm" type="video/webm">
-                Your browser does not support embedded video.
-              </video>
+      <h3>First-Time Tutorial</h3>
 
-              <h3>Village Building</h3>
-              <p>
-                Combine matching houses, create higher-tier buildings, and make room for new
-                village upgrades across the colorful cube board.
-              </p>
-            </article>
+      <p>
+        Meet Blobby, learn the puzzle board, create an opening animal match, and
+        discover how the Remove Animal tool helps clear a blocked move.
+      </p>
+    </article>
 
-            <article class="video-card">
-              <video
-                controls
-                preload="metadata"
-                playsinline
-                poster="assets/images/blobby/IMG_0165-16-10.jpg"
-                aria-label="Blobby world map and biome tour video">
-                <source src="assets/videos/blobby/biome-tour.mp4" type="video/mp4">
-                <source src="assets/videos/blobby/biome-tour.webm" type="video/webm">
-                Your browser does not support embedded video.
-              </video>
+    <article class="video-card">
+      <div class="guide-video-wrap">
+        <img
+          class="guide-video-poster"
+          src="assets/images/blobby/IMG_4909-7-12.jpg"
+          alt="Advanced Animal Sort puzzle board in the barn">
 
-              <h3>World Map and Biomes</h3>
-              <p>
-                Travel from the globe menu into wildlife regions including Owl Paradise and Wolf Valley,
-                then discover new puzzle destinations as they unlock.
-              </p>
-            </article>
+        <button
+          class="guide-play-button"
+          type="button"
+          aria-label="Play Animal Sort Strategy video"
+          aria-controls="animal-sort-strategy-video">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 5.5v13l10-6.5-10-6.5Z"></path>
+          </svg>
+        </button>
 
-          </div>
-        </section>
+        <video
+          id="animal-sort-strategy-video"
+          class="guide-preview-video"
+          controls
+          preload="metadata"
+          playsinline
+          poster="assets/images/blobby/IMG_4909-7-12.jpg"
+          aria-label="Animal Sort Strategy gameplay video">
+          <source
+            src="assets/videos/blobby/animal-sort-strategy.mp4"
+            type="video/mp4">
+        </video>
+      </div>
+
+      <h3>Animal Sort Strategy</h3>
+
+      <p>
+        Learn how to separate animal stacks, protect an open buffer stack, and
+        approach more advanced Animal Sort levels with confidence.
+      </p>
+    </article>
+
+    <article class="video-card">
+      <div class="guide-video-wrap">
+        <img
+          class="guide-video-poster"
+          src="assets/images/blobby/IMG_0167-14.jpg"
+          alt="Colorful house merge board for Blobby’s woodland village">
+
+        <button
+          class="guide-play-button"
+          type="button"
+          aria-label="Play Village Building video"
+          aria-controls="village-merge-chain-video">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 5.5v13l10-6.5-10-6.5Z"></path>
+          </svg>
+        </button>
+
+        <video
+          id="village-merge-chain-video"
+          class="guide-preview-video"
+          controls
+          preload="metadata"
+          playsinline
+          poster="assets/images/blobby/IMG_0167-14.jpg"
+          aria-label="Village Building gameplay video">
+          <source
+            src="assets/videos/blobby/village-merge-chain.mp4"
+            type="video/mp4">
+        </video>
+      </div>
+
+      <h3>Village Building</h3>
+
+      <p>
+        Merge matching houses into higher-tier homes and shape a growing woodland
+        village across the colorful cube board.
+      </p>
+    </article>
+
+    <article class="video-card">
+      <div class="guide-video-wrap">
+        <img
+          class="guide-video-poster"
+          src="assets/images/blobby/IMG_0165-16-10.jpg"
+          alt="Blobby world map featuring Owl Paradise and Wolf Valley">
+
+        <button
+          class="guide-play-button"
+          type="button"
+          aria-label="Play World Map and Biomes video"
+          aria-controls="biome-tour-video">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 5.5v13l10-6.5-10-6.5Z"></path>
+          </svg>
+        </button>
+
+        <video
+          id="biome-tour-video"
+          class="guide-preview-video"
+          controls
+          preload="metadata"
+          playsinline
+          poster="assets/images/blobby/IMG_0165-16-10.jpg"
+          aria-label="World Map and Biomes gameplay video">
+          <source
+            src="assets/videos/blobby/biome-tour.mp4"
+            type="video/mp4">
+        </video>
+      </div>
+
+      <h3>World Map and Biomes</h3>
+
+      <p>
+        Travel from the globe menu into wildlife areas including Owl Paradise,
+        Wolf Valley, and other magical destinations.
+      </p>
+    </article>
+
+  </div>
+</section>
 
         <section id="faq">
           <h2>Frequently Asked Questions</h2>
@@ -374,5 +555,40 @@
   <footer>
     <div class="container"><p><strong>ListPull</strong> · Blobby’s Woodland Wonder</p><p>Official game guide and player resource. <a href="/blobby/" style="color:#ffc96e">Return to the Blobby game page</a>.</p></div>
   </footer>
+<script>
+  document.querySelectorAll(".guide-video-wrap").forEach((wrapper) => {
+    const playButton = wrapper.querySelector(".guide-play-button");
+    const video = wrapper.querySelector(".guide-preview-video");
+
+    function showPoster() {
+      if (!video.paused) {
+        video.pause();
+      }
+
+      video.currentTime = 0;
+      wrapper.classList.remove("is-playing");
+    }
+
+    async function playVideo() {
+      wrapper.classList.add("is-playing");
+
+      try {
+        await video.play();
+      } catch (error) {
+        showPoster();
+      }
+    }
+
+    playButton.addEventListener("click", playVideo);
+
+    video.addEventListener("pause", () => {
+      if (!video.ended) {
+        showPoster();
+      }
+    });
+
+    video.addEventListener("ended", showPoster);
+  });
+</script>
 </body>
 </html>
