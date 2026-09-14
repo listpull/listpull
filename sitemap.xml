@@ -89,42 +89,42 @@
 
     <!-- Tutorial / gameplay images -->
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0156-10-7.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0156-10-7.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0157-11-6.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0157-11-6.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0159-12-8.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0159-12-8.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0160-13-13.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0160-13-13.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0162-14-11.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0162-14-11.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0165-16-10.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0165-16-10.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0166-8-9.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0166-8-9.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0167-14.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0167-14.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0168-4.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0168-4.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0169-5.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0169-5.webp</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_4909-7-12.jpg</image:loc>
+      <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_4909-7-12.webp</image:loc>
     </image:image>
 
     <!-- Wiki videos -->
     <video:video>
-      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0159-12-8.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0159-12-8.webp</video:thumbnail_loc>
       <video:title><![CDATA[Blobby Animal Sort Strategy]]></video:title>
       <video:description><![CDATA[Advanced tips for the Blobby barn animal sort mode, including Level 60 strategy.]]></video:description>
       <video:content_loc>https://listpull.com/blobby/wiki/assets/videos/blobby/animal-sort-strategy.mp4</video:content_loc>
@@ -132,7 +132,7 @@
     </video:video>
 
     <video:video>
-      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0166-8-9.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0166-8-9.webp</video:thumbnail_loc>
       <video:title><![CDATA[Blobby Biome Tour]]></video:title>
       <video:description><![CDATA[Tour of Owl Paradise, Wolf Valley, and other Blobby magical locations via the globe menu.]]></video:description>
       <video:content_loc>https://listpull.com/blobby/wiki/assets/videos/blobby/biome-tour.mp4</video:content_loc>
@@ -140,7 +140,7 @@
     </video:video>
 
     <video:video>
-      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0168-4.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0168-4.webp</video:thumbnail_loc>
       <video:title><![CDATA[Blobby First-Time Tutorial]]></video:title>
       <video:description><![CDATA[Walkthrough of Blobby's first-time tutorial: match 3 animals and use the remove tool.]]></video:description>
       <video:content_loc>https://listpull.com/blobby/wiki/assets/videos/blobby/first-time-tutorial.mp4</video:content_loc>
@@ -148,7 +148,7 @@
     </video:video>
 
     <video:video>
-      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0165-16-10.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0165-16-10.webp</video:thumbnail_loc>
       <video:title><![CDATA[Blobby Village Merge Chains]]></video:title>
       <video:description><![CDATA[Guide to building the floating forest village by merging houses into higher tiers.]]></video:description>
       <video:content_loc>https://listpull.com/blobby/wiki/assets/videos/blobby/village-merge-chain.mp4</video:content_loc>
