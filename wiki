@@ -1,0 +1,205 @@
+# Blobby's Woodland Wonder – Gameplay Guide
+
+Welcome to the official gameplay guide for **Blobby's Woodland Wonder**, a family‑friendly puzzle adventure where you match, merge, sort, and build to rescue woodland animals and grow a floating forest village.
+This page explains the core game modes, controls, and strategies so new players can get started quickly and experienced players can optimize their progression.
+
+---
+
+## 1. Overview of Blobby
+
+**Blobby** is a cheerful orange woodland alchemist and builder who guides you through a series of magical, floating forest world map.
+Your goal is to help Blobby rescue animals, unlock habitats, and transform the woodland into a thriving village by solving 3D puzzle boards.
+
+### Core Gameplay Pillars
+
+- **Match & merge** animals on colorful cube boards.
+- **Sort** stacked animal parts in a barn, similar to a ball‑sort puzzle game.
+- **Build & upgrade** houses in the village using a dedicated house‑merge mode.
+- **Explore Globe** like Owl Paradise and Wolf Valley via the world globe.
+
+---
+
+## 2. Getting Started and Tutorial Flow
+
+When you first open the game, Blobby introduces the basic controls through a short interactive tutorial sequence.
+The tutorial teaches tapping, matching 3 or more animals, and using the remove‑animal power‑up on the main 3D board.
+
+A typical tutorial flow is:
+
+1. **Welcome frame** – Blobby appears on a rainbow cube board and invites you to help the animals.  
+2. **Match 3+ animals** – The game highlights a group of owls and shows a hand icon tapping to complete a match.  
+3. **Remove animal tool** – Blobby demonstrates how to remove a single animal from the board when you are stuck by tapping the “Remove Animal” button and selecting an owl.
+
+You can replay tutorial hints from the settings menu if you need a refresher.
+
+---
+
+## 3. Main Animal Match Mode (Floating Islands)
+
+The primary game mode appears as soon as the game opens: a 3D stack of glowing cubes surrounded by floating islands populated with owls, foxes, and other animals.
+Here you play a **match‑3‑plus** style puzzle: placing and matching animals on the cube grid to clear them and progress through levels.
+
+### Basic Rules
+
+- Animals appear on cube tiles; matching **three or more of the same animal** clears them.
+- New animals spawn on the board and in nearby islands as you play, creating opportunities for combos.
+- Clearing animals fills progress bars at the top of the screen, advancing your **level** and unlocking new creatures and habitats.
+
+### Controls
+
+- **Tap** an animal to select and move it to a highlighted cube tile.
+- **Drag** if a specific implementation allows dragging placement instead of tapping.
+- **Undo / restart** buttons (if available) can reset the board or last move when a level becomes unwinnable.
+
+### Strategy Tips
+
+- Focus on creating higher‑order matches (4+ animals) to maximize clearing and avoid blocking key tiles.
+- Watch how animals are distributed on the side islands; they hint at upcoming spawns and target creatures.
+- Save power‑ups (like removing an animal) for boards where one misplaced creature prevents a large combo.
+
+---
+
+## 4. Tactical Animal Sort Mode (Barn Levels)
+
+The **Animal Sort** game mode is accessed via the second button in the main screen bottom menu, leading to a rustic barn environment.
+In this mode, each animal is represented by a vertical stack of segments, and your objective is to sort the segments so each stack contains parts belonging to the same animal — similar to a **ball sort puzzle game**.
+
+### How the Barn Sort Works
+
+- Each column represents an animal stack (e.g., owl, fox, tiger, pig, rabbit).
+- Segments are initially mixed; you must move segments between stacks to group them correctly.
+- You can only place a segment on top of a stack that matches its animal type or into an empty stack.
+
+### Levels and Difficulty
+
+- Level **1** introduces simple stacks with only a few mixed segments.
+- Higher levels (e.g., **Level 60**) feature many animals and taller stacks, demanding more planning.
+- Some stacks may be partially hidden or blocked, requiring you to free space before sorting efficiently.
+
+### Strategy Tips
+
+- Reserve at least one stack as a temporary buffer column for holding segments while you rearrange others.
+- Identify the animal with the most nearly‑completed stack and finish those stacks first to free space.
+- Avoid trapping important segments under mismatched animals; think two or three moves ahead.
+
+---
+
+## 5. House‑Building Village Mode
+
+Blobby’s world includes a **house‑building mode** where you merge houses instead of animals to grow your village.
+This mode uses a similar rainbow cube board, but tiles host houses of different tiers and styles rather than creatures.
+
+### Accessing House Mode
+
+- From the main screen, tap the **Map** or village icon, then choose the house‑building area.
+- Alternatively, reach it via the **globe menu**, selecting the biome that focuses on village construction.
+
+### House Merge Rules
+
+- Place identical houses next to each other on the board to merge them into a **higher‑tier house**.
+- Higher‑tier houses yield more village points and may unlock visual upgrades such as new roofs, decorations, or additional floors.
+- As the board fills, plan merges to avoid dead‑ends where no two houses match.
+
+### Strategy Tips
+
+- Try building chains: merge small houses into medium, then large, keeping future merges in mind.
+- Use any available “Remove House” tool sparingly to open space for multi‑step merges.
+- Consider clearing one section of the board at a time rather than scattering houses everywhere.
+
+---
+
+## 6. World Map and Globe Menu
+
+The **globe** icon in the bottom menu opens the World Map, showing a 3D planet and a collection of wildlife Globe such as **Owl Paradise** and **Wolf Valley**.
+Each biome is a themed set of levels with its own animal cast, visual style, and board layouts.
+
+### Navigating the Map
+
+- Swipe or tap arrows to spin the globe and browse available maps.
+- Tap a biome tile (e.g., Owl Paradise) to view its island and corresponding level path.
+- Unlock new maps by reaching certain level milestones or fulfilling objective requirements.
+
+### Progression
+
+- Completing levels in one biome often unlocks new animals or houses linked to that habitat.
+- Some worlds emphasize specific mechanics: Owl Paradise may focus on simple matching, while others highlight advanced sorting or rescue challenges.
+
+---
+
+## 7. Power‑Ups and Tools
+
+Several tools help you solve boards and rescue animals more efficiently.
+
+### Remove Animal / Remove House
+
+- The **Remove Animal** tool lets you tap a creature on the board to remove it when it is blocking a key match.
+- In house mode, an analogous **Remove House** button can clear a single house tile so you can continue merging.
+
+Use these tools strategically:
+
+- Save them for situations where one tile prevents a large combo or chain reaction.
+- Avoid using them on easy matches; rely on your planning first.
+
+### Blobby's Rescue Plane
+
+- In some levels, Blobby pilots an orange **rescue plane** to airlift trapped animals from cages or hard‑to‑reach tiles.
+- These rescue actions often trigger board changes that open new paths or create instant matches.
+
+---
+
+## 8. Progression, Currency, and Village Growth
+
+As you play, you earn in‑game currencies and progression towards your woodland village.
+
+### Currencies
+
+- **Coins / gems**: Used for unlocking levels, purchasing power‑ups, or refreshing boards.
+- **House points**: Track village growth and unlock new buildings or decorations.
+
+### Player Rating and Wildlife Community
+
+Blobby’s Woodland Wonder is positioned as a high‑quality puzzle experience with strong ratings and a large wildlife‑focused community.
+Your progression contributes to the shared universe of ListPull nature experiences connecting gameplay, wildlife imagery, and storytelling.
+
+---
+
+## 9. Tips and Strategies for New Players
+
+- **Follow the tutorial** carefully; it introduces matching, removing animals, and basic strategies in a low‑pressure environment.
+- **Practice in early barn levels** to internalize sort mechanics before attempting higher‑level animal stacks.
+- **Experiment with house merges** to understand how many tiers exist and how far you can push your village growth.
+- **Explore multiple maps** rather than staying on a single island; different layouts teach different skills and keep gameplay fresh.
+
+---
+
+## 10. Advanced Strategies and Video Guides
+
+To deepen the guide, consider embedding short video clips for:
+
+- **Intro tutorial walkthrough** – Showing the initial match‑3 board and remove‑animal tool in action.
+- **Animal Sort Level 60 breakdown** – Explaining how to approach complex stacks and avoid dead‑ends.
+- **Village building time‑lapse** – Demonstrating house merges from basic cabins to advanced homes.
+- **Biome tours** – Quick fly‑throughs of Owl Paradise, Wolf Valley, and other habitats.
+
+Place these videos near the relevant sections (e.g., “Main Animal Match Mode”, “Tactical Animal Sort Mode”, “House‑Building Village Mode”) so players can see the mechanic while reading the explanation.  
+Host the videos on a platform like YouTube or your own CDN and embed them using your wiki’s video or iframe syntax.
+
+---
+
+## 11. FAQ (Gameplay‑Focused)
+
+**Q: Can I get stuck on an animal board?**  
+Yes, some layouts can become unsolvable if animals are placed poorly. Use the remove‑animal tool or restart the level if no matches remain.
+
+**Q: How do I unlock new animals and maps?**  
+Progress through levels, complete objectives, and reach milestones indicated on the globe map; new animals and habitats appear as you advance.
+
+**Q: Is there any time limit?**  
+Core puzzle boards are designed to be relaxing; most levels do not use hard timers, letting you plan moves at your own pace.
+
+**Q: Can I play only one mode?**  
+Yes, you can focus on your favorite mode (animal matching, barn sorting, or village building), but playing across modes usually grants the fastest progression and the most variety.
+
+---
+
+*This wiki page is maintained by ListPull and the Blobby community. Contributions with new strategies, level‑specific tips, and biome guides are welcome.*
