@@ -7,7 +7,7 @@ This page explains the core game modes, controls, and strategies so new players 
 
 ## 1. Overview of Blobby
 
-**Blobby** is a cheerful orange woodland alchemist and builder who guides you through a series of magical, floating forest biomes.
+**Blobby** is a cheerful orange woodland painter and builder who guides you through a series of magical, floating forest world map.
 Your goal is to help Blobby rescue animals, unlock habitats, and transform the woodland into a thriving village by solving 3D puzzle boards.
 
 ### Core Gameplay Pillars
@@ -15,7 +15,7 @@ Your goal is to help Blobby rescue animals, unlock habitats, and transform the w
 - **Match & merge** animals on colorful cube boards.
 - **Sort** stacked animal parts in a barn, similar to a ball‑sort puzzle game.
 - **Build & upgrade** houses in the village using a dedicated house‑merge mode.
-- **Explore biomes** like Owl Paradise and Wolf Valley via the world globe.
+- **Explore Globe** like Owl Paradise and Wolf Valley via the world globe.
 
 ---
 
@@ -110,19 +110,19 @@ This mode uses a similar rainbow cube board, but tiles host houses of different 
 
 ## 6. World Map and Globe Menu
 
-The **globe** icon in the bottom menu opens the World Map, showing a 3D planet and a collection of wildlife biomes such as **Owl Paradise** and **Wolf Valley**.
+The **globe** icon in the bottom menu opens the World Map, showing a 3D planet and a collection of wildlife Globe such as **Owl Paradise** and **Wolf Valley**.
 Each biome is a themed set of levels with its own animal cast, visual style, and board layouts.
 
 ### Navigating the Map
 
-- Swipe or tap arrows to spin the globe and browse available biomes.
+- Swipe or tap arrows to spin the globe and browse available maps.
 - Tap a biome tile (e.g., Owl Paradise) to view its island and corresponding level path.
-- Unlock new biomes by reaching certain level milestones or fulfilling objective requirements.
+- Unlock new maps by reaching certain level milestones or fulfilling objective requirements.
 
 ### Progression
 
 - Completing levels in one biome often unlocks new animals or houses linked to that habitat.
-- Some biomes emphasize specific mechanics: Owl Paradise may focus on simple matching, while others highlight advanced sorting or rescue challenges.
+- Some worlds emphasize specific mechanics: Owl Paradise may focus on simple matching, while others highlight advanced sorting or rescue challenges.
 
 ---
 
@@ -168,7 +168,7 @@ Your progression contributes to the shared universe of ListPull nature experienc
 - **Follow the tutorial** carefully; it introduces matching, removing animals, and basic strategies in a low‑pressure environment.
 - **Practice in early barn levels** to internalize sort mechanics before attempting higher‑level animal stacks.
 - **Experiment with house merges** to understand how many tiers exist and how far you can push your village growth.
-- **Explore multiple biomes** rather than staying on a single island; different layouts teach different skills and keep gameplay fresh.
+- **Explore multiple maps** rather than staying on a single island; different layouts teach different skills and keep gameplay fresh.
 
 ---
 
@@ -191,7 +191,7 @@ Host the videos on a platform like YouTube or your own CDN and embed them using 
 **Q: Can I get stuck on an animal board?**  
 Yes, some layouts can become unsolvable if animals are placed poorly. Use the remove‑animal tool or restart the level if no matches remain.
 
-**Q: How do I unlock new animals and biomes?**  
+**Q: How do I unlock new animals and maps?**  
 Progress through levels, complete objectives, and reach milestones indicated on the globe map; new animals and habitats appear as you advance.
 
 **Q: Is there any time limit?**  
