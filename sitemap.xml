@@ -3,35 +3,56 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 
-
   <url>
     <loc>https://listpull.com/</loc>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://listpull.com/blobby-real-round-shadow.webp</image:loc>
+      <image:title>Blobby character — Woodland alchemist and builder</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://listpull.com/blobby-promo.webp</image:loc>
+      <image:title>Blobby's Woodland Wonder promotional banner</image:title>
+    </image:image>
   </url>
 
   <url>
     <loc>https://listpull.com/about-blobby</loc>
     <priority>1.0</priority>
-        <video:video>
+    <image:image>
+      <image:loc>https://listpull.com/blobby-no-bg.webp</image:loc>
+      <image:title>Blobby's Woodland Wonder preview</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://listpull.com/IMG_4905-4.jpg</image:loc>
+      <image:title>Blobby 3D Floating Islands and Animal Merge Puzzle Board</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://listpull.com/IMG_0166-8.jpg</image:loc>
+      <image:title>Blobby Barn Animal Sorting Stack Challenge</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://listpull.com/IMG_0160-13.jpg</image:loc>
+      <image:title>Blobby Airplane Rescue Power-up</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://listpull.com/IMG_0165-16.jpg</image:loc>
+      <image:title>Blobby Global World Map</image:title>
+    </image:image>
+    <video:video>
       <video:thumbnail_loc>
         https://listpull.com/blobby-real-round-shadow.png
       </video:thumbnail_loc>
-
       <video:title>Blobby's Woodland Wonder Gameplay Preview</video:title>
-
       <video:description>
         Watch Blobby's Woodland Wonder gameplay featuring colorful animal sorting,
         3D merge puzzles, and magical floating forest adventures.
       </video:description>
-
       <video:content_loc>
         https://listpull.com/blobby-preview.mp4
       </video:content_loc>
-
       <video:publication_date>2026-09-12T00:00:00-04:00</video:publication_date>
-
       <video:duration>27</video:duration>
-
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>
@@ -61,7 +82,6 @@
     <priority>0.8</priority>
   </url>
 
-
   <!-- Blobby wiki main page with images and videos -->
   <url>
     <loc>https://listpull.com/blobby/wiki/</loc>
@@ -71,43 +91,33 @@
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0156-10-7.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0157-11-6.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0159-12-8.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0160-13-13.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0162-14-11.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0165-16-10.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0166-8-9.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0167-14.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0168-4.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_0169-5.jpg</image:loc>
     </image:image>
-
     <image:image>
       <image:loc>https://listpull.com/blobby/wiki/assets/images/blobby/IMG_4909-7-12.jpg</image:loc>
     </image:image>
