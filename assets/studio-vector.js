@@ -266,7 +266,15 @@
   for(const name of ['duplicate','delete','up','down'])$('vector-'+name).addEventListener('click',()=>action(name));
   $('vector-undo').addEventListener('click',()=>restoreHistory(-1));
   $('vector-redo').addEventListener('click',()=>restoreHistory(1));
-  function applyZoom(){stage.style.width='min('+Math.round(zoom*100)+'%, '+Math.round(880*zoom)+'px)';$('vector-zoom-label').textContent=Math.round(zoom*100)+'%';}
+  function applyZoom(){
+    const area=document.querySelector('.vector-canvas-area');
+    const availableWidth=Math.max(200,area.clientWidth-72);
+    const availableHeight=Math.max(170,area.clientHeight-72);
+    const base=Math.min(880,availableWidth,availableHeight*1.5);
+    stage.style.width=Math.round(base*zoom)+'px';
+    $('vector-zoom-label').textContent=Math.round(zoom*100)+'%';
+  }
+  window.addEventListener('resize',applyZoom);
   $('vector-zoom-in').addEventListener('click',()=>{zoom=clamp(zoom+.2,.5,2);applyZoom()});
   $('vector-zoom-out').addEventListener('click',()=>{zoom=clamp(zoom-.2,.5,2);applyZoom()});
   function loadTemplate(name){
