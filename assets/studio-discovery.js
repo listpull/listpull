@@ -31,6 +31,7 @@
  function loadDataset(set){
   data=set;profile=engine.profile(set);lastReport=null;
   $('discovery-download').disabled=true;
+  $('discovery-demo-download').disabled=!set.demo;
   $('discovery-dataset-name').textContent=set.name+' · '+fmt(set.rows.length)+' rows';
   const suggest=engine.suggest(set,profile);
   $('discovery-goal').value=suggest.goal==='nash'?'nash':suggest.goal;
@@ -235,6 +236,14 @@
   const n=Number(event.target.value);$('discovery-uplift-value').value=(n>=0?'+':'')+n+'%';
  });
  $('discovery-analyze').addEventListener('click',analyze);
+ $('discovery-demo-download').addEventListener('click',()=>{
+  if(!data?.demo)return;
+  const escape=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows=[data.headers.map(escape).join(','),...data.rows.map(row=>data.headers.map(key=>escape(row[key])).join(','))];
+  const blob=new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='listpull-'+(data.demoId||'sample')+'-example.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ });
  $('discovery-download').addEventListener('click',()=>{
   if(!lastReport)return;
   const blob=new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'});
