@@ -10,6 +10,7 @@
 <button type="button" data-demo="customers"><strong>🛍️ Customers</strong><small>Who spends the most?</small></button>
 <button type="button" data-demo="deliveries"><strong>🚚 Deliveries</strong><small>Where are delays highest?</small></button>
 <button type="button" data-demo="wildlife"><strong>🦌 Wildlife</strong><small>Where are sightings concentrated?</small></button>
+<button type="button" data-demo="movement"><strong>🛰️ Animal tracking</strong><small>Where might a tagged animal move?</small></button>
 <button type="button" data-demo="farming"><strong>🌾 Agriculture</strong><small>How does yield differ by crop?</small></button>
 <button type="button" data-demo="health"><strong>🩺 Public health</strong><small>Compare aggregated case trends</small></button>
 <button type="button" data-demo="government"><strong>🏛️ Public services</strong><small>Which programs take longest?</small></button>
@@ -23,12 +24,20 @@
 <details class="discovery-schema" open><summary>Detected fields <span id="discovery-schema-count"></span></summary><div id="discovery-schema-body"></div></details>
 </div>
 <div class="discovery-controls"><div class="discovery-subhead"><span class="kicker">Customize your report</span><strong>What would you like to compare?</strong></div>
-<label for="discovery-goal">Explore</label><select id="discovery-goal"><option value="groups">Compare groups and outcomes</option><option value="stockout">Check stock against demand</option><option value="nash">Compare competitive decisions</option></select>
+<label for="discovery-goal">Explore</label><select id="discovery-goal"><option value="groups">Compare groups and outcomes</option><option value="stockout">Check stock against demand</option><option value="nash">Compare competitive decisions</option><option value="movement">Explore animal movement</option></select>
 <div id="discovery-group-fields"><label for="discovery-group">Compare categories or segments</label><select id="discovery-group"></select><label for="discovery-outcome">Measure this value</label><select id="discovery-outcome"></select><div id="discovery-positive-field" hidden><label for="discovery-positive">Count this outcome</label><select id="discovery-positive"></select></div></div>
 <div id="discovery-stock-fields" hidden><label for="discovery-item">Item / product identifier</label><select id="discovery-item"></select><label for="discovery-stock">Current stock</label><select id="discovery-stock"></select><label for="discovery-demand">Expected demand (assumption)</label><select id="discovery-demand"></select><label for="discovery-uplift">What if demand changes? <output id="discovery-uplift-value">+0%</output></label><input id="discovery-uplift" type="range" min="-50" max="100" step="5" value="0"></div>
 <div id="discovery-nash-fields" hidden><p class="discovery-hint">To infer a two-player game, your records need two observed action columns and a numerical payoff for each party. Every action combination needs at least 3 observations.</p>
 <label for="discovery-action-a">Party A action</label><select id="discovery-action-a"></select><label for="discovery-action-b">Party B action</label><select id="discovery-action-b"></select>
-<label for="discovery-reward-a">Party A payoff (numeric)</label><select id="discovery-reward-a"></select><label for="discovery-reward-b">Party B payoff (numeric)</label><select id="discovery-reward-b"></select></div>
+<label for="discovery-reward-a">Party A payoff (numeric)</label><select id="discovery-reward-a"></select><label for="discovery-reward-b">Party B payoff (numeric)</label><select id="discovery-reward-b"></select></div><div id="discovery-movement-fields" hidden>
+<p class="discovery-hint">See a tagged animal's recorded locations and explore a short continuation of its recent movement. Your CSV needs an animal ID, timestamp, latitude and longitude for each observation.</p>
+<label for="discovery-animal">Which tracked animal?</label><select id="discovery-animal"></select>
+<label for="discovery-animal-col">Animal ID column</label><select id="discovery-animal-col"></select>
+<label for="discovery-time-col">Date & time column</label><select id="discovery-time-col"></select>
+<label for="discovery-lat-col">Latitude column</label><select id="discovery-lat-col"></select>
+<label for="discovery-lon-col">Longitude column</label><select id="discovery-lon-col"></select>
+<label for="discovery-track-steps">Look ahead <output id="discovery-track-output">1 observation interval</output></label><input type="range" id="discovery-track-steps" min="1" max="3" step="1" value="1">
+</div>
 <div class="discovery-actions"><button type="button" class="btn orange" id="discovery-analyze">Analyze the data ↗</button><button type="button" class="btn secondary" id="discovery-download" disabled>Download report ↓</button></div><p id="discovery-status" role="status" aria-live="polite"></p>
 </div></div>
 
