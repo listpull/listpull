@@ -121,7 +121,8 @@
       for(const [direction,x,y] of handles){
         const circle=document.createElementNS(NS,'circle');
         circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r','25');
-        circle.setAttribute('fill','transparent');circle.setAttribute('stroke','none');
+        circle.setAttribute('fill','rgba(255,255,255,0.002)');circle.setAttribute('stroke','none');
+        circle.setAttribute('pointer-events','all');
         circle.setAttribute('data-resize-handle',direction);
         circle.setAttribute('aria-label','Resize '+direction);
         const cursors={nw:'nwse-resize',ne:'nesw-resize',sw:'nesw-resize',se:'nwse-resize',
