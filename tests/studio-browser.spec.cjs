@@ -114,6 +114,7 @@ test('Fiddle has working isolated preview and friendly sample',async({page})=>{
  await page.locator('#fiddle-tab-js').click();
  await expect(page.locator('#fiddle-js')).toBeVisible();
  await expect(page.locator('#ai-local-start')).toBeVisible();
+ await page.locator('#fiddle-tab-html').click();
  await expect(page.locator('#fiddle-html')).toBeVisible();
 });
 test('mobile visitor can open Labs menu without losing Blobby',async({browser})=>{
