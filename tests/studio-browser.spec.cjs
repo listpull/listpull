@@ -52,8 +52,8 @@ test('Forecast Lab imports CSV and shows validation against a baseline',async({p
  const values=Array.from({length:26},(_,i)=>'2026-09-'+String(i+1).padStart(2,'0')+','+(80+i*3)).join('\n');
  await page.locator('#forecast-upload').setInputFiles({name:'weekly-visits.csv',mimeType:'text/csv',buffer:Buffer.from('date,visits\n'+values)});
  await expect(page.locator('#forecast-import-message')).toContainText('Imported 26 observations');
- await expect(page.locator('#forecast-business-summary')).toContainText('next-step model estimate');
- await expect(page.locator('#forecast-backtest')).toContainText('mean absolute error');
+ await expect(page.locator('#forecast-business-summary')).toContainText('next value is estimated');
+ await expect(page.locator('#forecast-backtest')).toContainText('average miss');
 });
 test('Image Studio supports one-click look and destination-sized download',async({page})=>{
  await page.goto('/studio/image-editor.html');
@@ -90,6 +90,7 @@ test('Vector selected shape has direct resize handles',async({page})=>{
  await page.mouse.down();
  await page.mouse.move(box.x+box.width/2+55,box.y+box.height/2+35,{steps:6});
  await page.mouse.up();
+ console.log('VECTOR DRAG CHECK:', 'original',initial,'current',await field.inputValue(),'status',await page.locator('#vector-status').textContent());
  await expect.poll(async()=>Number(await field.inputValue())).toBeGreaterThan(initial);
 });
 test('Visual business explorer shows tracking scenario',async({page})=>{
