@@ -108,7 +108,7 @@ test('Vector Studio can draw, restyle and export a freehand layer',async({page})
  await page.mouse.move(x+85,y-18,{steps:5});await page.mouse.up();
  await expect(page.locator('#vector-layers')).toContainText('Drawing');
  await expect(page.locator('#vector-brush-wrapper')).toBeVisible();
- await page.locator('[data-property="strokeWidth"]').fill('13');
+ await page.locator('[data-property="strokeWidth"]').evaluate(input=>{input.value='13';input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));});
  await expect(page.locator('#vector-brush-output')).toContainText('13 px');
  const download=page.waitForEvent('download');await page.locator('#vector-export-svg').click();
  expect((await download).suggestedFilename()).toContain('svg');
