@@ -24,7 +24,7 @@
    const available=lib.prebuiltAppConfig?.model_list||[];
    const compact=available.filter(m=>/0[.]5B|0[.]6B|1B|1[.]5B|2B|360M|135M|1[.]1B/i.test(m.model_id||''));
    if(!compact.length)throw Error('This WebLLM package does not expose a supported compact model; the safe retrieval workflow remains available.');
-   if(!select.options.length||select.options[0].value===''){
+   if(!select.dataset.loaded){
      select.replaceChildren();
      for(const entry of compact){
        const option=document.createElement('option');
@@ -34,6 +34,7 @@
      }
      const preferred=compact.find(m=>/Qwen.*0[.]5B.*q4/i.test(m.model_id))||compact.find(m=>/SmolLM.*360M/i.test(m.model_id))||compact.find(m=>/1B.*q4/i.test(m.model_id))||compact[0];
      select.value=preferred.model_id;
+     select.dataset.loaded='true';
    }
    select.disabled=false;return select.value;
  }
