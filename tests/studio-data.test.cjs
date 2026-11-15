@@ -36,6 +36,16 @@ test('observed strategy payoff mapping is derived from all four combinations',()
  assert.ok(equilibrium.equilibria.length>=1);
  assert.ok(equilibrium.equilibria.every(g=>g.regretA<.00001&&g.regretB<.00001));
 });
+test('wildlife tracking projects an illustrative next location from GPS records',()=>{
+ const data=D.makeDemo('movement');
+ const p=D.profile(data),suggest=D.suggest(data,p);
+ assert.equal(suggest.goal,'movement');
+ const out=D.trackMovement(data,{animalId:'Heron H-101',steps:1});
+ assert.equal(out.kind,'movement');
+ assert.equal(out.points.length,12);
+ assert.ok(Number.isFinite(out.projected.lat)&&Number.isFinite(out.projected.lon));
+ assert.ok(out.validationErrorKm>=0&&out.uncertaintyKm>0);
+});
 test('health example is aggregate and has no individual identifiers',()=>{
  const d=D.makeDemo('health');
  assert.deepEqual(d.headers,['region','report_week','case_count','clinic_capacity']);
@@ -58,10 +68,17 @@ test('all published HTML routes use contact page, not mailto',()=>{
 });
 test('sitemap includes all new public destinations once',()=>{
  const xml=fs.readFileSync(path.resolve(__dirname,'../sitemap.xml'),'utf8');
- const urls=['/solutions.html','/engineering.html','/labs.html','/studio.html','/studio/vector.html','/studio/strategy.html','/studio/forecast.html','/studio/ai.html'];
+ const urls=['/solutions.html','/engineering.html','/labs.html','/studio.html','/studio/vector.html','/studio/strategy.html','/studio/forecast.html','/studio/ai.html','/studio/image-editor.html'];
  for(const url of urls){
   const found=xml.split('https://listpull.com'+url+'</loc>').length-1;
   assert.equal(found,1,'Expected exactly one sitemap entry for '+url);
+ }
+});
+test('public Studio pages never mention internal source projects or developer infrastructure',()=>{
+ const root=path.resolve(__dirname,'..');
+ for(const p of ['studio/ai.html','studio/vector.html','studio/forecast.html','studio/strategy.html','studio.html','labs.html']){
+  const content=fs.readFileSync(path.join(root,p),'utf8');
+  assert.equal(/Neubra|Electron|GitHub Pages|private research engine|founder.s portfolio/i.test(content),false,p+' exposes internal implementation history');
  }
 });
 test('entry pages advertise recognizable consumer and business paths',()=>{
