@@ -7,13 +7,13 @@ Prepared: 2026-11-15. This document is an execution plan, not a representation o
 - **ListPull Engineering**: founder-led cloud architecture, applied AI, web/data engineering, and systems integration. Business development and consulting inquiries belong here.
 - **ListPull Labs**: Blobby's Woodland Wonder, wildlife media, ListPull Studio experiments, and future independent products.
 
-**Homepage promise:** Complex systems. Clear solutions.
+**Audience promise:** The main homepage remains Blobby-and-wildlife-first, with Studio and Labs immediately discoverable. The separate `/solutions.html` page uses the engineering promise: **Complex systems. Clear solutions.**
 
 ## Credibility / attribution
 The founder's public portfolio describes AI recommendation workflows using AWS Step Functions, Lambda, PostgreSQL, Bedrock embeddings, and OpenSearch; public-health integrations; public data UI work; and independent ListPull-built analytics and research tooling. Prior employer projects must be explicitly attributed to the founder, not presented as ListPull customer contracts. Do not use client logos, outcomes, security claims, contracting awards, certifications or metrics without verification.
 
 ## Near-term buyer acquisition plan
-1. **Publish the Engineering-facing site** after reviewing the branch, testing navigation and email, and confirming copy/legal entity details.
+1. **Publish the original consumer-first homepage plus supporting Engineering/Labs/Studio pages** after reviewing the draft branch, testing navigation and email, and confirming legal/business details.
 2. **Create a one-page capability statement** with verified legal name, UEI, CAGE (if applicable), relevant NAICS, contact info, core competencies, differentiators, and clearly labeled *principal experience*. Avoid claims of corporate federal past performance without awards.
 3. **Reactivate or renew SAM.gov** by logging into the entity workspace and checking its authoritative status. Do not claim active registration on the site until verified. Registration must be renewed every 365 days. SAM.gov registration is free.
 4. **Update SBA Small Business Search (SBS)** when relevant/eligible with substantive capabilities, keywords, NAICS and accurately represented experience.
@@ -27,8 +27,8 @@ The founder's public portfolio describes AI recommendation workflows using AWS S
 - **Working prototype sprint**: agreed success criteria, demo artifact, design decisions, source/handoff plan.
 
 ## Studio product roadmap
-**Now**: browser-based raster editor preview (upload, contrast/brightness/saturation/grayscale, rotation/flip, caption, PNG export); all processing client-side.
-**Next**: audit and modernize the private `listpull/svg-editor` React/Fabric.js codebase (currently on React 18 and Fabric 3.x, using react-scripts), define licenses/ownership, migrate dependency stack, and add layers, history, crop, SVG import/export, and usability/accessibility testing.
+**Now**: public browser-based image editor (upload, contrast/brightness/saturation/grayscale, rotation/flip, caption, PNG export) plus layered Vector Studio, Nash Strategy Lab, illustrative ARIMA Forecast Lab, and source-grounded AI workflow demo.
+**Next**: audit and modernize the private `listpull/svg-editor` React/Fabric.js codebase (currently on React 18 and Fabric 3.x, using react-scripts), define licenses/ownership, migrate dependency stack, and expand the public vector tool with path editing, advanced layers/history, crop, vetted SVG import, and usability/accessibility testing.
 **Later**: assess local video trimming, timeline/caption support, export formats and browser/codec performance. Do not advertise these as available.
 
 ## Pre-launch verification
