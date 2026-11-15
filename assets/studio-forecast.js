@@ -1,5 +1,5 @@
 /* ListPull Forecast Lab - illustrative ARIMA(1,1,0), browser only.
-   Neubra Electron uses the full npm "arima" model package; this is not that service. */
+    */
 (() => {
  'use strict';
  const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
