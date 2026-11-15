@@ -19,11 +19,11 @@
   const first=projection.forecast[0].point,last=values[values.length-1];
   const delta=first-last;
   const summary=$('forecast-business-summary');summary.replaceChildren();
-  const title=el('h3','In everyday language');
-  const description=el('p','From '+values.length+' observed values ('+source+'), the next-step model estimate is '+format(first)+', '+(delta>=0?'up ':'down ')+format(Math.abs(delta))+' compared with the latest reading ('+format(last)+'). This is a model scenario, not a guaranteed future measurement.');
+  const title=el('h3','The next estimated value');
+  const description=el('p','Based on '+values.length+' past readings ('+source+'), the next value is estimated at '+format(first)+'. That is '+(delta>=0?'an increase of ':'a decrease of ')+format(Math.abs(delta))+' compared with the latest '+format(last)+'.');
   summary.append(title,description);
   const back=$('forecast-backtest');back.replaceChildren();
-  const intro=el('h3','How did this method do on recent known data?');back.append(intro);
+  const intro=el('h3','How reliable was this method on recent data?');back.append(intro);
   const holdout=Math.min(10,Math.max(3,Math.floor(values.length*.2)));
   const train=values.slice(0,-holdout),actual=values.slice(-holdout);
   if(train.length<8){back.append(el('p','Need more history for a basic holdout evaluation. Add at least 12 data points.'));return}
@@ -31,10 +31,10 @@
   const mae=forecast.reduce((a,v,i)=>a+Math.abs(v-actual[i]),0)/holdout;
   const baseline=train[train.length-1];
   const naiveMae=actual.reduce((a,v)=>a+Math.abs(v-baseline),0)/holdout;
-  const line=el('p','On the last '+holdout+' held-out observations: model mean absolute error '+format(mae)+' vs. simple “repeat the last value” baseline '+format(naiveMae)+'.');
-  const note=el('p',mae<naiveMae?'The model beat this simple baseline on this one holdout. That does not establish future accuracy.':'The model did not outperform the simple baseline on this holdout. More data, different models or diagnostics may be needed.');
+  const line=el('p','We checked '+holdout+' recent readings the model had not seen. Its average miss was '+format(mae)+' units; keeping the latest value unchanged would have missed by '+format(naiveMae)+' units on average.');
+  const note=el('p',mae<naiveMae?'This example performed better than the simple comparison on these readings. Future results can differ.':'A simple unchanged-value estimate performed just as well or better here. More history or a different approach may help.');
   note.className='forecast-quality-note';
-  const caution=el('p','Holdout measurements use past data only. Confidence bands remain illustrative and are not calibrated, especially on sparse or volatile series.');
+  const caution=el('p','These are trial calculations, not guarantees. Verify trends with representative company data before planning around them.');
   back.append(line,note,caution);
  }
  function addOptions(target,keys,selected,includeBlank=false){
