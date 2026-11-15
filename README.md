@@ -1,6 +1,6 @@
 # ListPull website
 
-Static, mobile-first web presence for **ListPull, LLC**, published with GitHub Pages at https://listpull.com/.
+Static, mobile-first web presence for **ListPull, LLC**, published with ListPull Studio at https://listpull.com/.
 
 ## Site map
 
@@ -23,7 +23,7 @@ No Node build or hosted API is required to serve the site. For local routing, ru
 python3 -m http.server 8000
 ```
 
-Visit `http://localhost:8000/` and the URLs above. GitHub Pages publishes the root of the configured deployment branch.
+Visit `http://localhost:8000/` and the URLs above. ListPull Studio publishes the root of the configured deployment branch.
 
 ## Checks
 
@@ -38,6 +38,6 @@ Automated static/math/data/SEO checks run in `.github/workflows/studio-checks.ym
 
 ## Architecture, provenance & release readiness
 
-Read `docs/STUDIO_ARCHITECTURE.md` for explicit implemented-vs-planned capabilities, privacy boundaries, references to the separate private SVG editor and Neubra systems, and the pre-merge manual browser checklist. Read `docs/ENGINEERING_LABS_LAUNCH.md` for client acquisition, SAM.gov verification, and launch strategy.
+Read `docs/STUDIO_ARCHITECTURE.md` for explicit implemented-vs-planned capabilities, privacy boundaries, references to the separate private SVG editor and ListPull Studio systems, and the pre-merge manual browser checklist. Read `docs/ENGINEERING_LABS_LAUNCH.md` for client acquisition, SAM.gov verification, and launch strategy.
 
 **Do not merge draft PR changes into `main` until the site owner has reviewed them.** Publicly hosted examples are previews—not production security certifications or federal contract claims.
