@@ -1,5 +1,5 @@
-/* Browser-first numerical demonstrations. No private Neubra code or API credentials.
- * These independent educational solvers are intentionally narrower than Neubra.
+/* Browser-first numerical demonstrations. No private 
+ * These independent educational solvers are intentionally narrower than 
  * CommonJS exports also allow dependency-free Node tests. */
 (function(root){
 'use strict';
