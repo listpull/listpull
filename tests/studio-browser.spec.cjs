@@ -97,6 +97,22 @@ test('Vector selected shape has direct resize handles',async({page})=>{
  console.log('VECTOR DRAG CHECK:', 'original',initial,'current',await field.inputValue(),'status',await page.locator('#vector-status').textContent());
  await expect.poll(async()=>Number(await field.inputValue())).toBeGreaterThan(initial);
 });
+test('Vector Studio can draw, restyle and export a freehand layer',async({page})=>{
+ await page.goto('/studio/vector.html');
+ await page.locator('#vector-pen').click();
+ await expect(page.locator('#vector-pen')).toHaveAttribute('aria-pressed','true');
+ const stage=await page.locator('#vector-stage').boundingBox();
+ const x=stage.x+stage.width*.38,y=stage.y+stage.height*.45;
+ await page.mouse.move(x,y);await page.mouse.down();
+ await page.mouse.move(x+34,y+22,{steps:4});
+ await page.mouse.move(x+85,y-18,{steps:5});await page.mouse.up();
+ await expect(page.locator('#vector-layers')).toContainText('Drawing');
+ await expect(page.locator('#vector-brush-wrapper')).toBeVisible();
+ await page.locator('[data-property="strokeWidth"]').fill('13');
+ await expect(page.locator('#vector-brush-output')).toContainText('13 px');
+ const download=page.waitForEvent('download');await page.locator('#vector-export-svg').click();
+ expect((await download).suggestedFilename()).toContain('svg');
+});
 test('Visual business explorer shows tracking scenario',async({page})=>{
  await page.goto('/studio/strategy.html');
  await page.locator('[data-demo="movement"]').click();
