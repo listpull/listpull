@@ -46,6 +46,15 @@
   fillSelect('discovery-action-b',suggest.actionB,categories);
   fillSelect('discovery-reward-a',suggest.rewardA,numbers);
   fillSelect('discovery-reward-b',suggest.rewardB,numbers);
+  const keyFor=rx=>data.headers.find(k=>rx.test(k))||data.headers[0];
+  const animalCol=keyFor(/animal|track|tag|subject/i);
+  fillSelect('discovery-animal-col',animalCol);
+  fillSelect('discovery-time-col',keyFor(/time|date|observ/i));
+  fillSelect('discovery-lat-col',keyFor(/^lat|latitude/i),numbers);
+  fillSelect('discovery-lon-col',keyFor(/^lon|longitude|lng/i),numbers);
+  const ids=[...new Set(data.rows.map(row=>row[animalCol]).filter(Boolean))].slice(0,60);
+  fillSelect('discovery-animal',ids[0],ids);
+  $('discovery-track-steps').value='1';$('discovery-track-output').value='1 observation interval';
   $('discovery-uplift').value='0';$('discovery-uplift-value').value='+0%';
   showGoal();showPositive();
   renderSchema();
@@ -62,6 +71,7 @@
   $('discovery-group-fields').hidden=choice!=='groups';
   $('discovery-stock-fields').hidden=choice!=='stockout';
   $('discovery-nash-fields').hidden=choice!=='nash';
+  $('discovery-movement-fields').hidden=choice!=='movement';
  }
  function showPositive(){
    const key=$('discovery-outcome').value,field=profile.find(x=>x.key===key);
@@ -144,6 +154,58 @@
    if(twoSeries)section.append(node('p','outcome-chart-legend','● Available stock     ● Scenario demand'));
    return section;
  }
+ function visualizeTrack(out){
+  const container=node('div','outcome-chart movement-view'),NS='http://www.w3.org/2000/svg';
+  container.append(node('h4','','Observed path and next-step scenario'));
+  const points=[...out.points,out.projected],lats=points.map(p=>p.lat),lons=points.map(p=>p.lon);
+  const minLat=Math.min(...lats),maxLat=Math.max(...lats),minLon=Math.min(...lons),maxLon=Math.max(...lons);
+  const padLat=Math.max(.004,(maxLat-minLat)*.18),padLon=Math.max(.004,(maxLon-minLon)*.18);
+  const x=lon=>64+620*(lon-(minLon-padLon))/(maxLon-minLon+padLon*2);
+  const y=lat=>275-225*(lat-(minLat-padLat))/(maxLat-minLat+padLat*2);
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 770 315');
+  svg.setAttribute('role','img');svg.setAttribute('aria-label','Observed GPS path and projected next location on a coordinate grid');
+  const el=(tag,props,text)=>{
+    const e=document.createElementNS(NS,tag);
+    for(const [k,v] of Object.entries(props||{}))e.setAttribute(k,String(v));
+    if(text!==undefined)e.textContent=String(text);return e;
+  };
+  svg.append(el('rect',{x:40,y:22,width:670,height:260,rx:13,fill:'#0e2432',stroke:'#33536a'}));
+  for(let i=0;i<6;i++){
+    const pos=52+i*114;
+    svg.append(el('line',{x1:pos,y1:24,x2:pos,y2:281,stroke:'#426477','stroke-opacity':'.45'}));
+    svg.append(el('line',{x1:40,y1:30+i*48,x2:710,y2:30+i*48,stroke:'#426477','stroke-opacity':'.45'}));
+  }
+  svg.append(el('text',{x:58,y:43,fill:'#d1eafa','font-size':17},'N ↑'));
+  svg.append(el('text',{x:680,y:300,fill:'#d1eafa','font-size':17},'E →'));
+  const p=out.points;
+  svg.append(el('polyline',{points:p.map(z=>x(z.lon)+','+y(z.lat)).join(' '),fill:'none',stroke:'#70e2c9','stroke-width':4,'stroke-linejoin':'round'}));
+  p.forEach((z,i)=>svg.append(el('circle',{cx:x(z.lon),cy:y(z.lat),r:i===p.length-1?7:4,fill:i===p.length-1?'#fff':'#75d9be',stroke:'#163c40','stroke-width':2})));
+  const last=p.at(-1),pred=out.projected;
+  svg.append(el('line',{x1:x(last.lon),y1:y(last.lat),x2:x(pred.lon),y2:y(pred.lat),stroke:'#ffa870','stroke-width':4,'stroke-dasharray':'9 7'}));
+  svg.append(el('circle',{cx:x(pred.lon),cy:y(pred.lat),r:10,fill:'#ff9d5e',stroke:'#fff','stroke-width':3}));
+  svg.append(el('text',{x:Math.min(650,x(pred.lon)+15),y:Math.max(35,y(pred.lat)-15),fill:'#ffd8ba','font-size':17},'Scenario'));
+  container.append(svg);
+  container.append(node('p','movement-note','Teal = recorded positions  •  Orange = next-step continuation (not a verified future location)'));
+  return container;
+ }
+ function movementAnalysis(){
+  const settings={animalColumn:$('discovery-animal-col').value,
+    timeColumn:$('discovery-time-col').value,latColumn:$('discovery-lat-col').value,
+    lonColumn:$('discovery-lon-col').value,animalId:$('discovery-animal').value,
+    steps:Number($('discovery-track-steps').value)};
+  const out=engine.trackMovement(data,settings),result=$('discovery-insights');
+  result.replaceChildren(node('h3','','Where could '+out.animal+' travel next?'));
+  result.append(node('p','','This map-like coordinate view shows the last recorded positions and an illustrative next location if the recent direction continues.'));
+  const tiles=node('div','discovery-insight-badges');
+  metric(tiles,fmt(out.points.length),'Recorded GPS points');
+  metric(tiles,fmt(out.intervalHours)+' hrs','Time between readings');
+  metric(tiles,fmt(out.uncertaintyKm)+' km','Illustrative planning radius');
+  result.append(tiles,visualizeTrack(out));
+  result.append(node('p','discovery-insight-note','Scenario location: '+out.projected.lat.toFixed(5)+' latitude, '+out.projected.lon.toFixed(5)+' longitude. Compare the full track and habitat before planning field activity.'));
+  if(out.issues.length)out.issues.forEach(v=>message(result,v));
+  message(result,'A location estimate based on recent motion alone does not account for habitat, obstacles, animal behavior, GPS error, season, or weather. Operational tracking would require validation and field-specific models.');
+  return out;
+ }
  function nashAnalysis(){
   const keys={actionA:$('discovery-action-a').value,actionB:$('discovery-action-b').value,rewardA:$('discovery-reward-a').value,rewardB:$('discovery-reward-b').value};
   const out=engine.deriveNash(data,keys);
@@ -188,7 +250,8 @@
   if(!data){setStatus('Choose a sample or upload a CSV.');return}
   try{
    const goal=$('discovery-goal').value;
-   if(goal==='nash'){lastReport=nashAnalysis();}
+   if(goal==='movement'){lastReport=movementAnalysis();}
+   else if(goal==='nash'){lastReport=nashAnalysis();}
    else{
     const mapping=goal==='stockout'?{
       goal,stock:$('discovery-stock').value,demand:$('discovery-demand').value,item:$('discovery-item').value,uplift:Number($('discovery-uplift').value)
@@ -262,6 +325,15 @@
    loadDataset(parsed);
   }catch(error){setStatus('Could not read CSV: '+error.message)}
  });
+ $('discovery-animal-col').addEventListener('change',()=>{
+  const ids=[...new Set(data.rows.map(row=>row[$('discovery-animal-col').value]).filter(Boolean))].slice(0,60);
+  fillSelect('discovery-animal',ids[0],ids);
+ });
+ $('discovery-track-steps').addEventListener('input',event=>{
+   $('discovery-track-output').value=event.target.value+' observation interval'+(event.target.value==='1'?'':'s');
+   if($('discovery-goal').value==='movement')analyze();
+ });
+ $('discovery-animal').addEventListener('change',()=>{if($('discovery-goal').value==='movement')analyze()});
  $('discovery-outcome').addEventListener('change',()=>{showPositive();lastReport=null;$('discovery-download').disabled=true;});
  $('discovery-goal').addEventListener('change',()=>{
   showGoal();lastReport=null;$('discovery-download').disabled=true;
