@@ -328,6 +328,36 @@
     }catch(error){setStatus('PNG export failed: '+error.message)}
     finally{b.disabled=false;}
   });
+  function checkArtwork(){
+    const issues=[];
+    const option=$('vector-export-size').value,fit=$('vector-export-fit').value;
+    const sizes={original:[1920,1280],square:[1080,1080],banner:[1200,630],portrait:[1080,1350]};
+    const [w,h]=sizes[option]||sizes.original;
+    if(doc.layers.length===0)issues.push('This canvas is blank. Add artwork or choose a template before exporting.');
+    for(const layer of doc.layers){
+      if(layer.x<0||layer.y<0||layer.x+layer.w>W||layer.y+layer.h>H)
+        issues.push('“'+layer.name+'” crosses the artboard edge and may be clipped.');
+      if(layer.type==='text'&&layer.h*.6*Math.min(w/W,h/H)<22)
+        issues.push('“'+layer.name+'” may be difficult to read at the chosen output size.');
+      if(layer.type==='image')issues.push('Check the sharpness and licensing of embedded photographs at the final export size.');
+    }
+    if(fit==='cover'&&Math.abs(w/h-W/H)>.03)
+      issues.push('Fill-frame export will crop some edges. Keep important text away from the boundary.');
+    if(fit==='contain'&&Math.abs(w/h-W/H)>.03)
+      issues.push('Fit-whole-image export may leave transparent padding at this aspect ratio.');
+    const result=$('vector-preflight-results');result.replaceChildren();
+    const heading=document.createElement('strong');
+    heading.textContent=issues.length?issues.length+' check'+(issues.length===1?'':'s')+' to review':'No common export issues detected';
+    result.append(heading);
+    const list=document.createElement('ul');
+    for(const item of issues.slice(0,9)){
+      const li=document.createElement('li');li.textContent=item;list.append(li);
+    }
+    if(issues.length)result.append(list);
+    const note=document.createElement('p');note.textContent='This is a visual preflight only—not color-profile, print, trademark, accessibility or marketplace-policy certification.';
+    result.append(note);setStatus(issues.length?'Preflight found items to review.':'Preflight completed. Review the design visually before publishing.');
+  }
+  $('vector-preflight').addEventListener('click',checkArtwork);
   $('vector-download-json').addEventListener('click',()=>{
     download(new Blob([JSON.stringify({format:'listpull-vector',version:1,...doc},null,2)],{type:'application/json'}),'listpull-project.json');
     setStatus('Project file downloaded.');
