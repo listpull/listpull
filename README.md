@@ -10,7 +10,7 @@ Static, mobile-first web presence for **ListPull, LLC**, published with GitHub P
 - `/studio/vector.html` — dependency-free, local-first vector creation preview.
 - `/studio/strategy.html` — editable Nash equilibrium teaching calculator.
 - `/studio/forecast.html` — transparent ARIMA(1,1,0) educational forecast.
-- `/studio/ai.html` — safe local retrieval and grounded AI prompt workflow (no live model).
+- `/studio/ai.html` — grounded retrieval, optional opt-in local WebGPU model, and safe Fiddle code experiments.
 - `/solutions.html` — dedicated client-oriented ListPull Engineering marketing landing page.
 - `/engineering.html` — consulting capabilities, engagement approach, and founder-experience attribution.
 - Existing Blobby, wiki, support, legal, and contact routes remain unchanged.
@@ -30,11 +30,11 @@ Visit `http://localhost:8000/` and the URLs above. GitHub Pages publishes the ro
 Requires Node 22 (built-in test runner only; no npm dependencies):
 
 ```sh
-node --test tests/studio-math.test.cjs
+node --test tests/*.test.cjs
 for file in assets/*.js; do node --check "$file"; done
 ```
 
-Automated checks are configured in `.github/workflows/studio-checks.yml` for pull requests.
+Automated static/math/data/SEO checks run in `.github/workflows/studio-checks.yml`; a separate Chromium journey test is in `.github/workflows/studio-browser-smoke.yml` and requires Playwright dependencies in GitHub Actions.
 
 ## Architecture, provenance & release readiness
 
