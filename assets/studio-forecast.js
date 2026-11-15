@@ -20,28 +20,7 @@
   if(values.some(n=>!Number.isFinite(n)||Math.abs(n)>1e9))throw Error('Use finite numeric values below 1 billion.');
   return values;
  }
- function fitArima110(values,horizon){
-  const d=values.slice(1).map((v,i)=>v-values[i]);
-  const x=d.slice(0,-1),y=d.slice(1),n=x.length;
-  const mx=x.reduce((a,b)=>a+b,0)/n,my=y.reduce((a,b)=>a+b,0)/n;
-  const cov=x.reduce((s,v,i)=>s+(v-mx)*(y[i]-my),0),varx=x.reduce((s,v)=>s+(v-mx)**2,0);
-  // Fallback to drift-only if the differenced observations have no variance.
-  let phi=varx>1e-10?cov/varx:0;
-  phi=Math.max(-.99,Math.min(.99,phi));
-  const intercept=my-phi*mx;
-  const residuals=y.map((v,i)=>v-intercept-phi*x[i]);
-  const variance=residuals.reduce((s,v)=>s+v*v,0)/Math.max(1,n-2);
-  const sigma=Math.sqrt(Math.max(variance,0));
-  let level=values[values.length-1],prevD=d[d.length-1];const forecast=[];
-  for(let k=1;k<=horizon;k++){
-    const predictedDifference=intercept+phi*prevD;
-    level+=predictedDifference;prevD=predictedDifference;
-    // Deliberately rough visual teaching band, not a calibrated interval.
-    const rough=1.96*sigma*Math.sqrt(k);
-    forecast.push({step:k,point:level,lower:level-rough,upper:level+rough});
-  }
-  return {forecast,phi,intercept,sigma,model:'ARIMA(1,1,0), OLS approximation'};
- }
+ const {fitArima110}=window.ListPullMath;
  const norm=n=>Number(n).toLocaleString(undefined,{maximumFractionDigits:2});
  const format=n=>Number(n).toFixed(2);
  function drawChart(values,result){
