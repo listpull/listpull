@@ -37,7 +37,7 @@
   const categories=profile.filter(p=>p.type==='category'||p.type==='text').map(p=>p.key);
   const numbers=profile.filter(p=>p.type==='numeric').map(p=>p.key);
   fillSelect('discovery-group',suggest.group,categories);
-  fillSelect('discovery-outcome',suggest.outcome,numbers);
+  fillSelect('discovery-outcome',suggest.outcome,[...numbers,...profile.filter(p=>p.type==='category'&&p.unique<=15).map(p=>p.key)]);
   fillSelect('discovery-item',suggest.item);
   fillSelect('discovery-stock',suggest.stock,numbers);
   fillSelect('discovery-demand',suggest.demand,numbers);
@@ -46,7 +46,7 @@
   fillSelect('discovery-reward-a',suggest.rewardA,numbers);
   fillSelect('discovery-reward-b',suggest.rewardB,numbers);
   $('discovery-uplift').value='0';$('discovery-uplift-value').value='+0%';
-  showGoal();
+  showGoal();showPositive();
   renderSchema();
   const q=engine.quality(data,profile),area=$('discovery-quality');area.replaceChildren();
   badge(q.rows+' records');badge(q.columns+' fields');badge(q.completeness+'% populated');
@@ -61,6 +61,15 @@
   $('discovery-group-fields').hidden=choice!=='groups';
   $('discovery-stock-fields').hidden=choice!=='stockout';
   $('discovery-nash-fields').hidden=choice!=='nash';
+ }
+ function showPositive(){
+   const key=$('discovery-outcome').value,field=profile.find(x=>x.key===key);
+   const relevant=field?.type==='category'&&field.unique<=15;
+   $('discovery-positive-field').hidden=!relevant;
+   if(relevant){
+     const values=field.top.map(v=>v[0]);
+     fillSelect('discovery-positive',values.find(v=>/^(yes|true|success|on.time|renewed|retained)$/i.test(v))||values[0],values);
+   }
  }
  function renderSchema(){
   $('discovery-schema-count').textContent='('+profile.length+')';
@@ -150,7 +159,7 @@
    else{
     const mapping=goal==='stockout'?{
       goal,stock:$('discovery-stock').value,demand:$('discovery-demand').value,item:$('discovery-item').value,uplift:Number($('discovery-uplift').value)
-    }:{goal,group:$('discovery-group').value,outcome:$('discovery-outcome').value};
+    }:{goal,group:$('discovery-group').value,outcome:$('discovery-outcome').value,positive:$('discovery-positive').value};
     const out=engine.analyze(data,mapping);
     const result=$('discovery-insights');
     result.replaceChildren();
@@ -166,6 +175,17 @@
       result.append(chartTable(['Item','Available','Scenario demand','Balance'],dataRows));
       if(!out.count)message(result,'Under the assumptions and rows provided, no item falls at or below modeled demand.');
       message(result,'This is an inventory-balance scenario, not a learned forecast of the probability of running out. Demand forecasts and supplier lead times are not inferred here.');
+    }else if(out.kind==='rates'){
+      result.append(node('h3','','What share of records show this outcome?'));
+      result.append(node('p','', 'Within each historical group, we counted how often “'+out.positive+'” appears in the selected field. This gives observed rates, not a validated likelihood of future behavior.'));
+      metric(top,pct(out.share),'Overall observed rate');
+      metric(top,fmt(out.total),'Records reviewed');
+      metric(top,fmt(out.rows.length),'Groups compared');
+      result.append(top);
+      const rows=out.rows.map(r=>[r.name,fmt(r.count),fmt(r.matched),pct(r.share),pct(r.interval[0])+'–'+pct(r.interval[1])]);
+      result.append(chartTable(['Group','Records','Matches','Observed rate','Approx. 95% interval'],rows));
+      message(result,'Intervals use a binomial independence assumption. Repeated customer records, correlated events or biased samples can invalidate that interpretation.');
+      if(out.hasSparse)message(result,'One or more groups have fewer than 10 records. Treat those rates as highly uncertain.');
     }else{
       result.append(node('h3','','Where does the outcome differ?'));
       result.append(node('p','', 'We grouped the observed records by “'+out.mapping.group+'” and compared historical “'+out.mapping.outcome+'” values. This can reveal where an operational review may be useful.'));
@@ -206,6 +226,7 @@
    loadDataset(parsed);
   }catch(error){setStatus('Could not read CSV: '+error.message)}
  });
+ $('discovery-outcome').addEventListener('change',()=>{showPositive();lastReport=null;$('discovery-download').disabled=true;});
  $('discovery-goal').addEventListener('change',()=>{
   showGoal();lastReport=null;$('discovery-download').disabled=true;
   $('discovery-insights').replaceChildren(node('p','','Choose your fields and select Analyze the data.'));
