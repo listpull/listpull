@@ -89,6 +89,7 @@ test('Vector selected shape has direct resize handles',async({page})=>{
  const box=await handle.boundingBox();
  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
  await page.mouse.down();
+ console.log('POINTER HIT:', await page.locator('#vector-status').textContent());
  await page.mouse.move(box.x+box.width/2+55,box.y+box.height/2-15,{steps:6});
  await page.mouse.up();
  console.log('VECTOR DRAG CHECK:', 'original',initial,'current',await field.inputValue(),'status',await page.locator('#vector-status').textContent());
