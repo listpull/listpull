@@ -83,12 +83,13 @@ test('Vector selected shape has direct resize handles',async({page})=>{
  await page.locator('#vector-layers button').filter({hasText:'Label border'}).click();
  const field=page.locator('[data-property="w"]');
  const initial=Number(await field.inputValue());
- const handle=page.locator('#vector-stage [data-resize-handle="se"]');
+ const handle=page.locator('#vector-stage [data-resize-handle="ne"]');
  await expect(handle).toBeVisible();
+ await handle.scrollIntoViewIfNeeded();
  const box=await handle.boundingBox();
  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
  await page.mouse.down();
- await page.mouse.move(box.x+box.width/2+55,box.y+box.height/2+35,{steps:6});
+ await page.mouse.move(box.x+box.width/2+55,box.y+box.height/2-15,{steps:6});
  await page.mouse.up();
  console.log('VECTOR DRAG CHECK:', 'original',initial,'current',await field.inputValue(),'status',await page.locator('#vector-status').textContent());
  await expect.poll(async()=>Number(await field.inputValue())).toBeGreaterThan(initial);
