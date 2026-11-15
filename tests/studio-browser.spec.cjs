@@ -60,6 +60,8 @@ test('Image Studio supports one-click look and destination-sized download',async
  await page.locator('[data-image-look="social"]').click();
  await expect(page.locator('#editor-canvas')).toBeVisible();
  await page.locator('#image-export-size').selectOption('square');
+ await page.locator('#image-check').click();
+ await expect(page.locator('#image-check-result')).toContainText('transparent space');
  const download=page.waitForEvent('download');
  await page.locator('#export-png').click();
  expect((await download).suggestedFilename()).toContain('1080x1080');
@@ -69,6 +71,8 @@ test('Vector Studio template loads and PNG export works',async({page})=>{
  await page.locator('[data-vector-template="badge"]').click();
  await expect(page.locator('#vector-layers')).toContainText('Label border');
  await page.locator('#vector-export-size').selectOption('square');
+ await page.locator('#vector-preflight').click();
+ await expect(page.locator('#vector-preflight-results')).toContainText('preflight');
  const download=page.waitForEvent('download');
  await page.locator('#vector-export-png').click();
  expect((await download).suggestedFilename()).toContain('1080x1080');
