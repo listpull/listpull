@@ -71,7 +71,8 @@
      if(!$('ai-retrieval')?.hidden&&retrieved){
        // Use the user's selected public demo evidence. The model must not fabricate sources.
      }
-     const prompt=(!$('ai-retrieval')?.hidden&&retrieved?retrieved:'Question:\n'+question+'\nNo source records were retrieved. State that evidence is missing.').slice(0,7000);
+     const userCode=typeof window.ListPullStudioCodePrompt==='string'?window.ListPullStudioCodePrompt:'';
+     const prompt=(userCode||( (!$('ai-retrieval')?.hidden&&retrieved)?retrieved:'Question:\n'+question+'\nNo source records were retrieved. State that evidence is missing.')).slice(0,7000);
      status('Generating with local model…');
      const result=await engine.chat.completions.create({
        messages:[
