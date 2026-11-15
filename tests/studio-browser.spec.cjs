@@ -87,6 +87,8 @@ test('Vector selected shape has direct resize handles',async({page})=>{
  await expect(handle).toBeVisible();
  await handle.scrollIntoViewIfNeeded();
  const box=await handle.boundingBox();
+ const diag=await page.evaluate(({x,y})=>{const el=document.elementFromPoint(x,y),stage=document.getElementById('vector-stage');return {target:el?.outerHTML?.slice(0,200),x,y,viewport:[innerWidth,innerHeight],stage:stage.getBoundingClientRect().toJSON()};},{x:box.x+box.width/2,y:box.y+box.height/2});
+ console.log('VECTOR TARGET:',JSON.stringify(diag));
  await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
  await page.mouse.down();
  console.log('POINTER HIT:', await page.locator('#vector-status').textContent());
