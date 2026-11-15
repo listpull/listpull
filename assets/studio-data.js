@@ -9,6 +9,7 @@
   customers:{label:'Customer spending',goal:'groups',fields:['segment','orders','spend','repeat_purchase'],rows:[]},
   deliveries:{label:'Delivery operations',goal:'groups',fields:['carrier','route','delay_minutes','delivered_on_time'],rows:[]},
   wildlife:{label:'Wildlife sightings',goal:'groups',fields:['location','species','sightings','observation_week'],rows:[]},
+  movement:{label:'Animal movement tracking',goal:'movement',fields:['animal_id','timestamp','latitude','longitude'],rows:[]},
   farming:{label:'Agriculture',goal:'groups',fields:['crop','field','rainfall_mm','yield_kg'],rows:[]},
   health:{label:'Public health — aggregated',goal:'groups',fields:['region','report_week','case_count','clinic_capacity'],rows:[]},
   government:{label:'Public service operations',goal:'groups',fields:['service','district','processing_days','resolved'],rows:[]},
@@ -21,6 +22,16 @@
   else if(key==='customers'){const seg=['New','Loyal','Seasonal','Business'];for(let i=0;i<80;i++){const s=i%4;rows.push([seg[s],1+(i*7)%12,Math.round(24+(i*19)%230+(s===1?130:0)),s===1||i%4===0?'Yes':'No']);}}
   else if(key==='deliveries'){const cr=['North','Metro','Coastal'];for(let i=0;i<72;i++){const d=(i*7)%61;rows.push([cr[i%3],['Local','Regional'][i%2],d,d<30?'Yes':'No']);}}
   else if(key==='wildlife'){const loc=['Wetland','Forest','Grassland','River'];const species=['Deer','Fox','Heron'];for(let i=0;i<60;i++)rows.push([loc[(i*3+Math.floor(i/7))%4],species[i%3],1+(i*5)%18,'2026-W'+String(1+Math.floor(i/6)).padStart(2,'0')]);}
+  else if(key==='movement'){
+    const animals=[{id:'Heron H-101',lat:38.512,long:-76.810,dy:.0021,dx:.0032},
+      {id:'Deer D-204',lat:38.519,long:-76.796,dy:-.0015,dx:.0026},
+      {id:'Fox F-007',lat:38.507,long:-76.822,dy:.0017,dx:-.0021}];
+    for(const animal of animals)for(let i=0;i<12;i++){
+      const time=new Date(Date.UTC(2026,9,1+i,8,0,0));
+      rows.push([animal.id,time.toISOString(),(animal.lat+i*animal.dy+Math.sin(i*.6)*.0007).toFixed(6),
+        (animal.long+i*animal.dx+Math.cos(i*.45)*.0006).toFixed(6)]);
+    }
+  }
   else if(key==='farming'){for(let i=0;i<56;i++){const crop=['Corn','Beans','Wheat','Soy'][i%4];rows.push([crop,'Field '+String(1+i%8),45+(i*13)%130,150+(i*27)%220]);}}
   else if(key==='health'){for(let i=0;i<48;i++)rows.push([['North','South','East','West'][i%4],'2026-W'+String(1+Math.floor(i/4)).padStart(2,'0'),3+(i*7)%45,35+(i*19)%80]);}
   else if(key==='government'){for(let i=0;i<72;i++)rows.push([['Permits','Benefits','Inspections'][i%3],['A','B','C','D'][i%4],2+(i*11)%26,i%5===0?'No':'Yes']);}
@@ -88,6 +99,7 @@
   const outcome=match(/spend|revenue|delay|duration|processing|yield|cases|sightings|count|volume|cost|price|score/i,'numeric')||numeric[0]?.key||null;
   const group=match(/segment|carrier|region|location|district|species|crop|service|category|channel|route/i)||category[0]?.key||null;
   let goal=stock&&demand?'stockout':'groups';
+  if(fields.some(f=>/lat(itude)?/i.test(f.key))&&fields.some(f=>/lon(gitude)?|lng/i.test(f.key)))goal='movement';
   if(data.goal)goal=data.goal;
   return {goal,group,outcome,stock,demand,item:id||group||data.headers[0], actionA:match(/our.action|player.a|action.a/i),actionB:match(/other.action|player.b|action.b/i),rewardA:match(/our.score|payoff.a|reward.a/i,'numeric'),rewardB:match(/other.score|payoff.b|reward.b/i,'numeric')};
  }
@@ -156,6 +168,53 @@
   if(fields.some(f=>f.type==='text'&&f.unique>data.rows.length*.9))issues.push('Identifier-like text columns should not be used as cohorts');
   return {rows:data.rows.length,columns:fields.length,completeness:Math.round(avgFill),issues};
  }
+
+ function trackMovement(data,options={}){
+  const fields=data.headers;
+  const idKey=options.animalColumn||fields.find(x=>/animal|track|tag|device|subject/i.test(x));
+  const timeKey=options.timeColumn||fields.find(x=>/time|date|observed_at/i.test(x));
+  const latKey=options.latColumn||fields.find(x=>/^lat|latitude/i.test(x));
+  const lonKey=options.lonColumn||fields.find(x=>/^lon|longitude|lng/i.test(x));
+  if(![idKey,timeKey,latKey,lonKey].every(x=>fields.includes(x)))throw Error('Select animal ID, timestamp, latitude and longitude columns.');
+  const animal=String(options.animalId||data.rows[0]?.[idKey]||'');
+  const readings=data.rows.filter(x=>x[idKey]===animal).map(row=>({
+    time:Date.parse(row[timeKey]),lat:cleanNumber(row[latKey]),lon:cleanNumber(row[lonKey])
+  })).filter(p=>Number.isFinite(p.time)&&p.lat!==null&&p.lon!==null&&Math.abs(p.lat)<=90&&Math.abs(p.lon)<=180)
+  .sort((a,b)=>a.time-b.time);
+  if(readings.length<4)throw Error('Provide at least four location readings for one animal.');
+  const latest=readings.slice(-12);
+  for(let i=1;i<latest.length;i++)if(latest[i].time<=latest[i-1].time)throw Error('Tracking timestamps must be unique and increasing.');
+  const diffs=latest.slice(1).map((p,i)=>(p.time-latest[i].time)/3600000);
+  const last=latest[latest.length-1];
+  const stepHours=diffs.slice(-3).sort((a,b)=>a-b)[1]||diffs[diffs.length-1];
+  const steps=Math.max(1,Math.min(3,Math.round(Number(options.steps)||1)));
+  const deltaA=latest.at(-1),deltaB=latest.at(-2),deltaC=latest.at(-3);
+  const vx1=(deltaA.lon-deltaB.lon)/diffs.at(-1),vy1=(deltaA.lat-deltaB.lat)/diffs.at(-1);
+  const vx2=(deltaB.lon-deltaC.lon)/diffs.at(-2),vy2=(deltaB.lat-deltaC.lat)/diffs.at(-2);
+  const vx=.65*vx1+.35*vx2,vy=.65*vy1+.35*vy2;
+  const projected={
+    lat:last.lat+vy*stepHours*steps,
+    lon:last.lon+vx*stepHours*steps,
+    time:new Date(last.time+stepHours*steps*3600000).toISOString()
+  };
+  const haversine=(a,b)=>{
+    const r=6371,toRad=x=>x*Math.PI/180,dlat=toRad(b.lat-a.lat),dlon=toRad(b.lon-a.lon);
+    const t=Math.sin(dlat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dlon/2)**2;
+    return 2*r*Math.asin(Math.min(1,Math.sqrt(t)));
+  };
+  const prior={lat:deltaB.lat+(deltaB.lat-deltaC.lat)*(diffs.at(-1)/diffs.at(-2)),
+    lon:deltaB.lon+(deltaB.lon-deltaC.lon)*(diffs.at(-1)/diffs.at(-2))};
+  const validationErrorKm=haversine(prior,deltaA);
+  const speedKmh=haversine({lat:last.lat,lon:last.lon},{lat:last.lat+vy,lon:last.lon+vx});
+  const uncertainKm=Math.max(.2,validationErrorKm*(1+steps)+.12*speedKmh*stepHours*steps);
+  const issues=[];
+  if(speedKmh>30)issues.push('Unusually high apparent movement speed; check timestamps and GPS records');
+  if(stepHours>48)issues.push('Long gaps between locations can make projections less informative');
+  if(validationErrorKm>2)issues.push('Past movement extrapolation did not closely match the last observed position');
+  return {kind:'movement',animal,points:latest,projected,steps,intervalHours:stepHours,
+    validationErrorKm,speedKmh,uncertaintyKm:uncertainKm,issues,
+    method:'Short-term linear continuation of recent observed velocity; illustrative planning radius, not a calibrated wildlife location prediction'};
+ }
  function deriveNash(data,mapping){
   const {actionA,actionB,rewardA,rewardB}=mapping;
   if(![actionA,actionB,rewardA,rewardB].every(k=>data.headers.includes(k)))throw Error('Map two action columns and two numeric payoff columns');
@@ -177,7 +236,7 @@
   }
   return {A,B,actionsA,actionsB,counts,method:'Mean observed payoffs by pair of actions. Not counterfactual causal estimates; selection bias and confounding may affect equilibria.'};
  }
- const api=Object.freeze({parseCSV,profile,suggest,analyze,deriveNash,makeDemo,quality,cleanNumber,sampleConfigs,wilson});
+ const api=Object.freeze({parseCSV,profile,suggest,analyze,deriveNash,makeDemo,quality,cleanNumber,sampleConfigs,wilson,trackMovement});
  if(typeof module!=='undefined'&&module.exports)module.exports=api;
  if(root)root.ListPullData=api;
 })(typeof window!=='undefined'?window:null);
