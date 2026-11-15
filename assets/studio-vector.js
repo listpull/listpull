@@ -113,6 +113,21 @@
       const rect=document.createElementNS(NS,'rect');
       for(const [k,v] of Object.entries({x:layer.x-4,y:layer.y-4,width:layer.w+8,height:layer.h+8,fill:'none',stroke:'#ff5c95','stroke-width':3,'stroke-dasharray':'10 7','pointer-events':'none'}))rect.setAttribute(k,v);
       stage.append(rect);
+      const handles=[
+        ['nw',layer.x-4,layer.y-4],['n',layer.x+layer.w/2,layer.y-4],['ne',layer.x+layer.w+4,layer.y-4],
+        ['e',layer.x+layer.w+4,layer.y+layer.h/2],['se',layer.x+layer.w+4,layer.y+layer.h+4],
+        ['s',layer.x+layer.w/2,layer.y+layer.h+4],['sw',layer.x-4,layer.y+layer.h+4],
+        ['w',layer.x-4,layer.y+layer.h/2]];
+      for(const [direction,x,y] of handles){
+        const circle=document.createElementNS(NS,'circle');
+        circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r','9');
+        circle.setAttribute('fill','#fff4e4');circle.setAttribute('stroke','#df5882');
+        circle.setAttribute('stroke-width','3');circle.setAttribute('data-resize-handle',direction);
+        circle.setAttribute('aria-label','Resize '+direction);
+        const cursors={nw:'nwse-resize',ne:'nesw-resize',sw:'nesw-resize',se:'nwse-resize',
+          n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize'};
+        circle.style.cursor=cursors[direction];stage.append(circle);
+      }
     }
     renderLayers();renderProps(layer);
     $('vector-background').value=doc.background;
@@ -169,26 +184,53 @@
     return {x:(event.clientX-r.left)/r.width*W,y:(event.clientY-r.top)/r.height*H};
   }
   stage.addEventListener('pointerdown',event=>{
+    const handle=event.target.closest('[data-resize-handle]');
     const target=event.target.closest('[data-layer-id]');
-    if(!target){selected=null;render();return;}
-    selected=target.getAttribute('data-layer-id');const layer=selectedLayer();
-    if(!layer)return;
+    if(handle&&!selectedLayer())return;
+    if(!handle&&!target){selected=null;render();return;}
+    if(target)selected=target.getAttribute('data-layer-id');
+    const layer=selectedLayer();if(!layer)return;
     const p=point(event);
-    drag={id:selected,p,startX:layer.x,startY:layer.y,changed:false,pointerId:event.pointerId};
+    drag={id:layer.id,mode:handle?'resize':'move',handle:handle?.getAttribute('data-resize-handle')||'',
+      p,startX:layer.x,startY:layer.y,startW:layer.w,startH:layer.h,
+      changed:false,pointerId:event.pointerId};
     stage.setPointerCapture(event.pointerId);render();
+    setStatus(handle?'Drag a corner or edge to resize. Hold Shift to keep proportions.':'Drag to move; use handles to resize.');
     event.preventDefault();
   });
   stage.addEventListener('pointermove',event=>{
     if(!drag||drag.pointerId!==event.pointerId)return;
     const layer=doc.layers.find(l=>l.id===drag.id);if(!layer)return;
-    const p=point(event);
-    const nextX=clamp(Math.round(drag.startX+p.x-drag.p.x),-layer.w+10,W-10);
-    const nextY=clamp(Math.round(drag.startY+p.y-drag.p.y),-layer.h+10,H-10);
-    if(nextX!==layer.x||nextY!==layer.y){layer.x=nextX;layer.y=nextY;drag.changed=true;render();}
+    const p=point(event),dx=p.x-drag.p.x,dy=p.y-drag.p.y;
+    let x=drag.startX,y=drag.startY,w=drag.startW,h=drag.startH;
+    if(drag.mode==='move'){
+      x=clamp(Math.round(x+dx),-w+10,W-10);y=clamp(Math.round(y+dy),-h+10,H-10);
+    }else{
+      const dir=drag.handle;
+      if(dir.includes('e'))w=drag.startW+dx;
+      if(dir.includes('s'))h=drag.startH+dy;
+      if(dir.includes('w')){x=drag.startX+dx;w=drag.startW-dx;}
+      if(dir.includes('n')){y=drag.startY+dy;h=drag.startH-dy;}
+      if(event.shiftKey&&dir.length===2){
+        const factor=Math.max(w/drag.startW,h/drag.startH);
+        w=drag.startW*factor;h=drag.startH*factor;
+        if(dir.includes('w'))x=drag.startX+drag.startW-w;
+        if(dir.includes('n'))y=drag.startY+drag.startH-h;
+      }
+      if(w<24){if(dir.includes('w'))x=drag.startX+drag.startW-24;w=24;}
+      if(h<24){if(dir.includes('n'))y=drag.startY+drag.startH-24;h=24;}
+      w=clamp(w,24,3000);h=clamp(h,24,3000);
+      x=clamp(x,-2000,3000);y=clamp(y,-2000,3000);
+    }
+    const nx=Math.round(x),ny=Math.round(y),nw=Math.round(w),nh=Math.round(h);
+    if(nx!==layer.x||ny!==layer.y||nw!==layer.w||nh!==layer.h){
+      Object.assign(layer,{x:nx,y:ny,w:nw,h:nh});drag.changed=true;render();
+      if(drag.mode==='resize')setStatus(layer.w+' × '+layer.h+' px. Release to apply.');
+    }
   });
   function endDrag(event){
     if(!drag||drag.pointerId!==event.pointerId)return;
-    if(drag.changed){snapshot();setStatus('Layer moved.');}
+    if(drag.changed){snapshot();setStatus(drag.mode==='resize'?'Shape resized. Drag handles again to refine.':'Artwork moved.');}
     drag=null;
   }
   stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
