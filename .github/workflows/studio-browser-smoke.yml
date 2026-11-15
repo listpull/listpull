@@ -1,0 +1,32 @@
+name: Studio browser smoke
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'assets/**'
+      - 'studio/**'
+      - 'studio.html'
+      - 'contact/**'
+      - 'tests/**'
+      - '.github/workflows/studio-browser-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated test dependencies
+        run: npm install --no-save @playwright/test
+      - name: Install Chromium for tests
+        run: npx playwright install --with-deps chromium
+      - name: Exercise key user journeys
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/listpull-http.log 2>&1 &
+          sleep 2
+          npx playwright test tests/studio-browser.spec.cjs --reporter=line --workers=1
