@@ -98,7 +98,7 @@
   const z=1.96,p=success/n,den=1+z*z/n;
   const center=(p+z*z/(2*n))/den;
   const margin=z*Math.sqrt((p*(1-p)+z*z/(4*n))/n)/den;
-  return [Math.max(0,center-margin),Math.min(1,center+margin)];
+  return [Math.max(0,Math.min(p,center-margin)),Math.min(1,Math.max(p,center+margin))];
  }
  function analyze(data,opts={}){
   const fields=profile(data),mapping={...suggest(data,fields),...opts};

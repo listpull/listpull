@@ -38,7 +38,9 @@
 <div class="inspector-section"><div class="inspector-head"><h2>Document</h2></div>
 <div class="vector-export-guide"><strong>Export for your destination</strong><p>SVG scales cleanly. PNG produces a ready-sized image.</p><label for="vector-export-size">PNG size</label><select id="vector-export-size">
 <option value="original">Artwork · 1920 × 1280</option><option value="square">Store / social · 1080 × 1080</option><option value="banner">Website · 1200 × 630</option><option value="portrait">Portrait · 1080 × 1350</option></select>
-<label for="vector-export-fit">How should it fit?</label><select id="vector-export-fit"><option value="contain">Keep whole design (padding)</option><option value="cover">Fill frame (crop edges)</option></select></div>
+<label for="vector-export-fit">How should it fit?</label><select id="vector-export-fit"><option value="contain">Keep whole design (padding)</option><option value="cover">Fill frame (crop edges)</option></select>
+<button type="button" id="vector-preflight" class="vector-preflight-button">✓ Check artwork before exporting</button>
+<div id="vector-preflight-results" class="vector-preflight-results" role="status" aria-live="polite">Choose a destination and check your artwork for common export issues.</div></div>
 <label class="inspector-inline">Canvas color <input type="color" id="vector-background" value="#ffffff"></label>
 <div class="layer-actions"><button type="button" id="vector-download-json">Save project</button><label for="vector-project-upload" class="vector-project-upload">Open project</label><input id="vector-project-upload" type="file" accept=".json,application/json"></div>
 <button type="button" id="vector-reset" class="vector-reset">Start a new design</button></div>

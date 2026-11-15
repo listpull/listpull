@@ -27,7 +27,7 @@ The founder's public portfolio describes AI recommendation workflows using AWS S
 - **Working prototype sprint**: agreed success criteria, demo artifact, design decisions, source/handoff plan.
 
 ## Studio product roadmap
-**Now**: public browser-based image editor (upload, contrast/brightness/saturation/grayscale, rotation/flip, caption, PNG export) plus layered Vector Studio, Nash Strategy Lab, illustrative ARIMA Forecast Lab, and source-grounded AI workflow demo.
+**Now**: browser image editing and template looks with destination-sized PNGs; layered vector art with templates/exports; guided, CSV-based multi-sector data exploration and Nash payoff modeling; illustrative ARIMA forecasting with a holdout benchmark; deterministic retrieval, optional opt-in WebGPU/WebLLM, and an isolated browser Fiddle code sandbox.
 **Next**: audit and modernize the private `listpull/svg-editor` React/Fabric.js codebase (currently on React 18 and Fabric 3.x, using react-scripts), define licenses/ownership, migrate dependency stack, and expand the public vector tool with path editing, advanced layers/history, crop, vetted SVG import, and usability/accessibility testing.
 **Later**: assess local video trimming, timeline/caption support, export formats and browser/codec performance. Do not advertise these as available.
 

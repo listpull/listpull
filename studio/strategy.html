@@ -16,7 +16,8 @@
 <button type="button" data-demo="strategic"><strong>♟ Strategy</strong><small>Infer payoffs from observed decisions</small></button></div>
 <div class="discovery-workflow">
 <div class="discovery-controls"><div class="discovery-subhead"><span class="kicker">Your dataset</span><strong id="discovery-dataset-name">Retail inventory · Example</strong></div>
-<label class="discovery-file-button" for="discovery-upload">↑ Or choose a CSV from your computer</label><input type="file" id="discovery-upload" accept=".csv,text/csv,text/plain" aria-describedby="discovery-file-help">
+<label class="discovery-file-button" for="discovery-upload">↑ Or choose a CSV from your computer</label>
+<button type="button" class="discovery-demo-download" id="discovery-demo-download">↓ Download this example CSV</button><input type="file" id="discovery-upload" accept=".csv,text/csv,text/plain" aria-describedby="discovery-file-help">
 <p id="discovery-file-help" class="discovery-hint">Processed in your browser, not uploaded. Limit 3 MB / 5,000 rows. Please do not use identifiable medical, customer, or regulated records in this public demo.</p>
 <div id="discovery-quality" class="discovery-quality" aria-live="polite"></div>
 <details class="discovery-schema" open><summary>Automatically detected columns <span id="discovery-schema-count"></span></summary><div id="discovery-schema-body"></div></details>

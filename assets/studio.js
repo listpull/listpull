@@ -115,6 +115,21 @@ if(compare){
  compare.addEventListener('keyup',end);
  compare.addEventListener('blur',end);
 }
+const qualityCheck=$('image-check');
+if(qualityCheck)qualityCheck.addEventListener('click',()=>{
+ if(!image){$('image-check-result').textContent='Upload an image or try the demo before checking.';return;}
+ const sizes={square:[1080,1080],web:[1200,630],video:[1280,720],portrait:[1080,1350]};
+ const choice=$('image-export-size').value,[w,h]=sizes[choice]||[canvas.width,canvas.height];
+ const ratio=Math.min(w/canvas.width,h/canvas.height);
+ const fit=$('image-export-fit').value;
+ const warnings=[];
+ if(ratio>1.5)warnings.push('This export enlarges your image by more than 1.5×; review sharpness at full size.');
+ if(fit==='cover'&&Math.abs(w/h-canvas.width/canvas.height)>.03)warnings.push('Crop-to-fill removes some edges. Keep important text and logos away from the border.');
+ if(fit==='contain'&&Math.abs(w/h-canvas.width/canvas.height)>.03)warnings.push('Fit-whole-image adds transparent space to the frame.');
+ if(Math.min(canvas.width,canvas.height)<600)warnings.push('Source dimensions are small for many ecommerce listing standards.');
+ $('image-check-result').textContent=warnings.length?warnings.join(' '):'No common resolution or crop issues found. Review visual quality and the destination’s requirements.';
+ message('Artwork quality check complete. This is a guide, not marketplace or color-profile certification.');
+});
 exportButton.addEventListener('click',()=>{
  if(!image)return;
  try{
