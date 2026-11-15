@@ -113,6 +113,37 @@
  function message(parent,text){
   parent.append(node('p','discovery-insight-note',text));
  }
+ function visualBars(items,{title='',twoSeries=false,percentage=false}={}){
+   const section=node('div','outcome-chart');
+   section.append(node('h4','',title));
+   if(!items.length){section.append(node('p','','No matching items in this scenario.'));return section;}
+   const limited=items.slice(0,7),height=limited.length*52+42,NS='http://www.w3.org/2000/svg';
+   const svg=document.createElementNS(NS,'svg');
+   svg.setAttribute('viewBox','0 0 830 '+height);
+   svg.setAttribute('role','img');svg.setAttribute('aria-label',title);
+   const el=(tag,attrs,text)=>{
+     const e=document.createElementNS(NS,tag);
+     for(const [k,v] of Object.entries(attrs||{}))e.setAttribute(k,String(v));
+     if(text!==undefined)e.textContent=String(text);
+     return e;
+   };
+   const highest=twoSeries?Math.max(1,...limited.flatMap(x=>[x.a,x.b])):Math.max(1,...limited.map(x=>Math.abs(x.a)));
+   for(let i=0;i<limited.length;i++){
+     const item=limited[i],y=24+i*52;
+     svg.append(el('text',{x:195,y:y+18,'text-anchor':'end',fill:'#dbe1f5','font-size':18},String(item.label).slice(0,19)));
+     svg.append(el('rect',{x:210,y:y+2,width:540,height:twoSeries?14:23,rx:6,fill:'#24374e'}));
+     svg.append(el('rect',{x:210,y:y+2,width:Math.max(1,540*Math.max(0,item.a)/highest),height:twoSeries?14:23,rx:6,fill:'#74dfc4'}));
+     if(twoSeries){
+       svg.append(el('rect',{x:210,y:y+21,width:540,height:14,rx:6,fill:'#24374e'}));
+       svg.append(el('rect',{x:210,y:y+21,width:Math.max(1,540*Math.max(0,item.b)/highest),height:14,rx:6,fill:'#ffa96b'}));
+     }
+     const value=percentage?(item.a*100).toFixed(1)+'%':fmt(item.a)+(twoSeries?' / '+fmt(item.b):'');
+     svg.append(el('text',{x:770,y:y+19,fill:'#f8e9df','font-size':16},value));
+   }
+   section.append(svg);
+   if(twoSeries)section.append(node('p','outcome-chart-legend','● Available stock     ● Scenario demand'));
+   return section;
+ }
  function nashAnalysis(){
   const keys={actionA:$('discovery-action-a').value,actionB:$('discovery-action-b').value,rewardA:$('discovery-reward-a').value,rewardB:$('discovery-reward-b').value};
   const out=engine.deriveNash(data,keys);
@@ -130,6 +161,7 @@
   metric(badges,fmt(Math.min(...out.counts.flat())),'Smallest cell sample');
   metric(badges,fmt(data.rows.length),'Observed records');
   result.append(badges);
+  result.append(visualBars(out.actionsA.flatMap((a,i)=>out.actionsB.map((b,j)=>({label:a+' / '+b,a:Math.max(0,out.A[i][j]),b:Math.max(0,out.B[i][j])}))),{title:'Average recorded result for each choice',twoSeries:true}));
   result.append(chartTable(['Party A action','Party B action','A avg payoff','B avg payoff','Samples'],
    out.actionsA.flatMap((a,i)=>out.actionsB.map((b,j)=>[a,b,fmt(out.A[i][j]),fmt(out.B[i][j]),fmt(out.counts[i][j])]))));
   if(calculation.equilibria.length){
@@ -172,6 +204,7 @@
       metric(top,pct(out.share),'Share of reviewed items');
       metric(top,(out.uplift>=0?'+':'')+pct(out.uplift),'Demand assumption adjustment');
       result.append(top);
+      result.append(visualBars(out.flagged.map(item=>({label:item.item,a:item.stock,b:item.adjustedDemand})),{title:'Items to check: stock compared with expected demand',twoSeries:true}));
       const dataRows=out.flagged.map(item=>[item.item,fmt(item.stock),fmt(item.adjustedDemand),fmt(item.gap)]);
       result.append(chartTable(['Item','Available','Scenario demand','Balance'],dataRows));
       if(!out.count)message(result,'Under the assumptions and rows provided, no item falls at or below modeled demand.');
@@ -183,6 +216,7 @@
       metric(top,fmt(out.total),'Records reviewed');
       metric(top,fmt(out.rows.length),'Groups compared');
       result.append(top);
+      result.append(visualBars(out.rows.map(r=>({label:r.name,a:r.share})),{title:'Observed rate by group (share of records)',percentage:true}));
       const rows=out.rows.map(r=>[r.name,fmt(r.count),fmt(r.matched),pct(r.share),pct(r.interval[0])+'–'+pct(r.interval[1])]);
       result.append(chartTable(['Group','Records','Matches','Observed rate','Approx. 95% interval'],rows));
       message(result,'Intervals use a binomial independence assumption. Repeated customer records, correlated events or biased samples can invalidate that interpretation.');
@@ -195,6 +229,7 @@
       metric(top,fmt(out.rows.length),'Groups represented');
       result.append(top);
       const maxMean=Math.max(...out.rows.map(r=>Math.abs(r.mean)),1);
+      result.append(visualBars(out.rows.map(r=>({label:r.name,a:Math.max(0,r.mean)})),{title:'Average outcome by group'}));
       const rows=out.rows.map(r=>[r.name,fmt(r.count),fmt(r.mean),fmt(r.median),String(Math.round(Math.max(0,r.mean)/maxMean*100))]);
       result.append(chartTable(['Group','Records','Average','Median','Relative scale %'],rows,4));
       if(out.hasSparse)message(result,'Some groups have fewer than five observations. Those averages can change substantially with new records.');
