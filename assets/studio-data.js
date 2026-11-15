@@ -119,6 +119,22 @@
   const key=mapping.group,metric=mapping.outcome;
   if(!key||!metric||key===metric)throw Error('Choose different grouping and outcome columns');
   if(!data.headers.includes(key)||!data.headers.includes(metric))throw Error('Choose columns present in the dataset');
+  const field=fields.find(f=>f.key===metric);
+  if(field?.type==='category'&&field.unique<=15){
+    const target=opts.positive||field.top[0]?.[0];
+    if(!target)throw Error('Choose the observed outcome to count.');
+    const counters=new Map();let excluded=0;
+    data.rows.forEach(r=>{
+      const g=String(r[key]||'').trim(),v=String(r[metric]||'').trim();
+      if(!g||!v){excluded++;return}
+      if(!counters.has(g))counters.set(g,{count:0,matched:0});
+      const obj=counters.get(g);obj.count++;if(v===target)obj.matched++;
+    });
+    const rows=[...counters.entries()].map(([name,v])=>({name,count:v.count,matched:v.matched,share:v.matched/v.count,interval:wilson(v.matched,v.count)})).sort((a,b)=>b.count-a.count).slice(0,15);
+    if(!rows.length)throw Error('No matching category values were found.');
+    const count=rows.reduce((a,b)=>a+b.count,0),matched=rows.reduce((a,b)=>a+b.matched,0);
+    return {kind:'rates',mapping,positive:target,rows,total:count,matched,share:matched/count,excluded,hasSparse:rows.some(r=>r.count<10),quality:quality(data,fields),method:'Observed frequency by group with Wilson 95% intervals under an independence assumption. Correlation, not future probability or causation.'};
+  }
   const groups=new Map();let excluded=0;
   data.rows.forEach(r=>{
    const group=String(r[key]||'').trim(),value=cleanNumber(r[metric]);
