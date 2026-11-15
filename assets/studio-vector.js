@@ -212,6 +212,41 @@
   function applyZoom(){stage.style.width='min('+Math.round(zoom*100)+'%, '+Math.round(880*zoom)+'px)';$('vector-zoom-label').textContent=Math.round(zoom*100)+'%';}
   $('vector-zoom-in').addEventListener('click',()=>{zoom=clamp(zoom+.2,.5,2);applyZoom()});
   $('vector-zoom-out').addEventListener('click',()=>{zoom=clamp(zoom-.2,.5,2);applyZoom()});
+  function loadTemplate(name){
+    if(snapshots.length>1&&!window.confirm('Replace this design with a template? Download a project backup if needed.'))return;
+    const L=(type,name,x,y,w,h,fill,text)=>({type,name,x,y,w,h,fill,opacity:1,...(type==='text'?{text}: {})});
+    let layers=[],bg='#ffffff';
+    if(name==='blank')layers=[];
+    else if(name==='badge'){
+      bg='#fffaf0';layers=[
+        L('ellipse','Label border',160,38,640,555,'#814fc4'),
+        L('ellipse','Inner badge',195,72,570,490,'#ffe6ad'),
+        L('star','Golden sparkle',386,107,190,174,'#ff9d58'),
+        L('text','Brand title',220,290,530,90,'#673b7f','CREATIVE MARKET'),
+        L('text','Subtitle',290,390,380,58,'#7b4d8e','MADE WITH CARE')
+      ];
+    }else if(name==='wildlife'){
+      bg='#f7faf1';layers=[
+        L('rect','Forest background',75,45,810,550,'#20594b'),
+        L('ellipse','Forest moon',590,92,165,165,'#ffda9f'),
+        L('ellipse','Forest hill',140,345,650,360,'#4f9273'),
+        L('star','Firefly',175,158,105,105,'#ffbf77'),
+        L('text','Wildlife title',165,292,625,90,'#ffffff','WILD & WONDERFUL'),
+        L('text','Subtitle',280,402,405,60,'#fff0c6','EXPLORE NATURE')
+      ];
+    }else if(name==='promo'){
+      bg='#f7eefc';layers=[
+        L('rect','Purple poster',35,35,890,575,'#66429b'),
+        L('ellipse','Sun',645,100,210,210,'#ffad73'),
+        L('star','Sparkle',135,105,155,155,'#ffdb86'),
+        L('text','Headline',125,255,700,116,'#ffffff','MAKE SOMETHING'),
+        L('text','Subhead',215,365,545,88,'#f8d5ff','MAGICAL TODAY')
+      ];
+    }else return;
+    doc={background:bg,layers:layers.map(cleanLayer)};
+    selected=null;snapshot();render();setStatus('Loaded editable '+name+' template. Select a word or shape to customize it.');
+  }
+  document.querySelectorAll('[data-vector-template]').forEach(button=>button.addEventListener('click',()=>loadTemplate(button.dataset.vectorTemplate)));
   $('vector-reset').addEventListener('click',()=>{
     if(!window.confirm('Start a new design? Download your current project first if needed.'))return;
     doc={background:'#ffffff',layers:[]};selected=null;snapshot();render();setStatus('New blank design.');
@@ -267,9 +302,30 @@
     }
     return new Promise((resolve,reject)=>c.toBlob(blob=>blob?resolve(blob):reject(Error('PNG encoding failed')),'image/png'));
   }
+  async function resizeExport(blob){
+    const preset=$('vector-export-size').value;
+    const sizes={square:[1080,1080],banner:[1200,630],portrait:[1080,1350]};
+    if(!sizes[preset])return {blob,name:'1920x1280'};
+    const [width,height]=sizes[preset],url=URL.createObjectURL(blob);
+    try{
+      const img=new Image();img.src=url;await img.decode();
+      const out=document.createElement('canvas');out.width=width;out.height=height;
+      const ctx=out.getContext('2d'),fit=$('vector-export-fit').value;
+      const scale=(fit==='cover'?Math.max:Math.min)(width/img.naturalWidth,height/img.naturalHeight);
+      const dw=img.naturalWidth*scale,dh=img.naturalHeight*scale;
+      ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+      ctx.drawImage(img,(width-dw)/2,(height-dh)/2,dw,dh);
+      const newBlob=await new Promise((resolve,reject)=>out.toBlob(b=>b?resolve(b):reject(Error('Export failed')),'image/png'));
+      return {blob:newBlob,name:width+'x'+height};
+    }finally{URL.revokeObjectURL(url)}
+  }
   $('vector-export-png').addEventListener('click',async()=>{
-    const b=$('vector-export-png');b.disabled=true;setStatus('Exporting PNG…');
-    try{download(await renderPng(),'listpull-vector.png');setStatus('High-resolution PNG downloaded.');}catch(error){setStatus('PNG export failed: '+error.message)}
+    const b=$('vector-export-png');b.disabled=true;setStatus('Rendering artwork at your selected size…');
+    try{
+      const result=await resizeExport(await renderPng());
+      download(result.blob,'listpull-artwork-'+result.name+'.png');
+      setStatus('Downloaded '+result.name+' PNG. The original design remains editable.');
+    }catch(error){setStatus('PNG export failed: '+error.message)}
     finally{b.disabled=false;}
   });
   $('vector-download-json').addEventListener('click',()=>{
