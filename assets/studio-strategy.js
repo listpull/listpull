@@ -4,7 +4,7 @@
 (() => {
 'use strict';
 const $=id=>document.getElementById(id);
-const EPS=1e-7;
+
 const examples={
  collaboration:{description:'Two technology teams decide whether to coordinate a shared integration. Alignment can help both teams, but pursuing separate approaches is also stable.',players:['Platform team','Integration team'],a:['Coordinate','Go solo'],b:['Coordinate','Go solo'],A:[[5,0],[3,2]],B:[[5,3],[0,2]]},
  pricing:{description:'Two competing products choose premium pricing or a discount. Incentives in these invented scores illustrate a price competition dilemma.',players:['Product Alpha','Product Beta'],a:['Premium','Discount'],b:['Premium','Discount'],A:[[3,0],[5,1]],B:[[3,5],[0,1]]},
@@ -39,43 +39,7 @@ function inputGame(){
  if(names.some(arr=>arr.some(s=>!s)))throw Error('Enter names for all four actions.');
  return {players:[$('player-a').value.trim()||'Player A',$('player-b').value.trim()||'Player B'],actions:names,A,B};
 }
-function expected(A,x,y){
- let sum=0;for(let i=0;i<2;i++)for(let j=0;j<2;j++)sum+=x[i]*y[j]*A[i][j];
- return sum;
-}
-function regrets(A,B,x,y){
- const u=expected(A,x,y),v=expected(B,x,y);
- const rowUtilities=[0,1].map(i=>A[i][0]*y[0]+A[i][1]*y[1]);
- const colUtilities=[0,1].map(j=>B[0][j]*x[0]+B[1][j]*x[1]);
- return {u,v,regretA:Math.max(0,...rowUtilities.map(z=>z-u)),regretB:Math.max(0,...colUtilities.map(z=>z-v))};
-}
-function solve2x2(A,B){
- const found=[],near=(a,b)=>Math.abs(a-b)<=EPS;
- function add(x,y,kind){
-  const metrics=regrets(A,B,x,y);
-  if(Math.max(metrics.regretA,metrics.regretB)>EPS)return;
-  if(found.some(z=>z.x.every((v,i)=>near(v,x[i]))&&z.y.every((v,i)=>near(v,y[i]))))return;
-  found.push({kind,x,y,...metrics});
- }
- // Enumerate pure best-response intersections.
- for(let i=0;i<2;i++)for(let j=0;j<2;j++){
-  const x=[0,0],y=[0,0];x[i]=1;y[j]=1;add(x,y,'Pure');
- }
- // Interior mixed equilibrium: each opponent is indifferent over own actions.
- const denA=A[0][0]-A[0][1]-A[1][0]+A[1][1];
- const denB=B[0][0]-B[1][0]-B[0][1]+B[1][1];
- let degenerate=false;
- if(Math.abs(denA)>EPS&&Math.abs(denB)>EPS){
-  const q=(A[1][1]-A[0][1])/denA; // probability B uses first action
-  const p=(B[1][1]-B[1][0])/denB; // probability A uses first action
-  if(p>=-EPS&&p<=1+EPS&&q>=-EPS&&q<=1+EPS){
-   const x=[Math.max(0,Math.min(1,p)),Math.max(0,Math.min(1,1-p))];
-   const y=[Math.max(0,Math.min(1,q)),Math.max(0,Math.min(1,1-q))];
-   add(x,y,'Mixed');
-  }
- }else degenerate=true;
- return {equilibria:found,degenerate,method:'Pure best-response enumeration + 2x2 interior mixed indifference'};
-}
+const {solve2x2}=window.ListPullMath;
 function node(tag,cls,value){
  const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=String(value);return n;
 }
