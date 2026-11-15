@@ -2,7 +2,7 @@ name: Website & Studio checks
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, feature/customer-first-studio-workspaces]
 permissions:
   contents: read
 jobs:
