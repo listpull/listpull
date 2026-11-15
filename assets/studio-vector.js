@@ -120,13 +120,18 @@
         ['w',layer.x-4,layer.y+layer.h/2]];
       for(const [direction,x,y] of handles){
         const circle=document.createElementNS(NS,'circle');
-        circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r','9');
-        circle.setAttribute('fill','#fff4e4');circle.setAttribute('stroke','#df5882');
-        circle.setAttribute('stroke-width','3');circle.setAttribute('data-resize-handle',direction);
+        circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r','25');
+        circle.setAttribute('fill','transparent');circle.setAttribute('stroke','none');
+        circle.setAttribute('data-resize-handle',direction);
         circle.setAttribute('aria-label','Resize '+direction);
         const cursors={nw:'nwse-resize',ne:'nesw-resize',sw:'nesw-resize',se:'nwse-resize',
           n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize'};
         circle.style.cursor=cursors[direction];stage.append(circle);
+        const visible=document.createElementNS(NS,'circle');
+        visible.setAttribute('cx',x);visible.setAttribute('cy',y);visible.setAttribute('r','10');
+        visible.setAttribute('fill','#fff4e4');visible.setAttribute('stroke','#d94d82');
+        visible.setAttribute('stroke-width','3');visible.setAttribute('pointer-events','none');
+        stage.append(visible);
       }
     }
     renderLayers();renderProps(layer);
@@ -234,6 +239,15 @@
     drag=null;
   }
   stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
+  stage.addEventListener('dblclick',event=>{
+    const target=event.target.closest('[data-layer-id]');
+    const layer=doc.layers.find(x=>x.id===target?.getAttribute('data-layer-id'));
+    if(layer?.type==='text'){
+      selected=layer.id;render();
+      const input=document.querySelector('[data-property="text"]');
+      input?.focus();input?.select();setStatus('Change your words in the Text field.');
+    }
+  });
   for(const input of props){
     input.addEventListener('change',()=>{
       const l=selectedLayer();if(!l)return;
