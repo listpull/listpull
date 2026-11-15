@@ -42,8 +42,8 @@ function htmlEscapeTags(value,tag){return value.replace(new RegExp('</'+tag,'gi'
 function build(sandbox){
  const html=$('fiddle-html').value,css=$('fiddle-css').value,js=$('fiddle-js').value;
  const csp=sandbox?'<meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; connect-src &#39;none&#39;; img-src data: blob:; font-src data:; style-src &#39;unsafe-inline&#39;; script-src &#39;unsafe-inline&#39;; form-action &#39;none&#39;; base-uri &#39;none&#39;">':'';
- const pre=sandbox?'<script>const listener=(level,args)=>parent.postMessage({type:"lp-fiddle",run:'+run+',level,text:Array.from(args).map(String).join(" ").slice(0,400)},"*");for(const level of ["log","warn","error"]){console[level]=function(){listener(level,arguments)}}window.addEventListener("error",event=>listener("error",[event.message]));<\\/script>':'';
- return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+csp+'<style>*,*:before,*:after{box-sizing:border-box}body{margin:0;background:#0e1a29;color:#f6f8ff;font:15px/1.5 system-ui}</style><style>'+htmlEscapeTags(css,'style')+'</style></head><body>'+html+pre+'<script>'+htmlEscapeTags(js,'script')+'<\\/script></body></html>';
+ const pre=sandbox?'<script>const listener=(level,args)=>parent.postMessage({type:"lp-fiddle",run:'+run+',level,text:Array.from(args).map(String).join(" ").slice(0,400)},"*");for(const level of ["log","warn","error"]){console[level]=function(){listener(level,arguments)}}window.addEventListener("error",event=>listener("error",[event.message]));</script>':'';
+ return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+csp+'<style>*,*:before,*:after{box-sizing:border-box}body{margin:0;background:#0e1a29;color:#f6f8ff;font:15px/1.5 system-ui}</style><style>'+htmlEscapeTags(css,'style')+'</style></head><body>'+html+pre+'<script>'+htmlEscapeTags(js,'script')+'</script></body></html>';
 }
 function execute(){
  run++;logBox.textContent='Running isolated preview…';frame.srcdoc=build(true);
