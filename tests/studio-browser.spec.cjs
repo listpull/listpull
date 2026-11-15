@@ -56,7 +56,7 @@ test('Forecast Lab imports CSV and shows validation against a baseline',async({p
  await expect(page.locator('#forecast-backtest')).toContainText('mean absolute error');
 });
 test('Image Studio supports one-click look and destination-sized download',async({page})=>{
- await page.goto('/studio.html');
+ await page.goto('/studio/image-editor.html');
  await page.locator('[data-image-look="social"]').click();
  await expect(page.locator('#editor-canvas')).toBeVisible();
  await page.locator('#image-export-size').selectOption('square');
@@ -77,13 +77,44 @@ test('Vector Studio template loads and PNG export works',async({page})=>{
  await page.locator('#vector-export-png').click();
  expect((await download).suggestedFilename()).toContain('1080x1080');
 });
+test('Vector selected shape has direct resize handles',async({page})=>{
+ await page.goto('/studio/vector.html');
+ await page.locator('[data-vector-template="badge"]').click();
+ await page.locator('#vector-layers button').filter({hasText:'Label border'}).click();
+ const field=page.locator('[data-property="w"]');
+ const initial=Number(await field.inputValue());
+ const handle=page.locator('#vector-stage [data-resize-handle="se"]');
+ await expect(handle).toBeVisible();
+ const box=await handle.boundingBox();
+ await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+ await page.mouse.down();
+ await page.mouse.move(box.x+box.width/2+55,box.y+box.height/2+35,{steps:6});
+ await page.mouse.up();
+ await expect.poll(async()=>Number(await field.inputValue())).toBeGreaterThan(initial);
+});
+test('Visual business explorer shows tracking scenario',async({page})=>{
+ await page.goto('/studio/strategy.html');
+ await page.locator('[data-demo="movement"]').click();
+ await expect(page.locator('#discovery-insights')).toContainText('Where could');
+ await expect(page.locator('#discovery-insights svg[role="img"]')).toBeVisible();
+ await expect(page.locator('#discovery-insights')).toContainText('Scenario location');
+});
+test('Studio hub launches separate full editors',async({page})=>{
+ await page.goto('/studio.html');
+ await expect(page.locator('#editor-canvas')).toHaveCount(0);
+ await expect(page.locator('a[href="/studio/image-editor.html"]').first()).toBeVisible();
+ await page.locator('a[href="/studio/image-editor.html"]').first().click();
+ await expect(page).toHaveURL(/\/studio\/image-editor.html/);
+ await expect(page.locator('#editor-canvas')).toBeAttached();
+});
 test('Fiddle has working isolated preview and friendly sample',async({page})=>{
  await page.goto('/studio/ai.html#fiddle');
  await page.locator('[data-fiddle-preset="poster"]').click();
  await expect(page.frameLocator('#fiddle-preview').locator('h1')).toContainText('MAKE');
  await page.locator('#fiddle-tab-js').click();
  await expect(page.locator('#fiddle-js')).toBeVisible();
- await expect(page.locator('#ai-local-start')).toBeAttached();
+ await expect(page.locator('#ai-local-start')).toBeVisible();
+ await expect(page.locator('#fiddle-html')).toBeVisible();
 });
 test('mobile visitor can open Labs menu without losing Blobby',async({browser})=>{
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
