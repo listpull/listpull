@@ -45,7 +45,7 @@ test('ARIMA demonstration stays finite for flat observed series',()=>{
 });
 test('new marketing and Studio pages exist and link to real source files',()=>{
  const root=path.resolve(__dirname,'..');
- const pages=['index.html','solutions.html','engineering.html','labs.html','studio.html','studio/vector.html','studio/strategy.html','studio/forecast.html','studio/ai.html'];
+ const pages=['index.html','solutions.html','engineering.html','labs.html','studio.html','studio/vector.html','studio/image-editor.html','studio/strategy.html','studio/forecast.html','studio/ai.html'];
  const required=['/assets/site-v2.css','/assets/studio-math.js','/assets/studio-ai.js','/assets/studio-vector.js'];
  pages.forEach(page=>assert.ok(fs.existsSync(path.join(root,page)),page+' is missing'));
  required.forEach(file=>assert.ok(fs.existsSync(path.join(root,file.slice(1))),file+' is missing'));
