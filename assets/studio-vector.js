@@ -1,6 +1,6 @@
 /* ListPull Vector Studio - client-only, dependency-free illustration editor.
-   The private svg-editor's layer/history/export concepts informed this clean-room
-   implementation. No Fabric 3 or legacy CRA code is loaded on the public site. */
+   The private ListPull's layer/history/export concepts informed this clean-room
+   implementation. No  */
 (() => {
   'use strict';
   const NS='http://www.w3.org/2000/svg';
