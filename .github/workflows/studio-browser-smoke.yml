@@ -1,5 +1,7 @@
 name: Studio browser smoke
 on:
+  push:
+    branches: [feature/customer-first-studio-workspaces]
   pull_request:
     paths:
       - 'index.html'

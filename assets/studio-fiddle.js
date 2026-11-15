@@ -1,4 +1,4 @@
-/* Public creative Fiddle: safe standalone sandbox, not Electron source copied. */
+/* Public creative Fiddle: safe standalone sandbox, not  */
 (() => {
 'use strict';
 const $=id=>document.getElementById(id),frame=$('fiddle-preview');if(!frame)return;

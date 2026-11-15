@@ -1,6 +1,6 @@
 /* ListPull Vector Studio - client-only, dependency-free illustration editor.
-   The private svg-editor's layer/history/export concepts informed this clean-room
-   implementation. No Fabric 3 or legacy CRA code is loaded on the public site. */
+   The private ListPull's layer/history/export concepts informed this clean-room
+   implementation. No  */
 (() => {
   'use strict';
   const NS='http://www.w3.org/2000/svg';
@@ -9,7 +9,7 @@
   const stage=$('vector-stage'), layersUI=$('vector-layers');
   const props=[...document.querySelectorAll('[data-property]')];
   const status=$('vector-status');
-  let doc={background:'#ffffff',layers:[]},selected=null,zoom=1;
+  let doc={background:'#ffffff',layers:[]},selected=null,zoom=1,penMode=false;
   let snapshots=[],historyIndex=-1,drag=null;
   const colors={rect:'#ff9b58',ellipse:'#8e6be0',star:'#ffd562',text:'#192c55'};
   const isHex=v=>typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v);
@@ -22,9 +22,17 @@
     return typeof src==='string'&&src.length<8000000&&/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(src);
   }
   function cleanLayer(raw){
-    if(!raw||!['rect','ellipse','star','text','image'].includes(raw.type))throw Error('Unsupported layer type');
+    if(!raw||!['rect','ellipse','star','text','image','path'].includes(raw.type))throw Error('Unsupported layer type');
     const layer={id:id(),type:raw.type,name:cleanName(raw.name),x:clamp(num(raw.x),-2000,3000),y:clamp(num(raw.y),-2000,3000),w:clamp(num(raw.w,120),1,3000),h:clamp(num(raw.h,100),1,3000),fill:isHex(raw.fill)?raw.fill:'#ff9b58',opacity:clamp(num(raw.opacity,1),0,1)};
     if(layer.type==='text')layer.text=String(raw.text||'Your text').slice(0,120);
+    if(layer.type==='path'){
+      if(!Array.isArray(raw.points)||raw.points.length<2||raw.points.length>2000)throw Error('Invalid drawing coordinates');
+      layer.points=raw.points.map(pair=>{
+        if(!Array.isArray(pair)||pair.length!==2||pair.some(v=>!Number.isFinite(Number(v))))throw Error('Invalid drawing point');
+        return [clamp(Number(pair[0]),0,1),clamp(Number(pair[1]),0,1)];
+      });
+      layer.strokeWidth=clamp(num(raw.strokeWidth,6),1,30);
+    }
     if(layer.type==='image'){if(!safeImage(raw.src))throw Error('Invalid embedded image');layer.src=raw.src;}
     return layer;
   }
@@ -77,7 +85,7 @@
     return points.join(' ');
   }
   function createLayerNode(layer){
-    const tag=({rect:'rect',ellipse:'ellipse',star:'polygon',text:'text',image:'image'})[layer.type];
+    const tag=({rect:'rect',ellipse:'ellipse',star:'polygon',text:'text',image:'image',path:'path'})[layer.type];
     const el=document.createElementNS(NS,tag);
     el.setAttribute('data-layer-id',layer.id);
     el.setAttribute('opacity',String(layer.opacity));
@@ -94,11 +102,16 @@
       el.setAttribute('lengthAdjust','spacingAndGlyphs');
       el.textContent=layer.text||'Text';
     }
+    if(layer.type==='path'){
+      const shape=layer.points.map((p,i)=>(i?'L':'M')+(layer.x+p[0]*layer.w).toFixed(2)+' '+(layer.y+p[1]*layer.h).toFixed(2)).join(' ');
+      el.setAttribute('d',shape);el.setAttribute('fill','none');el.setAttribute('stroke',layer.fill);
+      el.setAttribute('stroke-width',layer.strokeWidth);el.setAttribute('stroke-linecap','round');el.setAttribute('stroke-linejoin','round');
+    }
     if(layer.type==='image'){
       el.setAttribute('x',layer.x);el.setAttribute('y',layer.y);
       el.setAttribute('width',layer.w);el.setAttribute('height',layer.h);
       el.setAttribute('preserveAspectRatio','xMidYMid meet');el.setAttribute('href',layer.src);
-    }else el.setAttribute('fill',layer.fill);
+    }else if(layer.type!=='path')el.setAttribute('fill',layer.fill);
     el.style.cursor='move';
     return el;
   }
@@ -113,6 +126,27 @@
       const rect=document.createElementNS(NS,'rect');
       for(const [k,v] of Object.entries({x:layer.x-4,y:layer.y-4,width:layer.w+8,height:layer.h+8,fill:'none',stroke:'#ff5c95','stroke-width':3,'stroke-dasharray':'10 7','pointer-events':'none'}))rect.setAttribute(k,v);
       stage.append(rect);
+      const handles=[
+        ['nw',layer.x-4,layer.y-4],['n',layer.x+layer.w/2,layer.y-4],['ne',layer.x+layer.w+4,layer.y-4],
+        ['e',layer.x+layer.w+4,layer.y+layer.h/2],['se',layer.x+layer.w+4,layer.y+layer.h+4],
+        ['s',layer.x+layer.w/2,layer.y+layer.h+4],['sw',layer.x-4,layer.y+layer.h+4],
+        ['w',layer.x-4,layer.y+layer.h/2]];
+      for(const [direction,x,y] of handles){
+        const circle=document.createElementNS(NS,'circle');
+        circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r','25');
+        circle.setAttribute('fill','rgba(255,255,255,0.002)');circle.setAttribute('stroke','none');
+        circle.setAttribute('pointer-events','all');
+        circle.setAttribute('data-resize-handle',direction);
+        circle.setAttribute('aria-label','Resize '+direction);
+        const cursors={nw:'nwse-resize',ne:'nesw-resize',sw:'nesw-resize',se:'nwse-resize',
+          n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize'};
+        circle.style.cursor=cursors[direction];stage.append(circle);
+        const visible=document.createElementNS(NS,'circle');
+        visible.setAttribute('cx',x);visible.setAttribute('cy',y);visible.setAttribute('r','10');
+        visible.setAttribute('fill','#fff4e4');visible.setAttribute('stroke','#d94d82');
+        visible.setAttribute('stroke-width','3');visible.setAttribute('pointer-events','none');
+        stage.append(visible);
+      }
     }
     renderLayers();renderProps(layer);
     $('vector-background').value=doc.background;
@@ -126,7 +160,7 @@
     for(const layer of doc.layers.slice().reverse()){
       const li=document.createElement('li'),button=document.createElement('button'),symbol=document.createElement('span');
       button.type='button';button.setAttribute('aria-pressed',String(selected===layer.id));
-      button.title='Select '+layer.name;symbol.textContent=({rect:'▭',ellipse:'◯',star:'✦',text:'T',image:'▧'})[layer.type];
+      button.title='Select '+layer.name;symbol.textContent=({rect:'▭',ellipse:'◯',star:'✦',text:'T',image:'▧',path:'✎'})[layer.type];
       button.append(symbol,document.createTextNode(layer.name||layer.type));button.addEventListener('click',()=>{selected=layer.id;render();});
       li.append(button);layersUI.append(li);
     }
@@ -142,6 +176,8 @@
     }
     $('vector-opacity-output').textContent=layer?Math.round(layer.opacity*100)+'%':'—';
     $('vector-text-wrapper').hidden=!layer||layer.type!=='text';
+    $('vector-brush-wrapper').hidden=!layer||layer.type!=='path';
+    $('vector-brush-output').textContent=layer?.type==='path'?layer.strokeWidth+' px':'—';
   }
   function addLayer(type){
     const count=doc.layers.length;if(count>=80){setStatus('Maximum 80 layers.');return;}
@@ -169,29 +205,98 @@
     return {x:(event.clientX-r.left)/r.width*W,y:(event.clientY-r.top)/r.height*H};
   }
   stage.addEventListener('pointerdown',event=>{
+    const handle=event.target.closest('[data-resize-handle]');
+    if(penMode){
+      const p=point(event);drag={mode:'draw',points:[p],pointerId:event.pointerId,changed:false};
+      stage.setPointerCapture(event.pointerId);setStatus('Draw a line or curve, then release to add it as an editable layer.');
+      event.preventDefault();return;
+    }
     const target=event.target.closest('[data-layer-id]');
-    if(!target){selected=null;render();return;}
-    selected=target.getAttribute('data-layer-id');const layer=selectedLayer();
-    if(!layer)return;
+    if(handle&&!selectedLayer())return;
+    if(!handle&&!target){selected=null;render();return;}
+    if(target)selected=target.getAttribute('data-layer-id');
+    const layer=selectedLayer();if(!layer)return;
     const p=point(event);
-    drag={id:selected,p,startX:layer.x,startY:layer.y,changed:false,pointerId:event.pointerId};
+    drag={id:layer.id,mode:handle?'resize':'move',handle:handle?.getAttribute('data-resize-handle')||'',
+      p,startX:layer.x,startY:layer.y,startW:layer.w,startH:layer.h,
+      changed:false,pointerId:event.pointerId};
     stage.setPointerCapture(event.pointerId);render();
+    setStatus(handle?'Drag a corner or edge to resize. Hold Shift to keep proportions.':'Drag to move; use handles to resize.');
     event.preventDefault();
   });
   stage.addEventListener('pointermove',event=>{
     if(!drag||drag.pointerId!==event.pointerId)return;
+    if(drag.mode==='draw'){
+      const p=point(event);
+      const previous=drag.points.at(-1);
+      if(Math.hypot(p.x-previous.x,p.y-previous.y)<3)return;
+      drag.points.push(p);
+      if(drag.points.length>2000)return;
+      let preview=stage.querySelector('#vector-paint-preview');
+      if(!preview){preview=document.createElementNS(NS,'path');preview.id='vector-paint-preview';
+        preview.setAttribute('fill','none');preview.setAttribute('stroke','#ff9b58');
+        preview.setAttribute('stroke-width','6');preview.setAttribute('stroke-linejoin','round');preview.setAttribute('stroke-linecap','round');stage.append(preview);}
+      preview.setAttribute('d',drag.points.map((p,i)=>(i?'L':'M')+Math.round(p.x)+' '+Math.round(p.y)).join(' '));
+      return;
+    }
     const layer=doc.layers.find(l=>l.id===drag.id);if(!layer)return;
-    const p=point(event);
-    const nextX=clamp(Math.round(drag.startX+p.x-drag.p.x),-layer.w+10,W-10);
-    const nextY=clamp(Math.round(drag.startY+p.y-drag.p.y),-layer.h+10,H-10);
-    if(nextX!==layer.x||nextY!==layer.y){layer.x=nextX;layer.y=nextY;drag.changed=true;render();}
+    const p=point(event),dx=p.x-drag.p.x,dy=p.y-drag.p.y;
+    let x=drag.startX,y=drag.startY,w=drag.startW,h=drag.startH;
+    if(drag.mode==='move'){
+      x=clamp(Math.round(x+dx),-w+10,W-10);y=clamp(Math.round(y+dy),-h+10,H-10);
+    }else{
+      const dir=drag.handle;
+      if(dir.includes('e'))w=drag.startW+dx;
+      if(dir.includes('s'))h=drag.startH+dy;
+      if(dir.includes('w')){x=drag.startX+dx;w=drag.startW-dx;}
+      if(dir.includes('n')){y=drag.startY+dy;h=drag.startH-dy;}
+      if(event.shiftKey&&dir.length===2){
+        const factor=Math.max(w/drag.startW,h/drag.startH);
+        w=drag.startW*factor;h=drag.startH*factor;
+        if(dir.includes('w'))x=drag.startX+drag.startW-w;
+        if(dir.includes('n'))y=drag.startY+drag.startH-h;
+      }
+      if(w<24){if(dir.includes('w'))x=drag.startX+drag.startW-24;w=24;}
+      if(h<24){if(dir.includes('n'))y=drag.startY+drag.startH-24;h=24;}
+      w=clamp(w,24,3000);h=clamp(h,24,3000);
+      x=clamp(x,-2000,3000);y=clamp(y,-2000,3000);
+    }
+    const nx=Math.round(x),ny=Math.round(y),nw=Math.round(w),nh=Math.round(h);
+    if(nx!==layer.x||ny!==layer.y||nw!==layer.w||nh!==layer.h){
+      Object.assign(layer,{x:nx,y:ny,w:nw,h:nh});drag.changed=true;render();
+      if(drag.mode==='resize')setStatus(layer.w+' × '+layer.h+' px. Release to apply.');
+    }
   });
   function endDrag(event){
     if(!drag||drag.pointerId!==event.pointerId)return;
-    if(drag.changed){snapshot();setStatus('Layer moved.');}
+    if(drag.mode==='draw'){
+      const points=drag.points;
+      drag=null;penMode=false;
+      $('vector-pen').setAttribute('aria-pressed','false');
+      if(points.length<2){render();setStatus('Tap Draw and drag to sketch a line.');return;}
+      if(doc.layers.length>=80){render();setStatus('Maximum 80 layers.');return;}
+      const x=Math.min(...points.map(p=>p.x)),y=Math.min(...points.map(p=>p.y));
+      const w=Math.max(1,Math.max(...points.map(p=>p.x))-x);
+      const h=Math.max(1,Math.max(...points.map(p=>p.y))-y);
+      const layer=cleanLayer({type:'path',name:'Drawing '+(doc.layers.length+1),x,y,w,h,
+        fill:'#ff9b58',opacity:1,strokeWidth:6,
+        points:points.map(p=>[(p.x-x)/w,(p.y-y)/h])});
+      doc.layers.push(layer);selected=layer.id;snapshot();render();setStatus('Drawing added. Resize with handles or change its color and thickness.');
+      return;
+    }
+    if(drag.changed){snapshot();setStatus(drag.mode==='resize'?'Shape resized. Drag handles again to refine.':'Artwork moved.');}
     drag=null;
   }
   stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
+  stage.addEventListener('dblclick',event=>{
+    const target=event.target.closest('[data-layer-id]');
+    const layer=doc.layers.find(x=>x.id===target?.getAttribute('data-layer-id'));
+    if(layer?.type==='text'){
+      selected=layer.id;render();
+      const input=document.querySelector('[data-property="text"]');
+      input?.focus();input?.select();setStatus('Change your words in the Text field.');
+    }
+  });
   for(const input of props){
     input.addEventListener('change',()=>{
       const l=selectedLayer();if(!l)return;
@@ -199,17 +304,33 @@
       if(key==='fill'){if(isHex(input.value))l.fill=input.value;}
       else if(key==='text')l.text=input.value.slice(0,120);
       else if(key==='opacity')l.opacity=clamp(num(input.value)/100,0,1);
+      else if(key==='strokeWidth'&&l.type==='path')l.strokeWidth=clamp(num(input.value,6),1,30);
       else if(['x','y','w','h'].includes(key))l[key]=clamp(num(input.value,l[key]),key==='x'||key==='y'?-2000:1,3000);
       snapshot();render();
     });
     if(input.dataset.property==='opacity')input.addEventListener('input',()=>{$('vector-opacity-output').textContent=input.value+'%';});
+    if(input.dataset.property==='strokeWidth')input.addEventListener('input',()=>{$('vector-brush-output').textContent=input.value+' px';});
   }
   $('vector-background').addEventListener('change',event=>{if(!isHex(event.target.value))return;doc.background=event.target.value;snapshot();render()});
-  document.querySelectorAll('[data-add]').forEach(btn=>btn.addEventListener('click',()=>addLayer(btn.dataset.add)));
+  document.querySelectorAll('[data-add]').forEach(btn=>btn.addEventListener('click',()=>{
+    penMode=false;$('vector-pen').setAttribute('aria-pressed','false');addLayer(btn.dataset.add);
+  }));
+  $('vector-pen').addEventListener('click',()=>{
+    penMode=!penMode;$('vector-pen').setAttribute('aria-pressed',String(penMode));
+    setStatus(penMode?'Drag on the canvas to draw. Your stroke becomes an editable layer.':'Draw mode off. Select a layer to edit.');
+  });
   for(const name of ['duplicate','delete','up','down'])$('vector-'+name).addEventListener('click',()=>action(name));
   $('vector-undo').addEventListener('click',()=>restoreHistory(-1));
   $('vector-redo').addEventListener('click',()=>restoreHistory(1));
-  function applyZoom(){stage.style.width='min('+Math.round(zoom*100)+'%, '+Math.round(880*zoom)+'px)';$('vector-zoom-label').textContent=Math.round(zoom*100)+'%';}
+  function applyZoom(){
+    const area=document.querySelector('.vector-canvas-area');
+    const availableWidth=Math.max(200,area.clientWidth-72);
+    const availableHeight=Math.max(170,area.clientHeight-72);
+    const base=Math.min(880,availableWidth,availableHeight*1.5);
+    stage.style.width=Math.round(base*zoom)+'px';
+    $('vector-zoom-label').textContent=Math.round(zoom*100)+'%';
+  }
+  window.addEventListener('resize',applyZoom);
   $('vector-zoom-in').addEventListener('click',()=>{zoom=clamp(zoom+.2,.5,2);applyZoom()});
   $('vector-zoom-out').addEventListener('click',()=>{zoom=clamp(zoom-.2,.5,2);applyZoom()});
   function loadTemplate(name){
@@ -290,6 +411,10 @@
       if(l.type==='ellipse'){ctx.beginPath();ctx.ellipse(l.x+l.w/2,l.y+l.h/2,l.w/2,l.h/2,0,0,Math.PI*2);ctx.fill();}
       if(l.type==='star'){const pts=starPoints(l).split(' ').map(p=>p.split(',').map(Number));ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fill();}
       if(l.type==='text'){ctx.font='800 '+clamp(l.h*.6,12,320)+'px system-ui, Arial, sans-serif';ctx.textBaseline='alphabetic';ctx.fillText(l.text,l.x,l.y+l.h*.77,l.w);}
+      if(l.type==='path'){
+        ctx.beginPath();l.points.forEach((p,i)=>{const x=l.x+p[0]*l.w,y=l.y+p[1]*l.h;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+        ctx.strokeStyle=l.fill;ctx.lineWidth=l.strokeWidth;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+      }
       if(l.type==='image'){
         const img=new Image();img.src=l.src;
         await img.decode();

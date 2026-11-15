@@ -1,12 +1,14 @@
 /* ListPull Forecast Lab - illustrative ARIMA(1,1,0), browser only.
-   Neubra Electron uses the full npm "arima" model package; this is not that service. */
+    */
 (() => {
  'use strict';
  const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
  const demos={
   visits:Array.from({length:38},(_,i)=>Math.round(180+7.5*i+18*Math.sin(i*.44)+5*Math.cos(i*1.4))),
   tickets:Array.from({length:38},(_,i)=>Math.round(56-0.32*i+7*Math.sin(i*.72)+2*Math.cos(i*.23))),
-  inventory:Array.from({length:38},(_,i)=>Math.round(94+2*i+11*Math.sin(i*.46)+9*Math.cos(i*.83)))
+  inventory:Array.from({length:38},(_,i)=>Math.round(94+2*i+11*Math.sin(i*.46)+9*Math.cos(i*.83))),
+  wildlife:Array.from({length:38},(_,i)=>Math.max(0,Math.round(16+.28*i+5*Math.sin(i*.6)+3*Math.cos(i*.25)))),
+  farming:Array.from({length:38},(_,i)=>Math.max(0,Math.round(105+1.1*i+9*Math.sin(i*.44)+5*Math.cos(i*.18))))
  };
  let last=null;
  const mk=(tag,attrs={},txt)=>{
@@ -63,9 +65,9 @@
    const r=fitArima110(values,horizon);last={observed:values,...r};
    drawChart(values,r);
    const stats=$('forecast-stats');stats.replaceChildren(
-    card('Last observation',norm(values[values.length-1])),
-    card('Lagged-difference φ',format(r.phi)),
-    card('Residual σ',format(r.sigma))
+    card('Latest recorded value',norm(values[values.length-1])),
+    card('Next estimated value',norm(r.forecast[0].point)),
+    card('Steps ahead',String(horizon))
    );
    const rows=$('forecast-rows');rows.replaceChildren();
    for(const p of r.forecast){

@@ -1,5 +1,5 @@
 /* ListPull Studio - educational 2x2 Nash equilibrium calculator.
-   Independent browser adaptation of Neubra's best-response and regret concepts.
+   Independent browser adaptation of 
    No financial data, credentials, server calls or shared app state. */
 (() => {
 'use strict';
