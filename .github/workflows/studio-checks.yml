@@ -17,8 +17,10 @@ jobs:
           node-version: '22'
       - name: Check browser JavaScript syntax
         run: |
-          for file in assets/site-v2.js assets/studio.js assets/studio-vector.js assets/studio-ai.js assets/studio-math.js assets/studio-strategy.js assets/studio-forecast.js; do
+          for file in assets/*.js; do
             node --check "$file"
           done
       - name: Run Studio unit and site structure tests
-        run: node --test tests/studio-math.test.cjs
+        run: node --test tests/*.test.cjs
+      - name: Validate sitemap XML
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('sitemap.xml'); print('Sitemap XML valid')"

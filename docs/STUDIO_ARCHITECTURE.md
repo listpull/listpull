@@ -1,5 +1,21 @@
 # ListPull website and Studio — product architecture & release notes
 
+## Guided visitor workflows (expanded November 15, 2026)
+
+**Who this is for:** prospective clients, product owners, artists and analysts who may not know data-science jargon. The page now starts with recognizable tasks before expert controls.
+
+- **Strategy & data discovery:** eight synthetic one-click sample industries; 3 MB/5,000-row local CSV import; automatic numeric, categorical and date field profiling; column completeness; suggested mappings; group averages/medians; observed categorical success rates with Wilson intervals (independence assumption); inventory-balance sensitivity with adjustable demand; and an optional empirical 2×2 Nash payoff matrix if both actors' actions and rewards are observed in all combinations. A report can be exported as JSON. The app cannot identify causes or validate future forecasts from observational snapshots.
+- **Forecasting:** CSV upload and numeric field selection; optional time sorting; last 120 valid records; baseline ARIMA(1,1,0) OLS-style projection; sample scenarios; CSV output; and a simple held-out evaluation using mean absolute error compared to repeating the last observation. Warnings are shown when a simple baseline performs at least as well. Uncertainty bands remain illustrative rather than calibrated.
+- **Image:** click-to-try product/social/nature looks; compare with unfiltered source; choose fitting or crop-to-fill; download actual 1080-square, 1200×630 website, 1280×720 thumbnail, 1080×1350 portrait, or native-size PNG. No private uploads.
+- **Vector:** template designs for marketplace badges, nature stickers, and promotional layouts; editable layers; size presets for social and ecommerce deliverables. SVG remains scalable. No PDF/CMYK printing system or vetted SVG import is promised.
+- **AI + Fiddle:** existing deterministic citation-focused retrieval remains the default. If the visitor explicitly opts in and has WebGPU support, an external WebLLM package/model can be downloaded to run local inference without API keys. Real models may be large, may fail on weak devices, and can produce incorrect answers. New Fiddle runs HTML/CSS/JavaScript templates in a **sandboxed iframe with network-blocking CSP**; the Electron bridge and sensitive Neubra stock data are not copied to the public website.
+
+**Health and wildlife limitations:** aggregated health examples compare case counts; no contact-tracing, diagnosis, or epidemiological prediction is supplied. Wildlife examples compare observed sightings; they do not estimate future animal trajectories.
+
+**Demo data privacy:** CSV files are read in the browser and stay in memory for the current page; only aggregate outputs/downloads are generated. Do not load regulated or identifiable datasets on public/shared devices; browser extensions, third-party scripts and exported files may still have their own privacy implications.
+
+**Verification:** `tests/studio-data.test.cjs` covers schema and analytic fixtures. `tests/studio-browser.spec.cjs` runs smoke tests in Chromium via `.github/workflows/studio-browser-smoke.yml`; a successful browser test is not a full security, accessibility or model-validation audit.
+
 ## Audience strategy (November 2026)
 
 **Root `/`: keep the original public-facing ListPull experience.**
@@ -17,18 +33,18 @@ The Blobby hero, platform download links, wildlife card grid and community secti
 | `studio/vector.html` | Shape and text layers, local image placement, select/move, properties, stacking, history, undo/redo, browser autosave, JSON project, SVG/PNG export, keyboard commands | No path-node editor, groups, collaboration, SVG import, or secure cloud projects |
 | `studio/strategy.html` | Configurable 2×2 game, synthetic multi-domain payoffs, pure/mixed equilibrium, expected utility, regret diagnostics, JSON export | No generalized matrix-size support or complete equilibrium-continuum enumeration; not a decision recommendation |
 | `studio/forecast.html` | Synthetic samples, input series, simple in-browser ARIMA(1,1,0) OLS approximation, visualization, CSV export | Illustrative uncertainty bands; not equivalent to full Neubra model training/caching |
-| `studio/ai.html` | Local toy-corpus retrieval, source scoring, evidence display, grounded prompt construction and copy | No live LLM, private data search, or API credentials |
+| `studio/ai.html` | Grounded retrieval plus optional opt-in WebGPU model; isolated, editable Fiddle demos | No hosted AI, API-key collection, private data search, or guarantees |
 
 ## Source relationship and technical decisions
 
 - The separate private **`listpull/svg-editor`** currently contains a React 18/Fabric 3.x editor, with selection, shapes, drawing, image upload, history and SVG/PNG/JPEG export. Its older `react-scripts`/Fabric dependencies make a direct unreviewed production deployment unwise. The public Vector Studio is an independent, dependency-free implementation of a subset of capabilities; it does not copy private application source or expose private assets.
 - The private **Neubra Electron** Nash engine has best-response support solving and regret diagnostics. The public educational Strategy Lab uses a smaller tested 2×2 pure/mixed solver. It does not copy derivatives, market assumptions or internal data.
 - Neubra's ARIMA service uses a Node `arima` dependency and caches trained models. The public forecast is a **separate minimal** ARIMA(1,1,0) demonstration, not a browser port of the production research code.
-- Neubra's Fiddle AI assistant calls an Electron preload bridge (`window.electronAPI.aiExecute`). A static site cannot provide equivalent privileged functionality. The public AI Lab demonstrates evidence retrieval and prompt assembly without connecting to an external model.
+- Neubra's Fiddle AI assistant calls an Electron preload bridge (`window.electronAPI.aiExecute`). A static site cannot provide equivalent privileged functionality. The public AI Lab now has an optional WebGPU/WebLLM model path (only on explicit user action) and a retrieval-only fallback. It does not use Electron IPC or any production Neubra agents.
 
 ## Security and privacy
 
-- The website is deployed as static pages. No passwords, external model API keys, financial credentials or server secrets are requested or persisted.
+- The website is deployed as static pages. No passwords, external model API keys, financial credentials or server secrets are requested or persisted. Opt-in WebLLM fetches model assets and JavaScript from external hosts, but performs supported inference locally in the browser.
 - OpenAI's documented key safety guidance explicitly says not to expose API secrets in a public browser. For true BYO-model integrations, plan a **trusted, authenticated backend** with rate limiting, audit logs, access controls and short-lived scoped credentials as appropriate. Do not use a public browser input for raw model API keys.
 - Vector Studio accepts raster PNG/JPEG/WebP input with file-size and pixel limits, builds SVG only from whitelisted internal shapes, and validates JSON projects. It does **not** ingest arbitrary executable SVG. Generated graphics and image editors stay client-side. Browser autosave uses device-local storage, which may be accessible to another person using the same browser profile: do not work with confidential assets on shared devices.
 - The AI workflow renders retrieved passages and user prompts as text, not raw HTML, to avoid introducing script injection paths from model/source responses.
