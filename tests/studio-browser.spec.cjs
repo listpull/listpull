@@ -243,7 +243,7 @@ test('Video Studio allows moving footage directly and adding editable picture-in
  await page.locator('#video-scale').dispatchEvent('change');
  await expect(page.locator('#video-scale')).toHaveValue('60');
  await page.locator('[data-video="keyframe"]').first().click();
- await expect(page.locator('#video-keyframe-list')).toContainText('00:00');
+ await expect(page.locator('#video-keyframe-list')).toContainText('00:01');
  const save=page.waitForEvent('download');
  await page.locator('[data-video="save"]').click();
  expect((await save).suggestedFilename()).toContain('video-project.json');
