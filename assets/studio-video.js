@@ -278,7 +278,9 @@
     if(side==='start'){
      clip.in=limit(initialIn+delta,0,Math.max(0,clip.out-.08));
      if(clip.type==='overlay')clip.start=initialStart+(clip.in-initialIn)/Math.max(.05,clip.speed||1);
-    }else clip.out=limit(initialOut+delta,clip.in+.08,asset(clip.assetId)?.duration||initialOut);
+    }else {clip.out=limit(initialOut+delta,clip.in+.08,asset(clip.assetId)?.duration||initialOut);
+     if(clip.type==='overlay')clip.end=clip.start+duration(clip);
+    }
     const label=button.querySelector('span.video-clip-length');
     if(label)label.textContent=code(duration(clip));
     button.style.minWidth=Math.max(85,duration(clip)*timelineScale)+'px';
@@ -387,6 +389,7 @@
    }
   }
   Object.assign(c,fields);
+  if(c.type==='overlay')c.end=c.start+duration(c);
   const key=(c.keyframes||[]).find(k=>Math.abs(k.at-activeOffset(c))<.025);
   if(key)for(const field of ['x','y','scale','rotation','opacity'])key[field]=fields[field]??key[field];
   at=Math.min(at,total());changed('Edits applied to the preview and exported video.');seek(at);
@@ -995,11 +998,17 @@
       if(!recording||event!=='timeupdate')draw();
     });
   }
+  player.addEventListener('loadeddata',()=>{
+    if(typeof player.requestVideoFrameCallback==='function'){
+      player.requestVideoFrameCallback(()=>draw());
+    }
+  });
   player.addEventListener('loadedmetadata',()=>{
     const b=getBlock(at);
     if(b&&asset(b.clip.assetId)?.kind==='video'){
       const time=b.clip.in+(at-b.start)*b.clip.speed;
-      const next=limit(time,0,Math.max(0,player.duration-.005));
+      const max=Number.isFinite(player.duration)?Math.max(0,player.duration-.005):time;
+      const next=limit(time,0,max);
       if(Number.isFinite(next)&&Math.abs(player.currentTime-next)>.01){
         try{player.currentTime=next;}catch(e){}
       }
