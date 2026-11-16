@@ -658,8 +658,10 @@
     }
   });
   window.addEventListener('resize',()=>{if(!document.activeElement?.closest('.creative-zoom'))applyZoom(fitRatio());});
-  doDemo('social');
-  // Browser-only recovery. We do not silently replace the start template with previously saved art.
+  canvas.clear();canvas.backgroundColor='#ffffff';docW=1200;docH=800;
+  applyZoom(fitRatio());saveState();renderLayers();
+  status('Blank artboard ready. Import a photo or SVG to match its dimensions, or choose a starter design.');
+  // Browser-only recovery. Previous work is restored only when requested.
   try{
     const prior=localStorage.getItem('listpull.creative.project');
     if(prior&&prior.length<3_500_000){
