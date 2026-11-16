@@ -278,7 +278,7 @@
     if(side==='start'){
      clip.in=limit(initialIn+delta,0,Math.max(0,clip.out-.08));
      if(clip.type==='overlay')clip.start=initialStart+(clip.in-initialIn)/Math.max(.05,clip.speed||1);
-    }else {clip.out=limit(initialOut+delta,clip.in+.08,asset(clip.assetId)?.duration||initialOut);
+    }else {clip.out=limit(initialOut+delta,clip.in+.08,asset(clip.assetId)?.kind==='image'?Infinity:asset(clip.assetId)?.duration||initialOut);
      if(clip.type==='overlay')clip.end=clip.start+duration(clip);
     }
     const label=button.querySelector('span.video-clip-length');
@@ -414,7 +414,7 @@
   if(c.type==='title'&&fields.end<=fields.start){status('Title end must be later than its start.');return;}
   if(c.type!=='title'&&c.type!=='audio'){
    if(fields.cropLeft+fields.cropRight>=100||fields.cropTop+fields.cropBottom>=100){status('Crop sides must leave some visible pixels.');return;}
-   const a=asset(c.assetId);if(fields.out<=fields.in||fields.out>(a?.duration||Infinity)+.1){
+   const a=asset(c.assetId);if(fields.out<=fields.in||(a?.kind!=='image'&&fields.out>(a?.duration||Infinity)+.1)){
     status('Clip out-point must be after its in-point and within the source media.');return;
    }
   }
@@ -423,7 +423,7 @@
     c.start=Math.max(0,number('video-timeline-start'));
     const intendedDuration=Math.max(.01,number('video-timeline-duration',duration(c)));
     const source=asset(c.assetId);
-    c.out=Math.min(source?.duration||Infinity,c.in+intendedDuration*(c.speed||1));
+    c.out=Math.min(source?.kind==='image'?Infinity:source?.duration||Infinity,c.in+intendedDuration*(c.speed||1));
     if(c.type==='overlay')c.end=c.start+duration(c);
   }
   const key=(c.keyframes||[]).find(k=>Math.abs(k.at-activeOffset(c))<.025);
