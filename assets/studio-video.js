@@ -211,31 +211,52 @@
   }
   changed('Imported '+n+' caption segments from SRT.');
  }
- function addFileToTimeline(info){
+ function addFileToTimeline(info,options={}){
   if(!info)return;
+  const requested=options.track||(info.kind==='audio'?'audio':'clip');
+  const position=Number.isFinite(options.time)?Math.max(0,Number(options.time)):at;
   if(info.kind==='audio'){
-   const record={id:uid(),type:'audio',assetId:info.id,start:at,in:0,out:info.duration,speed:1,volume:100};
+   const record={id:uid(),type:'audio',assetId:info.id,start:position,in:0,
+    out:info.duration,speed:1,volume:100};
    audioClips.push(record);selectedId=record.id;
+  }else if(requested==='overlay'&&clips.length){
+   const start=Math.min(position,Math.max(0,total()-.01));
+   const out=Math.min(info.duration,Math.max(.01,total()-start));
+   const record={id:uid(),type:'overlay',assetId:info.id,start,end:start+out,in:0,out,
+    speed:1,volume:0,...defaults(),scale:45,fit:'contain',
+    filter:'none',transition:'cut',fade:.3};
+   overlays.push(record);selectedId=record.id;
+   at=start;
   }else{
    const first=clips.length===0;
-   const record={id:uid(),type:info.kind,assetId:info.id,in:0,out:info.duration,speed:1,volume:100,
-    ...defaults(),filter:'none',transition:'cut',fade:.5};
-   clips.push(record);selectedId=record.id;
-   if(first){
-    at=0;
-    if(sizeMode==='auto'&&info.width>0&&info.height>0){
-     width=info.width;height=info.height;resize();
+   const record={id:uid(),type:info.kind,assetId:info.id,in:0,out:info.duration,
+    speed:1,volume:100,...defaults(),filter:'none',transition:'cut',fade:.5};
+   const index=Number.isInteger(options.index)?limit(options.index,0,clips.length):clips.length;
+   const insertion=blocks()[index]?.start??total();
+   if(index<clips.length){
+    const shift=duration(record);
+    for(const entry of [...overlays,...titles,...audioClips]){
+     if((entry.start||0)>=insertion){
+      entry.start+=shift;
+      if(typeof entry.end==='number')entry.end+=shift;
+     }
     }
    }
+   clips.splice(index,0,record);selectedId=record.id;
+   if(first&&sizeMode==='auto'&&info.width>0&&info.height>0){
+    width=info.width;height=info.height;resize();
+   }
+   at=first?0:insertion;
   }
-  changed(info.name+' added. Preview is ready to edit; the full frame is preserved.');
+  changed(info.name+' added to '+(requested==='overlay'?'overlay':info.kind==='audio'?'audio':'video')+' track. Drag an edge to trim.');
   if(item(selectedId))fillInspector(item(selectedId));
   seek(at);
  }
  function renderLibrary(){
   const list=$('video-library');list.replaceChildren();
   for(const f of files){
-   const li=document.createElement('li');li.tabIndex=0;
+   const li=document.createElement('li');li.tabIndex=0;li.draggable=true;
+   li.setAttribute('aria-label','Drag '+f.name+' to a compatible video timeline track or double-click to add');
    li.className=chosenMedia===f.id?'is-selected':'';li.dataset.asset=f.id;
    const ico=document.createElement('span');ico.className='video-asset-icon';ico.textContent=f.kind==='video'?'🎞️':f.kind==='audio'?'♫':'▧';
    const text=document.createElement('div'),title=document.createElement('strong'),small=document.createElement('small');
@@ -244,6 +265,15 @@
    if(f.thumbnail){const preview=document.createElement('img');preview.src=f.thumbnail;preview.alt='';preview.className='video-library-thumbnail';li.prepend(preview);}
    li.addEventListener('click',()=>{chosenMedia=f.id;renderLibrary();});
    li.addEventListener('dblclick',()=>addFileToTimeline(f));
+   li.addEventListener('dragstart',event=>{
+     if(!event.dataTransfer)return;
+     chosenMedia=f.id;
+     event.dataTransfer.setData('application/x-listpull-media',f.id);
+     event.dataTransfer.setData('text/plain','asset:'+f.id);
+     event.dataTransfer.effectAllowed='copy';
+     li.classList.add('is-dragging');
+   });
+   li.addEventListener('dragend',()=>li.classList.remove('is-dragging'));
    li.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();chosenMedia=f.id;renderLibrary();}});
    list.append(li);
   }
