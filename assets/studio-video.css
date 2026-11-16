@@ -56,3 +56,13 @@ body.video-studio{background:var(--vbg);color:var(--vtext);font:14px/1.5 system-
 @media(max-width:900px){.video-main{height:auto;min-height:0}.video-work-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px}.video-assets{grid-column:1/-1;overflow:visible}.video-import-drop{display:flex;align-items:center;gap:12px}.video-library{display:flex;flex-wrap:wrap}.video-asset-controls{display:flex}.video-center{min-height:700px}.video-monitor{min-height:300px}.video-timeline{flex-basis:260px}.video-inspector{overflow:visible}}
 @media(max-width:680px){.video-header{padding:0 10px;gap:9px}.video-header>span{display:none}.video-header nav a:last-child{display:none}.video-header nav{gap:10px}.video-toolbar{overflow-x:auto;flex-wrap:nowrap}.video-toolbar button,.video-toolbar label{white-space:nowrap}
 .video-work-layout{display:flex;flex-direction:column}.video-assets{max-height:320px;overflow-y:auto}.video-center{min-height:670px}.video-monitor{min-height:220px}.video-timeline-header{display:block}.video-timeline-actions{margin-top:10px}.video-timeline{flex-basis:300px}.video-inspector{border:0}.video-transport{gap:5px;padding:8px}.video-transport button{padding:6px}.video-track-label{font-size:.62rem}.video-property-body{padding-bottom:34px}}
+
+.creative-main:fullscreen,.creative-main.studio-faux-fullscreen,.video-main:fullscreen,.video-main.studio-faux-fullscreen,.video-monitor:fullscreen,.video-monitor.studio-faux-fullscreen{background:#101727;position:fixed;inset:0;width:100vw;height:100dvh;max-height:none;min-height:0;z-index:9999;margin:0;overflow:hidden}
+.creative-main:fullscreen .creative-layout,.creative-main.studio-faux-fullscreen .creative-layout{height:calc(100dvh - 64px)}
+.creative-main:fullscreen .creative-drop,.creative-main.studio-faux-fullscreen .creative-drop{min-height:0}
+.video-main:fullscreen .video-work-layout,.video-main.studio-faux-fullscreen .video-work-layout{min-height:0}
+.video-main:fullscreen .video-monitor,.video-main.studio-faux-fullscreen .video-monitor{min-height:0}
+.video-monitor:fullscreen,.video-monitor.studio-faux-fullscreen{display:grid;place-items:center;padding:12px}
+.video-monitor:fullscreen canvas,.video-monitor.studio-faux-fullscreen canvas{width:auto;height:auto;max-width:100vw;max-height:100dvh}
+[data-fullscreen-target][aria-pressed=true]{background:#ab584e!important;border-color:#f8c39d!important;color:white!important}
+.video-preview-fullscreen{border:1px solid #59718a;border-radius:7px;background:#2e3c59;color:#fff;padding:5px 10px;cursor:pointer;font-size:.72rem}
