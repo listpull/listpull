@@ -232,7 +232,10 @@ test('Video Studio allows moving footage directly and adding editable picture-in
  const stage=await page.locator('#video-canvas').boundingBox();
  const x=stage.x+stage.width*.5,y=stage.y+stage.height*.5;
  console.log('PROGRAM MONITOR HIT:',JSON.stringify(await page.evaluate(({x,y})=>({
-  target:document.elementFromPoint(x,y)?.tagName,
+  target:document.elementFromPoint(x,y)?.outerHTML?.slice(0,420),
+  targetClasses:document.elementsFromPoint(x,y).slice(0,8).map(el=>el.tagName+'#'+el.id+'.'+el.className),
+  inMonitor:!!document.elementFromPoint(x,y)?.closest('#video-preview'),
+  canvasPointerEvents:getComputedStyle(document.getElementById('video-canvas')).pointerEvents,
   rect:document.getElementById('video-canvas').getBoundingClientRect().toJSON(),
   duration:document.getElementById('video-project-duration').textContent
  }),{x,y})));
