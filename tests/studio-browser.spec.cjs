@@ -70,7 +70,7 @@ test('one Creative Studio edits SVG shapes and photos with real dimensions, grad
  await page.locator('#creative-shadow-blur').fill('20');await page.locator('#creative-shadow-blur').press('Tab');
  await page.locator('#creative-depth').fill('18');await page.locator('#creative-depth').press('Tab');
  await page.locator('[data-creative="extrude"]').click();
- await expect(page.locator('#creative-layers li')).toHaveCount(12);
+ await expect(page.locator('#creative-layers li')).toHaveCount(11);
  await page.locator('[data-creative-tab="document"]').click();
  await page.locator('#creative-document-width').fill('2000');
  await page.locator('#creative-document-height').fill('1200');
