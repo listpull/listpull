@@ -930,7 +930,7 @@
   return null;
  }
  function previewDown(event){
-  if(event.button!==0||recording)return;
+  if(event.button!==0||recording||event.target.closest('button'))return;
   const p=previewPoint(event);if(!p)return;
   const hit=pickPreviewObject(p);if(!hit){status('Select a visible clip, title or overlay to move it.');return;}
   pause();selectedId=hit.item.id;
@@ -940,7 +940,7 @@
    scale:state.scale,x:state.x,y:state.y,
    distance:Math.max(1,Math.hypot(p.x-hit.rect.x,p.y-hit.rect.y)),
    key};
-  canvas.setPointerCapture(event.pointerId);
+  event.currentTarget.setPointerCapture(event.pointerId);
   renderAll();fillInspector(hit.item);status('Drag to move the selected layer, or drag a corner to resize.');event.preventDefault();
  }
  function previewMove(event){
@@ -1054,10 +1054,11 @@
     }
   });
   player.addEventListener('error',()=>status('This video could not be decoded in the current browser. Try another format or codec.'));
-  canvas.addEventListener('pointerdown',previewDown);
-  canvas.addEventListener('pointermove',previewMove);
-  canvas.addEventListener('pointerup',previewUp);
-  canvas.addEventListener('pointercancel',previewUp);
+  const monitor=$('video-preview');
+  monitor.addEventListener('pointerdown',previewDown);
+  monitor.addEventListener('pointermove',previewMove);
+  monitor.addEventListener('pointerup',previewUp);
+  monitor.addEventListener('pointercancel',previewUp);
     resize();save();renderAll();
   window.ListPullVideo=Object.freeze({
    inspect:()=>({width,height,fps,duration:total(),overlays:overlays.map(o=>({name:asset(o.assetId)?.name||'overlay',start:o.start,end:o.end,scale:o.scale})),clips:clips.map(c=>({name:asset(c.assetId)?.name||'missing media',
