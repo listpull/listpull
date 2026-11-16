@@ -148,6 +148,65 @@ test('Video Studio demo can play, trim, split, add title and capture a still',as
  await page.locator('[data-video="snapshot"]').click();
  expect((await still).suggestedFilename()).toContain('still.png');
 });
+test('An imported video immediately previews its first frame and adopts its dimensions',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ const data=await page.evaluate(async()=>{
+  const c=document.createElement('canvas');c.width=320;c.height=180;
+  const g=c.getContext('2d');g.fillStyle='#37bfa2';g.fillRect(0,0,320,180);
+  const stream=c.captureStream(24),r=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});
+  const chunks=[];r.ondataavailable=e=>chunks.push(e.data);
+  const done=new Promise(resolve=>r.onstop=resolve);
+  r.start();
+  await new Promise(resolve=>setTimeout(resolve,550));
+  r.stop();await done;stream.getTracks().forEach(t=>t.stop());
+  const buffer=await new Blob(chunks).arrayBuffer(),bytes=new Uint8Array(buffer);
+  let str='';for(let i=0;i<bytes.length;i+=8192)str+=String.fromCharCode(...bytes.subarray(i,i+8192));
+  return btoa(str);
+ });
+ await page.locator('#video-upload').setInputFiles({name:'portrait-test.webm',mimeType:'video/webm',buffer:Buffer.from(data,'base64')});
+ await expect(page.locator('#video-library')).toContainText('portrait-test.webm');
+ await page.locator('[data-video="add-media"]').click();
+ await expect(page.locator('#video-frame-size')).toContainText('320 × 180');
+ await expect(page.locator('#video-quick-width')).toHaveValue('320');
+ await expect(page.locator('#video-quick-height')).toHaveValue('180');
+ await expect(page.locator('#video-play')).toContainText('Play');
+ await expect.poll(async()=>page.evaluate(()=>{
+  const c=document.getElementById('video-canvas'),g=c.getContext('2d');
+  const pixel=g.getImageData(Math.round(c.width/2),Math.round(c.height/2),1,1).data;
+  return pixel[1]-pixel[0];
+ }),{timeout:15000}).toBeGreaterThan(35);
+ await page.locator('#video-quick-width').fill('720');
+ await page.locator('#video-quick-height').fill('1280');
+ await page.locator('[data-video="apply-quick-size"]').click();
+ await expect(page.locator('#video-frame-size')).toContainText('720 × 1280');
+ await page.locator('[data-video="match-source"]').click();
+ await expect(page.locator('#video-frame-size')).toContainText('320 × 180');
+ await page.locator('#video-fit').selectOption('cover');
+ await page.locator('#video-scale').fill('80');
+ await page.locator('#video-crop-left').fill('6');
+ await page.locator('#video-apply').click();
+ await expect(page.locator('#video-status')).toContainText('Edits applied');
+ await page.locator('[data-video="keyframe"]').first().click();
+ await expect(page.locator('#video-keyframe-list')).toContainText('00:00');
+});
+test('Creative artboard takes imported image dimensions and allows immediate custom resize',async({page})=>{
+ await page.goto('/studio/image-editor.html');
+ const png=await page.evaluate(()=>{
+  const c=document.createElement('canvas');c.width=640;c.height=360;
+  const g=c.getContext('2d');g.fillStyle='#72c9a8';g.fillRect(0,0,640,360);
+  return c.toDataURL('image/png').split(',')[1];
+ });
+ await page.locator('#creative-upload').setInputFiles({name:'client-banner.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await expect(page.locator('#creative-size-label')).toContainText('640 × 360');
+ await expect(page.locator('#creative-quick-width')).toHaveValue('640');
+ await page.locator('#creative-quick-width').fill('1500');
+ await page.locator('#creative-quick-height').fill('900');
+ await page.locator('[data-creative="quick-resize"]').click();
+ await expect(page.locator('#creative-size-label')).toContainText('1,500 × 900');
+ await page.locator('[data-creative="match-import"]').click();
+ await expect(page.locator('#creative-size-label')).toContainText('640 × 360');
+ await expect(page.locator('#creative-layers')).toContainText('client-banner.png');
+});
 test('Video Studio exports a real encoded WebM from a trimmed local timeline',async({page})=>{
  await page.goto('/studio/video-editor.html');
  await page.locator('[data-video="demo"]').click();
