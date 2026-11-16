@@ -67,6 +67,17 @@
 <label>Rotation ° <input id="creative-angle" type="number" step="1"></label><label>Z layer <input id="creative-z" type="number" step="1"></label>
 <label>Skew X ° <input id="creative-skewx" type="number" step="1"></label><label>Skew Y ° <input id="creative-skewy" type="number" step="1"></label>
 </div>
+<fieldset class="creative-style-fieldset"><legend>Artboard alignment</legend><div class="creative-inline creative-align-tools"><button type="button" data-creative-align="left">Align left</button><button type="button" data-creative-align="center">Center X</button><button type="button" data-creative-align="right">Align right</button><button type="button" data-creative-align="top">Align top</button><button type="button" data-creative-align="middle">Center Y</button><button type="button" data-creative-align="bottom">Align bottom</button></div></fieldset>
+<fieldset class="creative-style-fieldset" id="creative-text-fields" hidden><legend>Typography</legend>
+<label>Font family <select id="creative-font"><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Verdana">Verdana</option><option value="Times New Roman">Times New Roman</option><option value="Courier New">Courier New</option><option value="system-ui">System UI</option></select></label>
+<div class="creative-properties-grid"><label>Font size <input id="creative-font-size" type="number" min="1" step="1"></label><label>Letter spacing <input id="creative-letter-spacing" type="number" step="1"></label>
+<label>Line height <input id="creative-line-height" type="number" min=".4" step=".1"></label><label>Weight <select id="creative-font-weight"><option value="400">Regular</option><option value="600">Semibold</option><option value="800">Bold</option></select></label></div>
+<div class="creative-inline"><button type="button" data-creative-typography="left">Left text</button><button type="button" data-creative-typography="center">Center text</button><button type="button" data-creative-typography="right">Right text</button><button type="button" data-creative-typography="italic">Italic</button></div>
+<label>Edit words <textarea id="creative-text-content" rows="3" maxlength="800"></textarea></label></fieldset>
+<fieldset class="creative-style-fieldset" id="creative-crop-fields" hidden><legend>Non-destructive image crop</legend>
+<div class="creative-properties-grid"><label>Crop X <input id="creative-crop-x" type="number" min="0" step="1"></label><label>Crop Y <input id="creative-crop-y" type="number" min="0" step="1"></label>
+<label>Crop width <input id="creative-crop-w" type="number" min="1" step="1"></label><label>Crop height <input id="creative-crop-h" type="number" min="1" step="1"></label></div>
+<div class="creative-inline"><button type="button" data-creative="apply-crop">Apply crop</button><button type="button" data-creative="reset-crop">Restore original</button></div></fieldset>
 <label class="creative-field">Opacity <input id="creative-opacity" type="range" min="0" max="100" value="100"><output id="creative-opacity-value">100%</output></label>
 <fieldset class="creative-style-fieldset"><legend>Fill & transparency</legend>
 <label>Fill style <select id="creative-fill-mode"><option value="solid">Solid color</option><option value="linear">Linear gradient</option><option value="radial">Radial gradient</option></select></label>
