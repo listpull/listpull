@@ -58,6 +58,10 @@
 <label>Volume % <input id="video-volume" type="number" min="0" max="200" step="1" value="100"></label>
 <label>X % <input id="video-x" type="number" value="50" step=".5"></label><label>Y % <input id="video-y" type="number" value="50" step=".5"></label>
 <label>Scale % <input id="video-scale" type="number" value="100" min="1" step=".5"></label><label>Rotation ° <input id="video-rotation" type="number" value="0" step="1"></label></div>
+<fieldset class="video-edit-fieldset" id="video-timing-fields" hidden><legend>Position on timeline</legend>
+<div class="video-properties-grid"><label>Start time (seconds)<input id="video-timeline-start" type="number" min="0" step=".01" value="0"></label>
+<label>Visible duration (seconds)<input id="video-timeline-duration" type="number" min=".01" step=".01" value="3"></label></div>
+<p class="video-small">Move the overlay or audio layer earlier/later, or change how long it stays visible.</p></fieldset>
 <fieldset class="video-edit-fieldset"><legend>Framing & crop</legend>
 <label>Fit to canvas <select id="video-fit"><option value="contain">Fit entire video (no cropping)</option><option value="cover">Fill canvas (crop edges)</option><option value="stretch">Stretch to canvas</option></select></label>
 <div class="video-properties-grid"><label>Crop left % <input id="video-crop-left" type="number" min="0" max="99" step=".5" value="0"></label><label>Crop right % <input id="video-crop-right" type="number" min="0" max="99" step=".5" value="0"></label><label>Crop top % <input id="video-crop-top" type="number" min="0" max="99" step=".5" value="0"></label><label>Crop bottom % <input id="video-crop-bottom" type="number" min="0" max="99" step=".5" value="0"></label></div>
