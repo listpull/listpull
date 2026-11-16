@@ -243,6 +243,7 @@ test('Video Studio allows moving footage directly and adding editable picture-in
  await expect.poll(async()=>Number(await page.locator('#video-x').inputValue())).toBeGreaterThan(50);
  await page.locator('#video-library li').first().click();
  await page.locator('[data-video="add-overlay"]').click();
+ console.log('OVERLAY STATUS:',await page.locator('#video-status').textContent(),'rows',await page.locator('#video-overlay-track').textContent(),'media',await page.locator('#video-library').textContent());
  await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
  await page.locator('#video-scrub').fill('1');
  await page.locator('#video-overlay-track button').first().click();
@@ -256,6 +257,7 @@ test('Video Studio allows moving footage directly and adding editable picture-in
  expect((await save).suggestedFilename()).toContain('video-project.json');
 });
 test('Still images can be extended and timed overlays can be repositioned without a fixed duration',async({page})=>{
+ page.on('pageerror',error=>console.log('VIDEO EDITOR SCRIPT ERROR:',error.message));
  await page.goto('/studio/video-editor.html');
  await page.locator('[data-video="demo"]').click();
  await page.locator('#video-clip-track button').first().click();
