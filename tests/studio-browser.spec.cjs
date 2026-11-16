@@ -248,6 +248,26 @@ test('Video Studio allows moving footage directly and adding editable picture-in
  await page.locator('[data-video="save"]').click();
  expect((await save).suggestedFilename()).toContain('video-project.json');
 });
+test('Still images can be extended and timed overlays can be repositioned without a fixed duration',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ await page.locator('#video-clip-track button').first().click();
+ await page.locator('#video-out').fill('9');
+ await page.locator('#video-out').dispatchEvent('change');
+ await expect(page.locator('#video-project-duration')).toContainText('00:17');
+ await page.locator('#video-library li').first().click();
+ await page.locator('#video-scrub').fill('2');
+ await page.locator('[data-video="add-overlay"]').click();
+ await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
+ await page.locator('#video-timeline-start').fill('4');
+ await page.locator('#video-timeline-start').dispatchEvent('change');
+ await page.locator('#video-timeline-duration').fill('8');
+ await page.locator('#video-timeline-duration').dispatchEvent('change');
+ await expect(page.locator('#video-timeline-start')).toHaveValue('4');
+ await expect(page.locator('#video-timeline-duration')).toHaveValue('8');
+ const rect=await page.locator('#video-overlay-track button').first().evaluate(el=>({left:el.style.left,width:el.style.minWidth}));
+ expect(parseFloat(rect.left)).toBeGreaterThan(100);
+});
 test('Video Studio exports a real encoded WebM from a trimmed local timeline',async({page})=>{
  await page.goto('/studio/video-editor.html');
  await page.locator('[data-video="demo"]').click();
