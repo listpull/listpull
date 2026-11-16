@@ -71,11 +71,11 @@
                 '<a href="/about-blobby.html">Meet Blobby</a><a href="/#wildlife">Wildlife Media</a>'+
                 '<a href="/#community">Community</a><a href="/engineering.html">Engineering</a><a href="/contact/">Contact</a>'+
               '</div></div>'+
-            '<div class="lp-labs-menu">'+
-              '<button class="lp-labs-trigger" type="button" aria-controls="labs-options" aria-haspopup="true" aria-expanded="false">'+
+            '<div class="lp-labs-menu" data-labs-menu>'+
+              '<button class="lp-labs-trigger" data-labs-trigger type="button" aria-controls="labs-options" aria-haspopup="true" aria-expanded="false">'+
                 'ListPull Labs <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5 8 5 5 5-5"/></svg>'+
               '</button>'+
-              '<div class="lp-app-popover" id="labs-options" data-open="false" hidden>'+
+              '<div class="lp-app-popover" id="labs-options" data-labs-list data-open="false" hidden>'+
                 '<div class="lp-app-popover-header"><div><strong>Explore ListPull</strong><small>Apps, games & experiences</small></div>'+
                   '<button type="button" class="lp-close-menu" aria-label="Close application menu">×</button></div>'+
                 '<div class="lp-app-grid" role="group" aria-label="ListPull applications">'+
@@ -128,6 +128,13 @@
     });
     popover.addEventListener('click',event=>{
       if(event.target.closest('a'))closeLabs();
+    });
+    document.querySelectorAll('.footer-nav,.footer-links,.lp-labs-footer-links').forEach(footer=>{
+      const links=[...footer.querySelectorAll(':scope > a[href]')];
+      const studio=links.find(link=>link.getAttribute('href')==='/studio.html');
+      const labs=links.find(link=>link.getAttribute('href')==='/labs.html');
+      if(studio)footer.prepend(studio);
+      if(labs)footer.append(labs);
     });
     document.querySelectorAll('[data-lp-icon]').forEach(element=>{
       const id=element.dataset.lpIcon;
