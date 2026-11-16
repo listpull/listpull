@@ -102,3 +102,23 @@ body.video-studio{background:var(--vbg);color:var(--vtext);font:14px/1.5 system-
 .video-track-clips button[aria-label]:focus-visible{outline:2px solid #ffbd8d;outline-offset:2px}
 @media(max-width:1100px){.video-canvas-controls{order:3;flex-basis:100%;justify-content:center}.video-player-bar{justify-content:space-between}.video-size-readout{display:none}}
 @media(max-width:680px){.video-player-bar{padding:9px}.video-canvas-controls{justify-content:flex-start}.video-canvas-controls input{width:70px}.video-canvas-controls select{max-width:110px}.video-monitor-tools span{display:none}.video-monitor-tools{bottom:5px}}
+
+/* Recognizable footage thumbnails, a time ruler and usable clip edges. */
+.video-library-thumbnail{width:43px;height:38px;flex:0 0 43px;object-fit:cover;border:1px solid #8d9bad;border-radius:6px}
+.video-timeline-zoom{display:flex;align-items:center;gap:7px;color:#c7d4e2;font-size:.69rem;white-space:nowrap}
+.video-timeline-zoom input{width:92px;accent-color:#ed9e81}
+.video-time-ruler{height:33px;min-height:33px;position:relative;background:linear-gradient(#263750,#1b2b41);border:1px solid #52627b;border-radius:8px;cursor:crosshair}
+.video-ruler-title{position:absolute;left:9px;top:10px;color:#c2d3e4;font-size:.67rem;letter-spacing:.04em}
+.video-ruler-tick{position:absolute;top:6px;transform:translateX(-50%);height:25px;padding-top:2px;border-left:1px solid #8298b1;pointer-events:none;color:#c6cfe0;font-size:.62rem}
+.video-ruler-needle{position:absolute;top:0;height:100%;width:2px;background:#ffac72;pointer-events:none;box-shadow:0 0 7px #ff9a48}
+.video-timeline{overflow:auto;grid-auto-rows:min-content}
+.video-timeline-track{min-width:max-content;width:max-content;min-height:66px}
+.video-track-label{width:105px;min-width:105px}
+.video-track-clips{min-height:57px;overflow:visible}
+.video-track-clips button{height:56px;position:relative;min-width:85px;background-repeat:no-repeat;text-shadow:0 1px 3px #000e;background-color:#44446d;padding:7px 12px;overflow:hidden}
+.video-track-clips button .video-clip-length{font-variant-numeric:tabular-nums;text-shadow:0 1px 3px #000}
+.video-trim-handle{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;width:12px;background:#e5ad7fbb;color:#131b33;font-size:.65rem;font-weight:900;text-shadow:none;cursor:ew-resize;touch-action:none;z-index:2}
+.video-trim-handle:hover,.video-trim-handle:active{background:#ffe3bd}
+.video-trim-start{left:0;border-radius:5px 0 0 5px}
+.video-trim-end{right:0;border-radius:0 5px 5px 0}
+@media(max-width:900px){.video-timeline-zoom{margin-bottom:4px}.video-track-label{width:90px;min-width:90px}.video-ruler-title{font-size:.61rem}}
