@@ -406,7 +406,7 @@ test('Engineering capabilities each link to a relevant live application',async({
  for(let i=0;i<7;i++){
    await expect(articles.nth(i).locator('a.engineering-demo-link')).toHaveCount(1);
  }
- await expect(page.locator('.engineering-demo-link[href="/studio/ai.html#assistant"]')).toBeVisible();
+ await expect(page.locator('.engineering-demo-link[href="/studio/ai.html#assistant"]').first()).toBeVisible();
  await page.goto('/studio/strategy.html?scenario=government');
  await expect(page.locator('#discovery-dataset-name')).toContainText('Public');
  await page.goto('/studio/ai.html?app=service');

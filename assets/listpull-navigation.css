@@ -123,11 +123,19 @@
 /* Give full-height workspaces their true remaining height after shared navigation. */
 @media(min-width:901px){
  body.lp-has-global-nav .video-main{height:calc(100dvh - 139px);min-height:740px}
- body.lp-has-global-nav .video-center .video-timeline{
-   flex:0 0 var(--video-timeline-height,195px);
-   max-height:calc(100% - 240px)
+ body.lp-has-global-nav .video-center{
+   overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain
  }
- body.lp-has-global-nav .video-center .video-monitor{min-height:130px}
+ body.lp-has-global-nav .video-center .video-timeline{
+   flex:0 0 var(--video-timeline-height,195px);max-height:none
+ }
+ body.lp-has-global-nav .video-center .video-monitor{
+   min-height:145px;flex:1 0 145px
+ }
+ body.lp-has-global-nav .video-main:fullscreen,
+ body.lp-has-global-nav .video-main.studio-faux-fullscreen{
+   height:100dvh;min-height:0
+ }
  body.lp-has-global-nav .creative-main{height:calc(100dvh - 139px);min-height:510px}
 }
 @media(max-width:1190px){
