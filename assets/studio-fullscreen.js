@@ -37,7 +37,9 @@
   }
   document.addEventListener('fullscreenchange',refresh);
   document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&fallback){fallback.classList.remove('studio-faux-fullscreen');fallback=null;refresh();}
+    if(event.key!=='Escape')return;
+    if(document.fullscreenElement){document.exitFullscreen?.().catch(()=>{});}
+    if(fallback){fallback.classList.remove('studio-faux-fullscreen');fallback=null;refresh();}
   });
   refresh();
 })();
