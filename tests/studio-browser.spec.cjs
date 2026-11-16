@@ -269,9 +269,9 @@ test('Still images can be extended and timed overlays can be repositioned withou
  await expect(page.locator('#video-project-duration')).toContainText('00:17');
  await page.locator('#video-library li').first().click();
  await page.locator('#video-scrub').fill('2');
- console.log('TIMED OVERLAY BEFORE:',await page.locator('#video-status').textContent(),'selection',await page.locator('#video-library li.is-selected').textContent());
+ await expect(page.locator('#video-library li.is-selected')).toHaveCount(1,{timeout:4000});
  await page.locator('[data-video="add-overlay"]').click();
- console.log('TIMED OVERLAY AFTER:',await page.locator('#video-status').textContent(),'children',await page.locator('#video-overlay-track').innerHTML());
+ await expect(page.locator('#video-status')).toContainText('Overlay added');
  await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
  await page.locator('#video-timeline-start').fill('4');
  await page.locator('#video-timeline-start').dispatchEvent('change');
@@ -449,9 +449,12 @@ test('video media bin, inspector and timeline resize independently and layout ca
  const bin=page.locator('.video-assets'),panel=page.locator('.video-inspector'),timeline=page.locator('#video-timeline');
  const firstBin=await bin.evaluate(el=>el.getBoundingClientRect().width);
  const grip=page.locator('#video-split-assets'),a=await grip.boundingBox();
+ const splitterHit=await page.evaluate(({x,y})=>document.elementFromPoint(x,y)?.id,
+  {x:a.x+a.width/2,y:a.y+a.height/2});
+ expect(splitterHit).toBe('video-split-assets');
  await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();
  await page.mouse.move(a.x+a.width/2+55,a.y+a.height/2,{steps:5});await page.mouse.up();
- expect(await bin.evaluate(el=>el.getBoundingClientRect().width)).toBeGreaterThan(firstBin+35);
+ await expect.poll(async()=>bin.evaluate(el=>el.getBoundingClientRect().width)).toBeGreaterThan(firstBin+35);
  const firstPanel=await panel.evaluate(el=>el.getBoundingClientRect().width);
  const right=await page.locator('#video-split-inspector').boundingBox();
  await page.mouse.move(right.x+right.width/2,right.y+right.height/2);await page.mouse.down();
