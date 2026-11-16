@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/assets/site-v2.css"><link rel="stylesheet" href="/assets/studio-creative.css">
 <script src="https://cdn.jsdelivr.net/npm/fabric@7.4.0/dist/index.min.js" defer></script>
 <script src="/assets/studio-creative.js" defer></script><script src="/assets/studio-media-agent.js" defer></script>
-</head><body class="creative-app">
+<script src="/assets/studio-fullscreen.js" defer></script></head><body class="creative-app">
 <a class="skip" href="#creative-stage">Skip to artwork</a>
 <header class="creative-topbar"><a class="creative-brand" href="/"><span aria-hidden="true">✦</span> ListPull</a>
 <div class="creative-title"><strong>Creative Studio</strong><span>IMAGE + VECTOR · ONE WORKSPACE</span></div>
@@ -30,7 +30,7 @@
 </div>
 <div class="creative-tool-group"><button type="button" data-creative="undo" title="Undo (Ctrl+Z)">↶ Undo</button><button type="button" data-creative="redo" title="Redo (Ctrl+Shift+Z)">↷ Redo</button><button type="button" data-creative="duplicate">⧉ Duplicate</button>
 <button type="button" data-creative="group">Group</button><button type="button" data-creative="ungroup">Ungroup</button><button type="button" data-creative="delete">Delete</button></div>
-<div class="creative-tool-group creative-export-group"><select id="creative-export-format" aria-label="Export file format"><option value="png">PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option><option value="svg">SVG</option></select>
+<div class="creative-tool-group"><button type="button" data-fullscreen-target=".creative-main" aria-label="Expand image and vector editor to full screen">⛶ Full screen</button></div><div class="creative-tool-group creative-export-group"><select id="creative-export-format" aria-label="Export file format"><option value="png">PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option><option value="svg">SVG</option></select>
 <button type="button" data-creative="export" class="creative-tool-primary">↓ Export artwork</button></div>
 </section>
 <div class="creative-layout">
