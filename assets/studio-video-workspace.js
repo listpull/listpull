@@ -16,8 +16,8 @@
     try{
       const width=id=>Math.round(document.getElementById(id).getBoundingClientRect().width);
       localStorage.setItem(layoutKey,JSON.stringify({
-        assets:width('video-split-assets')&&Math.round($('.video-assets').getBoundingClientRect().width),
-        inspector:Math.round($('.video-inspector').getBoundingClientRect().width),
+        assets:width('video-split-assets')&&Math.round(document.querySelector('.video-assets').getBoundingClientRect().width),
+        inspector:Math.round(document.querySelector('.video-inspector').getBoundingClientRect().width),
         timeline:Math.round(timeline.getBoundingClientRect().height)
       }));
     }catch(e){}
@@ -110,8 +110,8 @@
   window.addEventListener('resize',()=>requestAnimationFrame(()=>showScale()));
 
   function panelSize(kind){
-    return kind==='assets'?$('.video-assets').getBoundingClientRect().width:
-      kind==='inspector'?$('.video-inspector').getBoundingClientRect().width:
+    return kind==='assets'?document.querySelector('.video-assets').getBoundingClientRect().width:
+      kind==='inspector'?document.querySelector('.video-inspector').getBoundingClientRect().width:
         timeline.getBoundingClientRect().height;
   }
   function maxTimeline(){

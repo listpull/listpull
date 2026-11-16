@@ -448,42 +448,12 @@ test('video media bin, inspector and timeline resize independently and layout ca
  await page.goto('/studio/video-editor.html');
  const bin=page.locator('.video-assets'),panel=page.locator('.video-inspector'),timeline=page.locator('#video-timeline');
  const firstBin=await bin.evaluate(el=>el.getBoundingClientRect().width);
- await page.evaluate(()=>{
-   window.__splitterEvents=[];
-   const grip=document.getElementById('video-split-assets');
-   for(const type of ['pointerdown','mousedown','pointermove','mousemove','pointerup','mouseup']){
-     const capture=event=>{
-       if(window.__splitterEvents.length>=50)return;
-       window.__splitterEvents.push({
-         type,at:event.currentTarget===window?'window':'grip',
-         target:event.target?.id||event.target?.tagName,
-         x:Math.round(event.clientX),y:Math.round(event.clientY),
-         pointerId:event.pointerId,button:event.button,buttons:event.buttons,
-         defaultPrevented:event.defaultPrevented});
-     };
-     window.addEventListener(type,capture,true);
-     grip.addEventListener(type,capture,true);
-   }
- });
  const grip=page.locator('#video-split-assets'),a=await grip.boundingBox();
  const splitterHit=await page.evaluate(({x,y})=>document.elementFromPoint(x,y)?.id,
   {x:a.x+a.width/2,y:a.y+a.height/2});
  expect(splitterHit).toBe('video-split-assets');
  await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();
  await page.mouse.move(a.x+a.width/2+55,a.y+a.height/2,{steps:5});await page.mouse.up();
- const splitterState=await page.evaluate(()=>{
-   const area=document.querySelector('.video-work-layout'),bin=document.querySelector('.video-assets');
-   const grip=document.getElementById('video-split-assets');
-   return {viewport:innerWidth,hover:document.elementFromPoint(grip.getBoundingClientRect().x+4,
-     grip.getBoundingClientRect().y+grip.getBoundingClientRect().height/2)?.id,
-     pointer:area.dataset.resizePointer,input:area.dataset.resizeInput,
-     cssVariable:area.style.getPropertyValue('--video-assets-width'),
-     computedGrid:getComputedStyle(area).gridTemplateColumns,
-     computedWidth:bin.getBoundingClientRect().width,
-     gripClass:grip.className,gripWidth:grip.getBoundingClientRect().width};
- });
- console.log('SPLITTER STATE:',JSON.stringify(splitterState));
- console.log('SPLITTER EVENTS:',JSON.stringify(await page.evaluate(()=>window.__splitterEvents)));
  await expect.poll(async()=>bin.evaluate(el=>el.getBoundingClientRect().width)).toBeGreaterThan(firstBin+35);
  const firstPanel=await panel.evaluate(el=>el.getBoundingClientRect().width);
  const right=await page.locator('#video-split-inspector').boundingBox();
