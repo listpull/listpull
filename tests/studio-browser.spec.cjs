@@ -313,8 +313,8 @@ test('Visual business explorer shows tracking scenario',async({page})=>{
 test('Studio hub launches separate full editors',async({page})=>{
  await page.goto('/studio.html');
  await expect(page.locator('#creative-canvas')).toHaveCount(0);
- await expect(page.locator('a[href="/studio/image-editor.html"]').first()).toBeVisible();
- await page.locator('a[href="/studio/image-editor.html"]').first().click();
+ await expect(page.locator('.studio-tool-card[href="/studio/image-editor.html"]')).toBeVisible();
+ await page.locator('.studio-tool-card[href="/studio/image-editor.html"]').click();
  await expect(page).toHaveURL(/\/studio\/image-editor.html/);
  await expect(page.locator('#creative-canvas')).toBeAttached();
 });
@@ -406,7 +406,7 @@ test('Engineering capabilities each link to a relevant live application',async({
  for(let i=0;i<7;i++){
    await expect(articles.nth(i).locator('a.engineering-demo-link')).toHaveCount(1);
  }
- await expect(page.locator('a[href="/studio/ai.html#assistant"]').first()).toBeVisible();
+ await expect(page.locator('.engineering-demo-link[href="/studio/ai.html#assistant"]')).toBeVisible();
  await page.goto('/studio/strategy.html?scenario=government');
  await expect(page.locator('#discovery-dataset-name')).toContainText('Public');
  await page.goto('/studio/ai.html?app=service');

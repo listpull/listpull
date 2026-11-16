@@ -122,7 +122,12 @@
 #lp-global-navigation .lp-app-popover:focus-within{border-color:#ffbd7f}
 /* Give full-height workspaces their true remaining height after shared navigation. */
 @media(min-width:901px){
- body.lp-has-global-nav .video-main{height:calc(100dvh - 139px);min-height:510px}
+ body.lp-has-global-nav .video-main{height:calc(100dvh - 139px);min-height:740px}
+ body.lp-has-global-nav .video-center .video-timeline{
+   flex:0 0 var(--video-timeline-height,195px);
+   max-height:calc(100% - 240px)
+ }
+ body.lp-has-global-nav .video-center .video-monitor{min-height:130px}
  body.lp-has-global-nav .creative-main{height:calc(100dvh - 139px);min-height:510px}
 }
 @media(max-width:1190px){

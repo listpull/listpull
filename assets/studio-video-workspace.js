@@ -117,7 +117,7 @@
   function maxTimeline(){
     const headers=['.video-player-bar','.video-view-controls','.video-transport','.video-timeline-header','.video-status','#video-split-timeline'];
     const fixed=headers.reduce((n,sel)=>n+(center.querySelector(sel)?.getBoundingClientRect().height||0),0);
-    return Math.max(160,center.clientHeight-fixed-155);
+    return Math.max(160,center.clientHeight-fixed-130);
   }
   function resizePanel(kind,value){
     if(!desktop())return;
