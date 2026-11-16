@@ -2,7 +2,7 @@
 <meta name="theme-color" content="#101529"><meta name="description" content="ListPull Video Studio: browser-based timeline video editing, trimming, multi-clip projects, audio, animated titles, captions and local exports with an optional AI editing agent.">
 <title>Video Studio — Edit, Compose & Export | ListPull</title><link rel="canonical" href="https://listpull.com/studio/video-editor.html">
 <link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/assets/site-v2.css"><link rel="stylesheet" href="/assets/studio-video.css">
-<script src="/assets/studio-video.js" defer></script><script src="/assets/studio-media-agent.js" defer></script>
+<script src="/assets/studio-video.js" defer></script><script src="/assets/studio-video-workspace.js" defer></script><script src="/assets/studio-media-agent.js" defer></script>
 <script src="/assets/studio-fullscreen.js" defer></script></head><body class="video-studio">
 <a class="skip" href="#video-preview">Skip to video preview</a>
 <header class="video-header"><a class="video-logo" href="/">✦ ListPull</a><strong>Video Studio</strong><span>PRODUCTION WORKSPACE</span>
@@ -13,18 +13,19 @@
 <button type="button" data-video="demo">Open sample project</button><button type="button" data-video="save">Save project</button><label for="video-project-open">Open project</label>
 <input type="file" id="video-project-open" accept=".json,application/json">
 <button type="button" data-video="undo">↶ Undo</button><button type="button" data-video="redo">↷ Redo</button>
-<button type="button" data-fullscreen-target=".video-main" aria-label="Expand video editing workspace">⛶ Full screen editor</button><div class="video-toolbar-push"></div>
+<button type="button" data-fullscreen-target=".video-main" aria-label="Expand video editing workspace">⛶ Full screen editor</button><button type="button" id="video-reset-layout" title="Restore the default workspace panel sizes">↺ Reset layout</button><div class="video-toolbar-push"></div>
 <select id="video-export-type" aria-label="Export format"><option value="auto">Best supported format</option><option value="mp4">MP4 (if supported)</option><option value="webm">WebM</option></select>
 <button type="button" data-video="export" class="video-tool-main">↓ Export video</button></section>
 <div class="video-work-layout">
 <aside class="video-assets" aria-label="Imported footage and audio">
-<div class="video-panel-title"><strong>Media library</strong><small>Drag in footage or images</small></div>
+<div class="video-panel-title"><strong>Media library</strong><small>Drag assets onto timeline tracks</small></div>
 <div class="video-import-drop" id="video-import-drop" tabindex="0">
 <span>▧</span><p>Drop your video, images or sound here.</p><label for="video-upload">Browse files</label></div>
 <ul class="video-library" id="video-library" aria-label="Available media"></ul>
 <div class="video-asset-controls"><button type="button" data-video="add-media">＋ Add selected to timeline</button><button type="button" data-video="record-voice">● Record voiceover</button></div>
-<p class="video-small">Media is edited on your device. Save the project and keep its source files together when transferring projects.</p>
+<p class="video-small">Select or drag media into a timeline track. Media is edited on your device. Save the project and keep its source files together when transferring projects.</p>
 </aside>
+<div class="video-panel-splitter" id="video-split-assets" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize media library" title="Drag to resize the media library. Arrow keys also work."></div>
 <section class="video-center" aria-label="Video editing and timeline">
 <div class="video-player-bar"><strong>◧ Program monitor</strong><button type="button" class="video-preview-fullscreen" data-fullscreen-target=".video-monitor" aria-label="Expand video preview to full screen">⛶ Preview</button><div class="video-canvas-controls" aria-label="Editable video canvas size">
 <label for="video-quick-width">Canvas</label>
@@ -34,19 +35,28 @@
 <button type="button" data-video="match-source" title="Match canvas size and aspect ratio to selected footage">Match footage</button>
 <select id="video-quick-preset" aria-label="Canvas aspect ratio preset"><option value="">Size presets</option><option value="1920,1080">Landscape 16:9</option><option value="1080,1920">Portrait 9:16</option><option value="1080,1080">Square 1:1</option><option value="1080,1350">Social 4:5</option><option value="3840,2160">4K landscape</option><option value="custom">Custom</option></select>
 </div><span id="video-frame-size" class="video-size-readout" aria-live="polite">1920 × 1080</span><span id="video-timecode">00:00.00 / 00:00.00</span></div>
-<div class="video-monitor" id="video-preview"><canvas id="video-canvas" width="1920" height="1080" aria-label="Interactive video preview. Drag selected footage or titles to reposition; use handles to resize."></canvas><div class="video-monitor-tools"><button type="button" data-video="toggle-guides" aria-pressed="false">▦ Guides</button><span id="video-preview-hint">Select a clip to move or resize it here</span></div>
+<div class="video-view-controls" aria-label="Video preview zoom and pan">
+<button type="button" id="video-view-minus" title="Zoom out from the preview" aria-label="Zoom out preview">−</button>
+<button type="button" id="video-view-fit" title="Fit full canvas inside the program monitor">Fit</button>
+<output id="video-view-percent" aria-live="polite">Fit</output>
+<button type="button" id="video-view-plus" title="Zoom in on the preview" aria-label="Zoom in preview">+</button>
+<button type="button" id="video-view-actual" title="Show 100% source pixels">1:1</button>
+<button type="button" id="video-view-pan" aria-pressed="false" title="Pan a zoomed preview by dragging">Hand</button>
+</div><div class="video-monitor" id="video-preview"><div class="video-preview-stage" id="video-preview-stage"><canvas id="video-canvas" width="1920" height="1080" aria-label="Interactive video preview. Drag selected footage or titles to reposition; use handles to resize."></canvas></div><div class="video-monitor-tools"><button type="button" data-video="toggle-guides" aria-pressed="false">▦ Guides</button><span id="video-preview-hint">Select a clip to move or resize it here</span></div>
 <div class="video-drop-message" id="video-empty">Import footage or choose the sample project to begin.</div></div>
 <div class="video-transport"><button type="button" data-video="previous" aria-label="Go to beginning">⏮</button><button type="button" data-video="play" id="video-play" aria-label="Play or pause">▶ Play</button><button type="button" data-video="next" aria-label="Go to end">⏭</button>
 <input type="range" id="video-scrub" min="0" max="100" value="0" step="0.01" aria-label="Video timeline position"><output id="video-current">00:00</output>
 <button type="button" data-video="snapshot">↓ Still</button></div>
+<div class="video-panel-splitter video-panel-splitter-horizontal" id="video-split-timeline" role="separator" tabindex="0" aria-orientation="horizontal" aria-label="Resize preview and timeline" title="Drag up to make the timeline taller; arrow keys also work."></div>
 <div class="video-timeline-header"><div><strong>Timeline</strong><span>Drag clips to reorder · drag their edges to trim · S to split · Ctrl/⌘ + D to duplicate</span></div>
 <div class="video-timeline-actions"><label class="video-timeline-zoom" for="video-timeline-zoom">Timeline zoom <input id="video-timeline-zoom" type="range" min="12" max="90" value="28" step="2"></label><button type="button" data-video="split">✂ Split at playhead</button><button type="button" data-video="remove">× Remove clip</button><button type="button" data-video="duplicate-item" title="Duplicate selected clip (Ctrl/⌘ + D)">⧉ Duplicate</button><button type="button" data-video="add-title">T Add title</button><button type="button" data-video="add-music">♫ Add audio</button><button type="button" data-video="add-overlay">▣ Add overlay</button><button type="button" data-video="keyframe">◆ Add keyframe</button></div></div>
-<div class="video-timeline" id="video-timeline"><div class="video-time-ruler" id="video-time-ruler" role="button" tabindex="0" aria-label="Seek video timeline by clicking a time marker"></div><div class="video-timeline-track"><span class="video-track-label">VIDEO / IMAGE</span><div class="video-track-clips" id="video-clip-track"></div></div>
-<div class="video-timeline-track"><span class="video-track-label">OVERLAY / PIP</span><div class="video-track-clips" id="video-overlay-track"></div></div>
+<div class="video-timeline" id="video-timeline" aria-label="Drop imported footage on a track to add it at the chosen position"><div class="video-time-ruler" id="video-time-ruler" role="button" tabindex="0" aria-label="Seek video timeline by clicking a time marker"></div><div class="video-timeline-track"><span class="video-track-label">VIDEO / IMAGE<small>Drop footage</small></span><div class="video-track-clips" id="video-clip-track"></div></div>
+<div class="video-timeline-track"><span class="video-track-label">OVERLAY / PIP<small>Drop image/video</small></span><div class="video-track-clips" id="video-overlay-track"></div></div>
 <div class="video-timeline-track"><span class="video-track-label">TITLES / CAPTIONS</span><div class="video-track-clips" id="video-title-track"></div></div>
-<div class="video-timeline-track"><span class="video-track-label">AUDIO / VOICE</span><div class="video-track-clips" id="video-audio-track"></div></div></div>
+<div class="video-timeline-track"><span class="video-track-label">AUDIO / VOICE<small>Drop audio</small></span><div class="video-track-clips" id="video-audio-track"></div></div></div>
 <div class="video-status"><span id="video-status" role="status" aria-live="polite">Ready to create your video.</span><span id="video-project-duration">Duration 00:00</span></div>
 </section>
+<div class="video-panel-splitter" id="video-split-inspector" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize properties inspector" title="Drag to resize the inspector. Arrow keys also work."></div>
 <aside class="video-inspector" aria-label="Video properties and AI tools">
 <div class="video-property-tabs" role="tablist"><button type="button" data-video-tab="clip" aria-selected="true">Edit</button>
 <button type="button" data-video-tab="project" aria-selected="false">Project</button><button type="button" data-video-tab="ai" aria-selected="false">AI Agent</button></div>

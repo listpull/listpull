@@ -269,9 +269,9 @@ test('Still images can be extended and timed overlays can be repositioned withou
  await expect(page.locator('#video-project-duration')).toContainText('00:17');
  await page.locator('#video-library li').first().click();
  await page.locator('#video-scrub').fill('2');
- console.log('TIMED OVERLAY BEFORE:',await page.locator('#video-status').textContent(),'selection',await page.locator('#video-library li.is-selected').textContent());
+ await expect(page.locator('#video-library li.is-selected')).toHaveCount(1,{timeout:4000});
  await page.locator('[data-video="add-overlay"]').click();
- console.log('TIMED OVERLAY AFTER:',await page.locator('#video-status').textContent(),'children',await page.locator('#video-overlay-track').innerHTML());
+ await expect(page.locator('#video-status')).toContainText('Overlay added');
  await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
  await page.locator('#video-timeline-start').fill('4');
  await page.locator('#video-timeline-start').dispatchEvent('change');
@@ -413,6 +413,112 @@ test('Engineering capabilities each link to a relevant live application',async({
  await expect(page.frameLocator('#fiddle-preview').locator('h1')).toContainText('Service delivery');
 });
 
+test('video preview fits a 2160 square inside desktop monitor without changing output pixels',async({page})=>{
+ await page.setViewportSize({width:1440,height:900});
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ await page.locator('#video-quick-width').fill('2160');
+ await page.locator('#video-quick-height').fill('2160');
+ await page.locator('[data-video="apply-quick-size"]').click();
+ const original=await page.evaluate(()=>{
+  const stage=document.getElementById('video-preview-stage').getBoundingClientRect();
+  const monitor=document.getElementById('video-preview');
+  const canvas=document.getElementById('video-canvas');
+  return {stageWidth:stage.width,stageHeight:stage.height,
+   monitorWidth:monitor.clientWidth,monitorHeight:monitor.clientHeight,
+   output:[canvas.width,canvas.height]};
+ });
+ expect(original.output).toEqual([2160,2160]);
+ expect(original.stageWidth).toBeLessThan(original.monitorWidth-10);
+ expect(original.stageHeight).toBeLessThan(original.monitorHeight-10);
+ await page.locator('#video-view-plus').click();
+ await expect.poll(async()=>page.locator('#video-preview-stage').evaluate(el=>el.getBoundingClientRect().width))
+  .toBeGreaterThan(original.stageWidth*1.12);
+ expect(await page.locator('#video-canvas').evaluate(el=>[el.width,el.height])).toEqual([2160,2160]);
+ await page.locator('#video-view-actual').click();
+ await expect.poll(async()=>page.locator('#video-preview-stage').evaluate(el=>el.getBoundingClientRect().width))
+  .toBeGreaterThan(2100);
+ await page.locator('#video-view-fit').click();
+ await expect.poll(async()=>page.locator('#video-preview-stage').evaluate(el=>el.getBoundingClientRect().width))
+  .toBeLessThan(original.monitorWidth-10);
+});
+
+test('video media bin, inspector and timeline resize independently and layout can reset',async({page})=>{
+ await page.setViewportSize({width:1536,height:950});
+ await page.goto('/studio/video-editor.html');
+ const bin=page.locator('.video-assets'),panel=page.locator('.video-inspector'),timeline=page.locator('#video-timeline');
+ const firstBin=await bin.evaluate(el=>el.getBoundingClientRect().width);
+ const grip=page.locator('#video-split-assets'),a=await grip.boundingBox();
+ const splitterHit=await page.evaluate(({x,y})=>document.elementFromPoint(x,y)?.id,
+  {x:a.x+a.width/2,y:a.y+a.height/2});
+ expect(splitterHit).toBe('video-split-assets');
+ await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();
+ await page.mouse.move(a.x+a.width/2+55,a.y+a.height/2,{steps:5});await page.mouse.up();
+ await expect.poll(async()=>bin.evaluate(el=>el.getBoundingClientRect().width)).toBeGreaterThan(firstBin+35);
+ const firstPanel=await panel.evaluate(el=>el.getBoundingClientRect().width);
+ const right=await page.locator('#video-split-inspector').boundingBox();
+ await page.mouse.move(right.x+right.width/2,right.y+right.height/2);await page.mouse.down();
+ await page.mouse.move(right.x+right.width/2-50,right.y+right.height/2,{steps:5});await page.mouse.up();
+ expect(await panel.evaluate(el=>el.getBoundingClientRect().width)).toBeGreaterThan(firstPanel+30);
+ const firstTime=await timeline.evaluate(el=>el.getBoundingClientRect().height);
+ const horizontal=await page.locator('#video-split-timeline').boundingBox();
+ await page.mouse.move(horizontal.x+horizontal.width/2,horizontal.y+horizontal.height/2);await page.mouse.down();
+ await page.mouse.move(horizontal.x+horizontal.width/2,horizontal.y+horizontal.height/2-45,{steps:5});await page.mouse.up();
+ expect(await timeline.evaluate(el=>el.getBoundingClientRect().height)).toBeGreaterThan(firstTime+20);
+ await page.locator('#video-reset-layout').click();
+ await expect.poll(async()=>bin.evaluate(el=>Math.round(el.getBoundingClientRect().width))).toBe(225);
+ await page.setViewportSize({width:390,height:844});
+ await expect(page.locator('#video-split-assets')).toBeHidden();
+ await expect(page.locator('.video-inspector')).toBeVisible();
+});
+
+test('media library drag creates main and picture-in-picture clips on matching timeline tracks',async({page})=>{
+ await page.setViewportSize({width:1490,height:930});
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ const library=page.locator('#video-library li').first();
+ await expect(library).toHaveAttribute('draggable','true');
+ await expect(page.locator('#video-clip-track button')).toHaveCount(3);
+ await library.dragTo(page.locator('#video-clip-track'),{targetPosition:{x:45,y:28}});
+ await expect(page.locator('#video-clip-track button')).toHaveCount(4);
+ await page.locator('#video-library li').first().dragTo(page.locator('#video-overlay-track'),{targetPosition:{x:100,y:24}});
+ await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
+ const first=page.locator('#video-clip-track button').first();
+ const initial=await first.evaluate(el=>parseFloat(el.style.width));
+ const handle=await first.locator('.video-trim-end').boundingBox();
+ await page.mouse.move(handle.x+handle.width/2,handle.y+handle.height/2);await page.mouse.down();
+ await page.mouse.move(handle.x+handle.width/2+52,handle.y+handle.height/2,{steps:6});await page.mouse.up();
+ await expect.poll(async()=>page.locator('#video-clip-track button').first()
+   .evaluate(el=>parseFloat(el.style.width))).toBeGreaterThan(initial+35);
+});
+
+test('audio imports onto audio track and media names stay inside their library panel',async({page})=>{
+ await page.setViewportSize({width:1390,height:850});
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ const rate=8000,samples=8000,buf=Buffer.alloc(44+samples*2);
+ buf.write('RIFF',0);buf.writeUInt32LE(buf.length-8,4);buf.write('WAVE',8);
+ buf.write('fmt ',12);buf.writeUInt32LE(16,16);buf.writeUInt16LE(1,20);
+ buf.writeUInt16LE(1,22);buf.writeUInt32LE(rate,24);buf.writeUInt32LE(rate*2,28);
+ buf.writeUInt16LE(2,32);buf.writeUInt16LE(16,34);buf.write('data',36);
+ buf.writeUInt32LE(samples*2,40);
+ for(let i=0;i<samples;i++)buf.writeInt16LE(Math.round(Math.sin(i*2*Math.PI*440/rate)*4000),44+i*2);
+ const filename='this-is-a-long-commercial-project-voiceover-audio-file-that-must-not-overflow-the-media-bin.wav';
+ await page.locator('#video-upload').setInputFiles({name:filename,mimeType:'audio/wav',buffer:buf});
+ const audio=page.locator('#video-library li').filter({hasText:'this-is-a-long-commercial-project'}).first();
+ await expect(audio).toBeVisible();
+ await audio.dragTo(page.locator('#video-audio-track'),{targetPosition:{x:85,y:23}});
+ await expect(page.locator('#video-audio-track button')).toHaveCount(1);
+ const size=await page.evaluate(()=>{
+  const panel=document.querySelector('.video-assets').getBoundingClientRect();
+  const item=[...document.querySelectorAll('#video-library li')].find(el=>el.textContent.includes('this-is-a-long'));
+  const rect=item.getBoundingClientRect();
+  return {itemRight:rect.right,panelRight:panel.right,
+   overflow:getComputedStyle(document.querySelector('.video-assets')).overflowX};
+ });
+ expect(size.itemRight).toBeLessThanOrEqual(size.panelRight+2);
+ expect(size.overflow).toBe('hidden');
+});
 test('mobile visitor can open Labs menu without losing Blobby',async({browser})=>{
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await context.newPage();
