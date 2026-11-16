@@ -22,9 +22,9 @@
   const selected=()=>canvas.getActiveObject();
   const objects=()=>canvas.getObjects();
   const num=n=>Math.round((Number(n)||0)*100)/100;
-  let docW=1200,docH=800,zoom=1,history=[],cursor=-1,restoring=false,ignore=false,brush=false;
+  let docW=1200,docH=800,zoom=1,history=[],cursor=-1,restoring=false,ignore=false,brush=false,clipboard=null;
   let timer=null,lastName='listpull-artwork';
-  const extras=['name','zValue','depthValue','fillDefinition','fillOpacity','shadowSettings','effectSettings','sourceName'];
+  const extras=['name','zValue','depthValue','fillDefinition','fillOpacity','shadowSettings','effectSettings','sourceName','sourceWidth','sourceHeight'];
   if(F.FabricObject){F.FabricObject.customProperties=[...new Set([...(F.FabricObject.customProperties||[]),...extras])];}
   const presets={
     social:[1080,1080],product:[1200,1200],nature:[1600,1000],badge:[1000,1000]
@@ -199,6 +199,24 @@
       const sh=o.shadowSettings||{color:'#10162b',alpha:.35,blur:12,offsetX:8,offsetY:8};
       $('creative-shadow-color').value=sh.color; $('creative-shadow-opacity').value=Math.round(sh.alpha*100);
       $('creative-shadow-blur').value=sh.blur;$('creative-shadow-x').value=sh.offsetX;$('creative-shadow-y').value=sh.offsetY;
+      const isText=['i-text','textbox','text'].includes(o.type),isImage=o.type==='image';
+      $('creative-text-fields').hidden=!isText;
+      $('creative-crop-fields').hidden=!isImage;
+      if(isText){
+        $('creative-font').value=o.fontFamily||'Arial';
+        $('creative-font-size').value=Math.round(o.fontSize||40);
+        $('creative-letter-spacing').value=o.charSpacing||0;
+        $('creative-line-height').value=o.lineHeight||1.16;
+        $('creative-font-weight').value=String(o.fontWeight||400)==='bold'?'800':String(o.fontWeight||400);
+        $('creative-text-content').value=o.text||'';
+      }
+      if(isImage){
+        const element=o.getElement?.();
+        $('creative-crop-x').value=Math.round(o.cropX||0);
+        $('creative-crop-y').value=Math.round(o.cropY||0);
+        $('creative-crop-w').value=Math.round(o.width||element?.naturalWidth||100);
+        $('creative-crop-h').value=Math.round(o.height||element?.naturalHeight||100);
+      }
       const fx=o.effectSettings||{};
       for(const name of ['brightness','contrast','saturation','blur','grayscale','gamma-r','gamma-g','gamma-b']){
         const field=$('creative-'+name),v=fx[name]??(name.startsWith('gamma')?100:0);
@@ -210,6 +228,41 @@
     const v=String(hex||'#000000').replace('#','');const parsed=parseInt(v,16);
     if(!/^[0-9a-f]{6}$/i.test(v))return 'rgba(0,0,0,1)';
     return 'rgba('+((parsed>>16)&255)+','+((parsed>>8)&255)+','+(parsed&255)+','+clamp(alpha,0,1)+')';
+  }
+  function alignToArtboard(position){
+    const obj=selected();if(!obj){status('Select one or more layers to align.');return;}
+    const w=obj.getScaledWidth(),h=obj.getScaledHeight();
+    const positions={left:0,center:(docW-w)/2,right:docW-w,top:0,middle:(docH-h)/2,bottom:docH-h};
+    if(!(position in positions))return;
+    if(['left','center','right'].includes(position))obj.left=positions[position];
+    else obj.top=positions[position];
+    obj.setCoords();syncInputs();noteMutation('Aligned selection to artboard '+position+'.');
+  }
+  function updateTypography(){
+    const o=selected();if(!o||!['text','i-text','textbox'].includes(o.type))return;
+    o.set({text:$('creative-text-content').value.slice(0,800),
+      fontFamily:$('creative-font').value,
+      fontSize:Math.max(1,val('creative-font-size',36)),
+      charSpacing:val('creative-letter-spacing',0),
+      lineHeight:Math.max(.4,val('creative-line-height',1.1)),
+      fontWeight:$('creative-font-weight').value});
+    o.setCoords();noteMutation('Typography updated.');
+  }
+  function cropSelected(reset=false){
+    const o=selected();if(!o||o.type!=='image'){status('Select an image layer to crop.');return;}
+    const element=o.getElement?.();
+    const naturalW=o.sourceWidth||element?.naturalWidth||element?.width||o.width;
+    const naturalH=o.sourceHeight||element?.naturalHeight||element?.height||o.height;
+    const oldW=o.getScaledWidth(),oldH=o.getScaledHeight();
+    let x=reset?0:val('creative-crop-x'),y=reset?0:val('creative-crop-y');
+    let w=reset?naturalW:val('creative-crop-w'),h=reset?naturalH:val('creative-crop-h');
+    x=clamp(Math.round(x),0,Math.max(0,naturalW-1));
+    y=clamp(Math.round(y),0,Math.max(0,naturalH-1));
+    w=clamp(Math.round(w),1,naturalW-x);
+    h=clamp(Math.round(h),1,naturalH-y);
+    o.sourceWidth=naturalW;o.sourceHeight=naturalH;
+    o.set({cropX:x,cropY:y,width:w,height:h,scaleX:oldW/w,scaleY:oldH/h});
+    o.setCoords();syncInputs();noteMutation(reset?'Original image crop restored.':'Image crop applied. The layer remains editable.');
   }
   function applyFill(){
     const o=selected();if(!o||o.type==='image')return;
@@ -324,7 +377,7 @@
         const image=new F.FabricImage(element,{left:40,top:40});
         const factor=Math.min(1,Math.min(docW*.78/image.width,docH*.78/image.height));
         image.scale(factor);
-        image.sourceName=file.name;
+        image.sourceName=file.name;image.sourceWidth=element.naturalWidth;image.sourceHeight=element.naturalHeight;
         addObject(image,file.name);
         lastName=file.name.replace(/\.[^.]+$/,'');
       }finally{URL.revokeObjectURL(url)}
@@ -412,6 +465,8 @@
     if(action==='fit'){applyZoom(fitRatio());return;}
     if(action==='zoomin'){applyZoom(zoom*1.15);return;}
     if(action==='zoomout'){applyZoom(zoom/1.15);return;}
+    if(action==='apply-crop'){cropSelected(false);return;}
+    if(action==='reset-crop'){cropSelected(true);return;}
     if(action==='resize'){setSize(Math.round(val('creative-document-width')),Math.round(val('creative-document-height')));return;}
     if(action==='background'){applyBackground();return;}
     if(action==='new'){
@@ -490,6 +545,16 @@
     input.addEventListener('change',()=>applyProperties(input.id));
     if(field==='opacity')input.addEventListener('input',()=>text('creative-opacity-value',input.value+'%'));
   }
+  all('[data-creative-align]').forEach(button=>button.addEventListener('click',()=>alignToArtboard(button.dataset.creativeAlign)));
+  for(const id of ['font','font-size','letter-spacing','line-height','font-weight','text-content']){
+    $('creative-'+id).addEventListener('change',updateTypography);
+  }
+  all('[data-creative-typography]').forEach(button=>button.addEventListener('click',()=>{
+    const o=selected();if(!o||!['i-text','textbox','text'].includes(o.type))return;
+    if(button.dataset.creativeTypography==='italic')o.fontStyle=o.fontStyle==='italic'?'normal':'italic';
+    else o.textAlign=button.dataset.creativeTypography;
+    o.setCoords();noteMutation('Text styling updated.');
+  }));
   ['fill-mode','color1','color2','fill-alpha','gradient-angle'].forEach(field=>{
     $('creative-'+field).addEventListener('change',applyFill);
   });
@@ -530,6 +595,15 @@
     if(mod&&event.key.toLowerCase()==='z'){event.preventDefault();undoRedo(event.shiftKey?1:-1);}
     if(mod&&event.key.toLowerCase()==='y'){event.preventDefault();undoRedo(1);}
     if(mod&&event.key.toLowerCase()==='d'){event.preventDefault();duplicateSelection();}
+    if(mod&&event.key.toLowerCase()==='c'&&selected()){
+      event.preventDefault();selected().clone(extras).then(obj=>{clipboard=obj;status('Copied selected artwork.');});
+    }
+    if(mod&&event.key.toLowerCase()==='v'&&clipboard){
+      event.preventDefault();clipboard.clone(extras).then(copy=>{
+        copy.left=(copy.left||0)+24;copy.top=(copy.top||0)+24;
+        canvas.add(copy);canvas.setActiveObject(copy);noteMutation('Pasted an editable layer.');
+      });
+    }
     if(['Delete','Backspace'].includes(event.key)&&selected()){event.preventDefault();tool('delete');}
     if(event.key.toLowerCase()==='v')tool('select');
     if(event.key.toLowerCase()==='b')tool('brush');
