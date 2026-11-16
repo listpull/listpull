@@ -3,7 +3,7 @@
 <title>Video Studio — Edit, Compose & Export | ListPull</title><link rel="canonical" href="https://listpull.com/studio/video-editor.html">
 <link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/assets/site-v2.css"><link rel="stylesheet" href="/assets/studio-video.css">
 <script src="/assets/studio-video.js" defer></script><script src="/assets/studio-media-agent.js" defer></script>
-</head><body class="video-studio">
+<script src="/assets/studio-fullscreen.js" defer></script></head><body class="video-studio">
 <a class="skip" href="#video-preview">Skip to video preview</a>
 <header class="video-header"><a class="video-logo" href="/">✦ ListPull</a><strong>Video Studio</strong><span>PRODUCTION WORKSPACE</span>
 <nav><a href="/studio.html">Studio</a><a href="/studio/image-editor.html">Creative Editor</a><a href="/contact/#engineering">Business integration</a></nav></header>
@@ -13,7 +13,7 @@
 <button type="button" data-video="demo">Open sample project</button><button type="button" data-video="save">Save project</button><label for="video-project-open">Open project</label>
 <input type="file" id="video-project-open" accept=".json,application/json">
 <button type="button" data-video="undo">↶ Undo</button><button type="button" data-video="redo">↷ Redo</button>
-<div class="video-toolbar-push"></div>
+<button type="button" data-fullscreen-target=".video-main" aria-label="Expand video editing workspace">⛶ Full screen editor</button><div class="video-toolbar-push"></div>
 <select id="video-export-type" aria-label="Export format"><option value="auto">Best supported format</option><option value="mp4">MP4 (if supported)</option><option value="webm">WebM</option></select>
 <button type="button" data-video="export" class="video-tool-main">↓ Export video</button></section>
 <div class="video-work-layout">
