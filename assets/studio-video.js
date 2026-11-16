@@ -690,6 +690,10 @@
   if(name==='undo'){history(-1);return;}
   if(name==='redo'){history(1);return;}
   if(name==='split'){split();return;}
+  if(name==='add-overlay'){addOverlay();return;}
+  if(name==='keyframe'){addKeyframe();return;}
+  if(name==='clear-keyframes'){const o=item(selectedId);if(o){o.keyframes=[];changed('Animation keyframes cleared.');fillInspector(o);seek(at);}return;}
+  if(name==='toggle-guides'){showGuides=!showGuides;document.querySelector('[data-video="toggle-guides"]').setAttribute('aria-pressed',String(showGuides));draw();return;}
   if(name==='add-title'){addTitle();return;}
   if(name==='add-music'){$('video-upload').click();switchTab('clip');status('Import an audio file and add it to the timeline.');return;}
   if(name==='record-voice'){voiceover();return;}
@@ -697,25 +701,46 @@
   if(name==='save'){saveProject();return;}
   if(name==='export'){exportVideo();return;}
   if(name==='cancel-export'){cancelExport=true;return;}
+  if(name==='match-source'){matchSource();return;}
+  if(name==='apply-quick-size'){setCanvasSize(Math.round(number('video-quick-width')),Math.round(number('video-quick-height')),'Custom canvas size applied.');return;}
+  if(name==='fit-clip'||name==='fill-clip'){const o=item(selectedId);if(o){o.fit=name==='fit-clip'?'contain':'cover';fillInspector(o);changed(name==='fit-clip'?'Entire source frame fitted to canvas.':'Source fills canvas. Adjust crop in the inspector.');seek(at);}return;}
+  if(name==='reset-transform'){const o=item(selectedId);if(o){Object.assign(o,defaults(),{filter:'none'});fillInspector(o);changed('Original framing and appearance restored.');seek(at);}return;}
   if(name==='apply-project'){
    const w=Math.round(number('video-width')),h=Math.round(number('video-height')),
     f=Math.round(number('video-fps')),rate=number('video-bitrate');
    if(w<16||h<16||f<1||rate<=0){status('Use positive project resolution, frame rate and bitrate.');return;}
-   width=w;height=h;fps=f;bitrate=rate*1e6;resize();changed('Project resolution and export settings updated.');return;
+   fps=f;bitrate=rate*1e6;setCanvasSize(w,h,'Canvas and export settings updated.');return;
   }
   if(name==='remove'){
    if(!selectedId){status('Select a timeline item first.');return;}
-   for(const group of [clips,titles,audioClips]){
+   for(const group of [clips,overlays,titles,audioClips]){
     const i=group.findIndex(x=>x.id===selectedId);if(i>=0){group.splice(i,1);break;}
-   }selectedId=null;at=Math.min(at,total());changed('Selected item removed.');return;
+   }selectedId=null;at=Math.min(at,total());changed('Selected item removed.');seek(at);return;
   }
  }
  function startup(){
   document.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',()=>command(button.dataset.video)));
   document.querySelectorAll('[data-video-tab]').forEach(button=>button.addEventListener('click',()=>switchTab(button.dataset.videoTab)));
   document.querySelectorAll('[data-video-size]').forEach(button=>button.addEventListener('click',()=>{
-    const [w,h]=button.dataset.videoSize.split(',').map(Number);width=w;height=h;resize();changed('Resolution changed to '+w+' × '+h+'.');
+    const [w,h]=button.dataset.videoSize.split(',').map(Number);
+    setCanvasSize(w,h,'Canvas changed to '+w+' × '+h+'.');
   }));
+  $('video-quick-preset').addEventListener('change',event=>{
+    const value=event.target.value;
+    if(value&&value!=='custom'){const [w,h]=value.split(',').map(Number);setCanvasSize(w,h,'Canvas preset applied.');}
+    else if(value==='custom')$('video-quick-width').focus();
+    event.target.value='';
+  });
+  for(const id of ['video-quick-width','video-quick-height']){
+    $(id).addEventListener('keydown',event=>{
+      if(event.key==='Enter'){event.preventDefault();command('apply-quick-size');}
+    });
+  }
+  for(const name of ['opacity','brightness','contrast','saturation']){
+    const field=$('video-'+name),out=$('video-'+name+'-label');
+    field.addEventListener('input',()=>{out.textContent=field.value+(name==='opacity'?'%':'');});
+    field.addEventListener('change',()=>{if(selectedId)applyInspector();});
+  }
   $('video-apply').addEventListener('click',applyInspector);
   $('video-scrub').addEventListener('input',e=>{pause();seek(e.target.value);});
   const input=$('video-upload');input.addEventListener('change',()=>ingest(input.files).catch(e=>status(e.message)).finally(()=>input.value=''));
@@ -732,6 +757,22 @@
     if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'){e.preventDefault();history(e.shiftKey?1:-1);}
     if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='y'){e.preventDefault();history(1);}
   });
+  for(const event of ['loadeddata','seeked','canplay','timeupdate']){
+    player.addEventListener(event,()=>{
+      if(!recording||event!=='timeupdate')draw();
+    });
+  }
+  player.addEventListener('loadedmetadata',()=>{
+    const b=getBlock(at);
+    if(b&&asset(b.clip.assetId)?.kind==='video'){
+      const time=b.clip.in+(at-b.start)*b.clip.speed;
+      const next=limit(time,0,Math.max(0,player.duration-.005));
+      if(Number.isFinite(next)&&Math.abs(player.currentTime-next)>.01){
+        try{player.currentTime=next;}catch(e){}
+      }
+    }
+  });
+  player.addEventListener('error',()=>status('This video could not be decoded in the current browser. Try another format or codec.'));
   resize();save();renderAll();
   window.ListPullVideo=Object.freeze({
    inspect:()=>({width,height,fps,duration:total(),clips:clips.map(c=>({name:asset(c.assetId)?.name||'missing media',
