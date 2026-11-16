@@ -141,7 +141,7 @@ test('Video Studio exports a real encoded WebM from a trimmed local timeline',as
  await page.locator('[data-video="export"]').click();
  const file=await download;
  expect(file.suggestedFilename()).toMatch(/\.webm$/);
- await expect(page.locator('#video-export-progress')).toHaveValue('100');
+ await expect(page.locator('#video-export-progress')).toHaveJSProperty('value',100);
 });
 test('Visual business explorer shows tracking scenario',async({page})=>{
  await page.goto('/studio/strategy.html');
