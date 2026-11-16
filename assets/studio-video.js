@@ -395,14 +395,16 @@
     'contrast('+(100+(c.contrast||0))+'%)',
     'saturate('+(100+(c.saturation||0))+'%)'].join(' ');
  }
- function drawMedia(element,clip,alpha=1,time=at,offset=0){
+ function drawMedia(element,clip,alpha=1,time=at,offset=0,motion={}){
   if(!element)return;
   if(element.tagName==='VIDEO'&&element.readyState<2)return;
   const rect=mediaBounds(element,clip,time,offset);
   ctx.save();
   ctx.globalAlpha=limit(alpha*(rect.opacity/100),0,1);ctx.filter=visualFilter(clip);
-  ctx.translate(rect.x,rect.y);ctx.rotate((rect.rotation||0)*Math.PI/180);
-  try{ctx.drawImage(element,rect.sx,rect.sy,rect.sw,rect.sh,-rect.w/2,-rect.h/2,rect.w,rect.h);}catch(e){}
+  ctx.translate(rect.x+(motion.shiftX||0),rect.y+(motion.shiftY||0));
+  ctx.rotate((rect.rotation||0)*Math.PI/180);
+  const scale=motion.scale||1;
+  try{ctx.drawImage(element,rect.sx,rect.sy,rect.sw,rect.sh,-rect.w*scale/2,-rect.h*scale/2,rect.w*scale,rect.h*scale);}catch(e){}
   ctx.restore();return rect;
  }
  function drawTitle(t,time){
@@ -470,10 +472,18 @@
   if(current){
    const a=asset(current.clip.assetId);
    const element=a?.kind==='image'?images.get(a.url):a?.kind==='video'?player:null;
-   const transition=current.clip.transition==='fade'?Math.min(current.clip.fade||.5,current.end-current.start):0;
+   const style=current.clip.transition||'cut',duration=Math.min(current.clip.fade??.5,current.end-current.start);
+   const progress=duration>0?limit((time-current.start)/duration,0,1):1;
    const elapsed=time-current.start;
-   const alpha=transition?limit(Math.min(elapsed,current.end-time)/transition,0,1):1;
-   const rect=drawMedia(element,current.clip,alpha,time,current.start);
+   let alpha=1,animation={};
+   if(style==='fade'&&duration>0)alpha=limit(Math.min(elapsed,current.end-time)/duration,0,1);
+   if(style==='slide'&&duration>0)animation.shiftX=(1-progress)*width;
+   if(style==='zoom'&&duration>0)animation.scale=1.35-.35*progress;
+   if(style==='wipe'&&duration>0){
+    ctx.save();ctx.beginPath();ctx.rect(0,0,width*progress,height);ctx.clip();
+   }
+   const rect=drawMedia(element,current.clip,alpha,time,current.start,animation);
+   if(style==='wipe'&&duration>0)ctx.restore();
    if(current.clip.id===selectedId)selectedRect=rect;
   }
   for(const overlay of overlays){
@@ -904,6 +914,11 @@
     field.addEventListener('change',()=>{if(selectedId)applyInspector();});
   }
   $('video-apply').addEventListener('click',applyInspector);
+  for(const name of ['in','out','speed','volume','x','y','scale','rotation','fit',
+    'crop-left','crop-right','crop-top','crop-bottom','filter','transition','fade',
+    'caption-text','title-size','title-color','title-start','title-end','title-animation']){
+    $('video-'+name).addEventListener('change',()=>{if(selectedId)applyInspector();});
+  }
   $('video-timeline-zoom').addEventListener('input',event=>{
     timelineScale=Number(event.target.value)||28;renderAll();
   });
@@ -954,7 +969,7 @@
   canvas.addEventListener('pointercancel',previewUp);
     resize();save();renderAll();
   window.ListPullVideo=Object.freeze({
-   inspect:()=>({width,height,fps,duration:total(),clips:clips.map(c=>({name:asset(c.assetId)?.name||'missing media',
+   inspect:()=>({width,height,fps,duration:total(),overlays:overlays.map(o=>({name:asset(o.assetId)?.name||'overlay',start:o.start,end:o.end,scale:o.scale})),clips:clips.map(c=>({name:asset(c.assetId)?.name||'missing media',
       duration:round(duration(c)),filter:c.filter,speed:c.speed})),titles:titles.map(t=>({text:t.text,start:t.start,end:t.end})),
       audio:audioClips.length}),
    applyTitles:list=>{
