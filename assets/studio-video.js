@@ -661,7 +661,7 @@
    g.beginPath();g.arc(1000,210,155,0,Math.PI*2);g.fill();
    const img=new Image();img.src=temp.toDataURL('image/png');
    const id=uid(),url=img.src;images.set(url,img);
-   files.push({id,kind:'image',name:'ListPull Sample Scene '+(i+1)+'.png',url,duration:4,width:1280,height:720});
+   files.push({id,kind:'image',name:'ListPull Sample Scene '+(i+1)+'.png',url,thumbnail:url,duration:4,width:1280,height:720});
    clips.push({id:uid(),type:'image',assetId:id,in:0,out:4,speed:1,volume:0,...defaults(),
      filter:'none',transition:'fade',fade:.45});
    titles.push({id:uid(),type:'title',text:prompts[i],start:i*4+.35,end:i*4+3.65,size:92,
