@@ -1,27 +1,124 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111b32"><meta name="description" content="ListPull Image Studio: edit product photos, campaign images and digital artwork in your browser. Color adjustments, captions, before/after and ready-sized PNG exports."><title>Image Editor | ListPull Studio</title><link rel="canonical" href="https://listpull.com/studio/image-editor.html"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/assets/site-v2.css"><link rel="stylesheet" href="/assets/studio.css"><link rel="stylesheet" href="/assets/studio-theme.css"><link rel="stylesheet" href="/assets/studio-workspaces.css"><script src="/assets/site-v2.js" defer></script><script src="/assets/studio.js" defer></script></head><body><a class="skip" href="#image-editor">Skip to image editor</a><header class="site-header"><div class="wrap nav-shell"><a class="brand" href="/" aria-label="ListPull home"><span class="brand-mark" aria-hidden="true">L</span>ListPull</a>
-<nav class="nav-main" data-nav-main id="primary-nav" aria-label="Main navigation"><a href="/engineering.html">Engineering</a><a href="/labs.html">Labs</a><a href="/#capabilities">Capabilities</a><a href="/#contact">Contact</a></nav>
-<div class="nav-end"><div class="labs-menu" data-labs-menu><button class="labs-trigger" type="button" data-labs-trigger aria-expanded="false" aria-controls="labs-options" aria-haspopup="true">ListPull Labs <svg class="labs-chevron-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg></button><div class="labs-list" id="labs-options" data-labs-list data-open="false"><a href="/labs.html">All Labs <span>Games, media & tools</span></a><a href="/blobby.html">Blobby game <span>Woodland Wonder</span></a><a href="/labs.html#wildlife">Wildlife Media <span>Nature and stories</span></a><a href="/studio.html">Studio <span>Creative & business tools</span></a></div></div><button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation">☰</button></div></div></header><main class="image-full"><div class="wrap editor-heading"><div><span class="eyebrow orange">ListPull Studio / Image Editor</span><h1>Create artwork ready for the next step.</h1><p>Start with a look, adjust it to fit your project, then export for a product page, video thumbnail, or social campaign.</p></div><a class="btn secondary" href="/studio.html">← All Studio tools</a></div><section class="wrap image-quickstart" aria-labelledby="image-start-title"><div><span class="eyebrow orange">Image Studio · Quick start</span><h2 id="image-start-title">Make it yours in three clicks.</h2><p>Choose a look, upload your artwork (or try the demo), then select an export size. Your edits are non-destructive until you download the finished image.</p></div><div class="image-use-cases">
-<button type="button" data-image-look="social">✨ Social graphic <small>Make colors pop</small></button>
-<button type="button" data-image-look="product">📦 Product artwork <small>Bright & clean</small></button>
-<button type="button" data-image-look="nature">🌿 Nature photo <small>Rich, natural color</small></button></div></section>
-<section class="wrap studio-workspace" id="image-editor" aria-label="Image editor workspace"><aside class="studio-panel" aria-label="Editing controls">
-<div class="panel-heading"><h2>Image editor</h2><span>01 / CREATE</span></div>
-<div class="control-block"><label for="image-file" class="file-label">Upload an image <span aria-hidden="true">↑</span></label><input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" aria-describedby="file-help"><p class="control-help" id="file-help">PNG, JPEG, WebP, GIF or BMP. Animated GIFs use the first frame.</p><button class="tool-button" type="button" id="demo-image">Try a demo image</button></div>
-<div class="control-block"><h3>Adjustments</h3>
-<label class="range-row" for="brightness">Brightness <output for="brightness" id="brightness-out">100%</output></label><input type="range" id="brightness" min="0" max="200" value="100" step="1">
-<label class="range-row" for="contrast">Contrast <output for="contrast" id="contrast-out">100%</output></label><input type="range" id="contrast" min="0" max="200" value="100" step="1">
-<label class="range-row" for="saturation">Saturation <output for="saturation" id="saturation-out">100%</output></label><input type="range" id="saturation" min="0" max="200" value="100" step="1">
-<label class="range-row" for="grayscale">Grayscale <output for="grayscale" id="grayscale-out">0%</output></label><input type="range" id="grayscale" min="0" max="100" value="0" step="1"></div>
-<div class="control-block"><h3>Transform</h3><div class="tool-grid"><button type="button" class="tool-button" id="rotate-left">↶ Rotate left</button><button type="button" class="tool-button" id="rotate-right">↷ Rotate right</button><button type="button" class="tool-button" id="flip-horizontal">⇄ Flip</button><button type="button" class="tool-button" id="reset-all">↺ Reset</button></div></div>
-<div class="control-block"><h3>Text overlay</h3><label for="caption-text" class="field-label">Caption</label><input type="text" id="caption-text" maxlength="100" placeholder="Add a caption…" autocomplete="off"><label class="range-row" for="text-size">Text size <output for="text-size" id="text-size-out">6%</output></label><input type="range" id="text-size" min="2" max="12" value="6" step="1"><label class="field-label" for="text-color">Text color</label><input type="color" id="text-color" value="#ffffff"></div>
-<div class="image-export-guide"><h3>Download for where?</h3>
-<label for="image-export-size">Image format / destination</label>
-<select id="image-export-size"><option value="original">Original resolution</option><option value="square">Social post · 1080 × 1080</option><option value="web">Website banner · 1200 × 630</option><option value="video">Video thumbnail · 1280 × 720</option><option value="portrait">Portrait post · 1080 × 1350</option></select>
-<label for="image-export-fit">Layout</label><select id="image-export-fit"><option value="contain">Fit whole image (transparent space if needed)</option><option value="cover">Fill frame (crop edges if needed)</option></select>
-<button id="image-compare" type="button" class="tool-button">Hold to compare with the original</button>
-<button id="image-check" type="button" class="tool-button">✓ Check export quality</button><p id="image-check-result" class="control-help" role="status" aria-live="polite">Choose an export size to check image resolution and cropping.</p>
-<p class="control-help">Exports are created in your browser. No upload or account required. Choose “Fill frame” only when cropping is acceptable.</p></div>
-<button class="btn orange export-button" type="button" id="export-png" disabled>Download PNG ↓</button><p class="control-help">Your imported file is processed locally in this tab. ListPull does not upload it to a server.</p>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0e1426">
+<meta name="description" content="ListPull Creative Studio unites professional image editing, SVG design, layered artwork, 2.5D effects, custom canvas sizes, filters and AI-assisted design in one browser workspace.">
+<title>Creative Studio — Image & Vector Editor | ListPull</title>
+<link rel="canonical" href="https://listpull.com/studio/image-editor.html">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/assets/site-v2.css"><link rel="stylesheet" href="/assets/studio-creative.css">
+<script src="https://cdn.jsdelivr.net/npm/fabric@7.4.0/dist/index.min.js" defer></script>
+<script src="/assets/studio-creative.js" defer></script><script src="/assets/studio-media-agent.js" defer></script>
+</head><body class="creative-app">
+<a class="skip" href="#creative-stage">Skip to artwork</a>
+<header class="creative-topbar"><a class="creative-brand" href="/"><span aria-hidden="true">✦</span> ListPull</a>
+<div class="creative-title"><strong>Creative Studio</strong><span>IMAGE + VECTOR · ONE WORKSPACE</span></div>
+<nav class="creative-toplinks" aria-label="Studio navigation"><a href="/studio.html">Studio</a><a href="/studio/video-editor.html">Video Editor</a><a href="/contact/#engineering">Integrate with your team</a></nav></header>
+<main class="creative-main">
+<section class="creative-toolbar" aria-label="Editor toolbar">
+<div class="creative-tool-group"><label class="creative-tool-primary" for="creative-upload">＋ Import image or SVG</label><input id="creative-upload" type="file" accept="image/*,.svg,application/json,.json" multiple>
+<button type="button" data-creative="new">New</button><button type="button" data-creative="demo">Open demo</button>
+<button type="button" data-creative="save">Save project</button><label for="creative-open">Open project</label><input type="file" id="creative-open" accept=".json,application/json"></div>
+<div class="creative-tool-group" role="toolbar" aria-label="Editing tools">
+<button type="button" data-creative="select" aria-pressed="true">↖ Select</button>
+<button type="button" data-creative="rect">▭ Rectangle</button>
+<button type="button" data-creative="ellipse">◯ Ellipse</button>
+<button type="button" data-creative="triangle">△ Triangle</button>
+<button type="button" data-creative="star">✦ Star</button>
+<button type="button" data-creative="line">╱ Line</button>
+<button type="button" data-creative="text">T Text</button>
+<button type="button" data-creative="brush">✎ Brush</button>
+</div>
+<div class="creative-tool-group"><button type="button" data-creative="undo" title="Undo (Ctrl+Z)">↶ Undo</button><button type="button" data-creative="redo" title="Redo (Ctrl+Shift+Z)">↷ Redo</button><button type="button" data-creative="duplicate">⧉ Duplicate</button>
+<button type="button" data-creative="group">Group</button><button type="button" data-creative="ungroup">Ungroup</button><button type="button" data-creative="delete">Delete</button></div>
+<div class="creative-tool-group creative-export-group"><select id="creative-export-format" aria-label="Export file format"><option value="png">PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option><option value="svg">SVG</option></select>
+<button type="button" data-creative="export" class="creative-tool-primary">↓ Export artwork</button></div>
+</section>
+<div class="creative-layout">
+<aside class="creative-side creative-left" aria-label="Templates, assets and layers">
+<div class="creative-panel-heading"><strong>Start creating</strong><span>Choose a project</span></div>
+<div class="creative-templates"><button data-template="social">✨ Social campaign</button><button data-template="product">📦 Product card</button><button data-template="nature">🌿 Wildlife poster</button><button data-template="badge">🏷️ Badge & logo</button></div>
+<div class="creative-panel-heading"><strong>Layers</strong><span id="creative-layer-count">0</span></div>
+<div class="creative-layer-actions"><button data-creative="front">↑ Forward</button><button data-creative="back">↓ Backward</button><button data-creative="clone">⧉ Copy</button></div>
+<ol id="creative-layers" class="creative-layers" aria-label="Document layers, highest first"></ol>
+<div class="creative-asset-help">Drop PNG, JPEG, WebP or SVG onto the artboard, or paste an image. Select a layer to resize, rotate, reposition, style, or apply effects.</div>
+<div class="creative-asset-help"><a href="/studio/video-editor.html">Need motion? Open the Video Editor ↗</a></div>
 </aside>
-<div class="studio-preview"><div class="preview-top"><div><strong>Canvas</strong><span id="image-dimensions" aria-live="polite">No image loaded</span></div><span class="preview-dot">● Local preview</span></div><div class="canvas-area" id="drop-area" tabindex="0" aria-label="Image preview. You can also drop an image here."><div id="empty-state" class="empty-state"><div class="empty-icon" aria-hidden="true">▧</div><strong>Your next idea starts here.</strong><p>Upload an image, drop one into this space, or load the demo.</p></div><canvas id="editor-canvas" hidden aria-label="Edited image preview"></canvas></div><div class="preview-bottom"><span id="editor-status" role="status" aria-live="polite">Ready for an image.</span><span>Browser-only • PNG output</span></div></div></section>
-<section class="wrap workspace-service"><div><span class="eyebrow orange">For your team</span><h2>From one image to an entire content pipeline.</h2><p>Need branded templates, automated resizing, product-catalog processing, asset approvals or ecommerce publication? ListPull Engineering can integrate creative workflows with your existing systems.</p></div><a class="btn orange" href="/contact/#engineering">Discuss an integration ↗</a></section></main><footer class="site-footer"><div class="wrap footer-grid"><div><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">L</span>ListPull</a><p class="footer-caption">ListPull Studio creative tools • © 2026 ListPull</p></div><nav class="footer-nav" aria-label="Footer"><a href="/">Home</a><a href="/engineering.html">Engineering</a><a href="/labs.html">Labs</a><a href="/contact/">Contact</a><a href="/policies/privacy-policy/">Privacy</a></nav></div></footer></body></html>
+<section class="creative-work" id="creative-stage" aria-label="Interactive design canvas">
+<div class="creative-canvas-top"><span>Artboard: <strong id="creative-size-label">1200 × 800</strong></span>
+<div class="creative-zoom"><button type="button" data-creative="zoomout" aria-label="Zoom out">−</button><output id="creative-zoom-label">Fit</output><button type="button" data-creative="zoomin" aria-label="Zoom in">＋</button><button type="button" data-creative="fit">Fit</button></div></div>
+<div id="creative-drop" class="creative-drop" tabindex="0" aria-label="Artwork canvas, drop or paste images">
+<div class="creative-artboard"><canvas id="creative-canvas" width="1200" height="800" aria-label="Editable artboard with draggable and resizable objects"></canvas></div>
+<div class="creative-drop-hint" id="creative-drop-hint" hidden>Release to import your artwork</div>
+</div>
+<div class="creative-status"><span id="creative-status" role="status" aria-live="polite">Choose a template, import media, or draw directly on the canvas.</span><span>Drag handles to resize · Shift for proportions · Double-click text to edit</span></div>
+</section>
+<aside class="creative-side creative-properties" aria-label="Design and object properties">
+<div class="creative-tabs" role="tablist" aria-label="Editor properties">
+<button type="button" data-creative-tab="object" aria-selected="true">Object</button>
+<button type="button" data-creative-tab="document" aria-selected="false">Canvas</button>
+<button type="button" data-creative-tab="effects" aria-selected="false">Effects</button>
+<button type="button" data-creative-tab="ai" aria-selected="false">AI Agent</button></div>
+<div class="creative-panel-scroll">
+<div data-creative-panel="object">
+<div class="creative-panel-heading"><strong id="creative-selected-label">Select artwork</strong><small>All values are editable</small></div>
+<div class="creative-properties-grid">
+<label>X <input id="creative-x" type="number" step="0.1"></label><label>Y <input id="creative-y" type="number" step="0.1"></label>
+<label>Width <input id="creative-w" type="number" step="0.1" min="0.1"></label><label>Height <input id="creative-h" type="number" step="0.1" min="0.1"></label>
+<label>Rotation ° <input id="creative-angle" type="number" step="1"></label><label>Z layer <input id="creative-z" type="number" step="1"></label>
+<label>Skew X ° <input id="creative-skewx" type="number" step="1"></label><label>Skew Y ° <input id="creative-skewy" type="number" step="1"></label>
+</div>
+<label class="creative-field">Opacity <input id="creative-opacity" type="range" min="0" max="100" value="100"><output id="creative-opacity-value">100%</output></label>
+<fieldset class="creative-style-fieldset"><legend>Fill & transparency</legend>
+<label>Fill style <select id="creative-fill-mode"><option value="solid">Solid color</option><option value="linear">Linear gradient</option><option value="radial">Radial gradient</option></select></label>
+<div class="creative-two"><label>Color A <input id="creative-color1" type="color" value="#8b65e5"></label><label>Color B <input id="creative-color2" type="color" value="#f6aa6c"></label></div>
+<label>Fill transparency <input id="creative-fill-alpha" type="range" min="0" max="100" value="100"><output id="creative-fill-alpha-value">100%</output></label>
+<label>Gradient angle ° <input id="creative-gradient-angle" type="number" value="0" step="1"></label>
+<label>Outline color <input id="creative-stroke" type="color" value="#19253e"></label>
+<label>Outline width <input id="creative-stroke-width" type="number" value="0" min="0" step="0.5"></label></fieldset>
+<fieldset class="creative-style-fieldset"><legend>Shadows & 2.5D depth</legend>
+<label>Shadow color <input id="creative-shadow-color" type="color" value="#10162b"></label>
+<label>Shadow opacity <input id="creative-shadow-opacity" type="range" min="0" max="100" value="35"></label>
+<label>Shadow blur <input id="creative-shadow-blur" type="number" value="12" min="0" step="1"></label>
+<div class="creative-two"><label>Shadow X <input id="creative-shadow-x" type="number" value="8" step="1"></label><label>Shadow Y <input id="creative-shadow-y" type="number" value="8" step="1"></label></div>
+<label>Visual depth (px) <input id="creative-depth" type="number" value="0" step="1" min="0"></label>
+<button type="button" data-creative="extrude">Create 2.5D depth</button>
+<p class="creative-tip">Z changes stacking order. Tilt and depth create a dimensional, extruded look while keeping the artboard editable.</p></fieldset>
+<div class="creative-inline"><button type="button" data-creative="fliph">⇄ Flip H</button><button type="button" data-creative="flipv">⇅ Flip V</button><button type="button" data-creative="lock">Lock</button></div>
+</div>
+<div data-creative-panel="document" hidden>
+<div class="creative-panel-heading"><strong>Artboard settings</strong><small>Set your own dimensions</small></div>
+<div class="creative-properties-grid"><label>Canvas width <input id="creative-document-width" type="number" min="1" step="1" value="1200"></label>
+<label>Canvas height <input id="creative-document-height" type="number" min="1" step="1" value="800"></label></div>
+<button type="button" data-creative="resize">Apply canvas size</button>
+<div class="creative-size-presets"><button data-size="1080,1080">Social square</button><button data-size="1200,630">Website</button><button data-size="1080,1920">Vertical</button><button data-size="1920,1080">Video</button><button data-size="2480,3508">A4 artwork</button></div>
+<fieldset class="creative-style-fieldset"><legend>Background</legend><label>Background mode <select id="creative-background-mode"><option value="solid">Solid</option><option value="transparent">Transparent</option><option value="linear">Gradient</option></select></label>
+<label>Color A <input id="creative-background1" type="color" value="#ffffff"></label><label>Color B <input id="creative-background2" type="color" value="#d5c8ff"></label>
+<label>Background opacity <input id="creative-background-opacity" type="range" min="0" max="100" value="100"></label>
+<button type="button" data-creative="background">Apply background</button></fieldset>
+<fieldset class="creative-style-fieldset"><legend>Export size</legend>
+<label>Scale <input id="creative-export-scale" type="number" min="0.1" step="0.1" value="1"></label>
+<p class="creative-tip">Exports use the current document dimensions multiplied by this value. Layers, transparency, vector artwork and editable project files are preserved.</p></fieldset>
+</div>
+<div data-creative-panel="effects" hidden>
+<div class="creative-panel-heading"><strong>Photo adjustments</strong><small>Select a photo layer to edit</small></div>
+<label class="creative-field">Brightness <input id="creative-brightness" type="range" min="-100" max="100" value="0"><output>0</output></label>
+<label class="creative-field">Contrast <input id="creative-contrast" type="range" min="-100" max="100" value="0"><output>0</output></label>
+<label class="creative-field">Saturation <input id="creative-saturation" type="range" min="-100" max="100" value="0"><output>0</output></label>
+<label class="creative-field">Blur <input id="creative-blur" type="range" min="0" max="100" value="0"><output>0</output></label>
+<label class="creative-field">Grayscale <input id="creative-grayscale" type="range" min="0" max="100" value="0"><output>0</output></label>
+<label class="creative-field">Gamma R <input id="creative-gamma-r" type="range" min="1" max="220" value="100"><output>100</output></label>
+<label class="creative-field">Gamma G <input id="creative-gamma-g" type="range" min="1" max="220" value="100"><output>100</output></label>
+<label class="creative-field">Gamma B <input id="creative-gamma-b" type="range" min="1" max="220" value="100"><output>100</output></label>
+<div class="creative-inline"><button type="button" data-creative="filter-punch">Vibrant</button><button type="button" data-creative="filter-mono">Black & white</button><button type="button" data-creative="filter-reset">Reset</button></div>
+</div>
+<div data-creative-panel="ai" hidden>
+<div class="creative-panel-heading"><strong>AI Creative Agent</strong><small>Design assistance, in the editor</small></div>
+<p>Describe a poster, badge, label or campaign graphic. The agent can propose editable shapes, text, color and layout on your canvas.</p>
+<button type="button" data-media-ai="enable" class="creative-tool-primary">✧ Enable AI Agent</button><span data-media-ai="status" role="status" aria-live="polite">Optional local model · No sign-in</span>
+<label for="creative-ai-request">Describe what to create</label><textarea id="creative-ai-request" rows="4" placeholder="Design an elegant wildlife conservation event poster with warm colors."></textarea>
+<button type="button" data-media-ai="design">Generate editable design</button>
+<button type="button" data-media-ai="ask">Ask about my artwork</button>
+<div id="creative-ai-response" class="creative-ai-response" role="status" aria-live="polite"></div>
+<div class="creative-inline"><button type="button" id="creative-ai-apply" hidden>Apply design</button><button type="button" id="creative-ai-discard" hidden>Discard</button></div>
+</div></div></aside>
+</div></main></body></html>
