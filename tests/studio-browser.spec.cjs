@@ -122,6 +122,27 @@ test('Video Studio demo can play, trim, split, add title and capture a still',as
  await page.locator('[data-video="snapshot"]').click();
  expect((await still).suggestedFilename()).toContain('still.png');
 });
+test('Video Studio exports a real encoded WebM from a trimmed local timeline',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ while(await page.locator('#video-clip-track button').count()>1){
+   await page.locator('#video-clip-track button').last().click();
+   await page.locator('[data-video="remove"]').click();
+ }
+ await page.locator('#video-clip-track button').first().click();
+ await page.locator('#video-out').fill('1.2');
+ await page.locator('#video-apply').click();
+ await page.locator('[data-video-tab="project"]').click();
+ await page.locator('#video-width').fill('320');
+ await page.locator('#video-height').fill('180');
+ await page.locator('[data-video="apply-project"]').click();
+ await page.locator('#video-export-type').selectOption('webm');
+ const download=page.waitForEvent('download',{timeout:45000});
+ await page.locator('[data-video="export"]').click();
+ const file=await download;
+ expect(file.suggestedFilename()).toMatch(/\.webm$/);
+ await expect(page.locator('#video-export-progress')).toHaveValue('100');
+});
 test('Visual business explorer shows tracking scenario',async({page})=>{
  await page.goto('/studio/strategy.html');
  await page.locator('[data-demo="movement"]').click();
