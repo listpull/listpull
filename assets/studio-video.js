@@ -527,7 +527,7 @@
    'video-title-color':c.color||'#ffffff','video-title-start':c.start||0,
    'video-title-end':c.end||0,'video-title-animation':c.animation||'none'
   };
-  for(const [id,v] of Object.entries(values))$(id).value=v;
+  for(const [id,v] of Object.entries(values))$(id).value=typeof v==='number'?round(v):v;
   for(const name of ['opacity','brightness','contrast','saturation'])
    $('video-'+name+'-label').textContent=$('video-'+name).value+(name==='opacity'?'%':'');
   renderKeyframes(c);
