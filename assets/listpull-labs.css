@@ -1,0 +1,117 @@
+/* ListPull Labs — public product directory, not another Studio menu. */
+.lp-labs-directory{--lab-line:#564e76;--lab-warm:#ffa76b;--lab-mint:#9ce8d4;
+ background:radial-gradient(ellipse at 80% 10%,#43283e85,transparent 41%),
+ radial-gradient(ellipse at 15% 40%,#0c34425c,transparent 50%),#090f1a;
+ min-height:80vh;color:#f8f7fd;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+.lp-labs-directory a{text-decoration:none}
+.lp-labs-directory img{max-width:100%;height:auto}
+.lp-labs-wrap{width:min(1190px,calc(100% - 36px));margin-inline:auto}
+.lp-labs-hero{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+ align-items:center;gap:clamp(20px,4vw,60px);padding:clamp(32px,5vw,76px) 0 44px}
+.lp-labs-kicker{display:inline-flex;align-items:center;gap:7px;
+ border:1px solid #a67c61;border-radius:999px;background:#ff9b5120;color:#ffbd90;
+ padding:5px 12px;font-size:.68rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.lp-labs-hero h1{font-size:clamp(2.35rem,5.2vw,5.2rem);font-weight:900;letter-spacing:-.065em;
+ line-height:1.02;margin:18px 0 17px}
+.lp-labs-hero h1 em{font-style:normal;background:linear-gradient(95deg,#ffc179,#d0a1ff 63%,#81dce6);
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.lp-labs-hero p{max-width:600px;color:#c9c7d8;font-size:clamp(.95rem,1.35vw,1.12rem);line-height:1.65}
+.lp-labs-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:22px}
+.lp-labs-action{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;
+ min-height:41px;padding:9px 16px;font-size:.8rem;font-weight:800;line-height:1.2}
+.lp-labs-action.primary{background:linear-gradient(125deg,#ff8a20,#f65a1d);color:white;
+ box-shadow:0 8px 28px #f46c243a}
+.lp-labs-action.secondary{border:1px solid #8a72b0;color:#e9d9ff;background:#60437b2e}
+.lp-labs-action.neutral{border:1px solid #438f9b;color:#b4f1f5;background:#1d6a7530}
+.lp-labs-action:hover{filter:brightness(1.14);transform:translateY(-2px)}
+.lp-labs-hero-art{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+ grid-template-rows:1fr 1fr;gap:10px;min-height:290px}
+.lp-labs-hero-art a{position:relative;display:block;overflow:hidden;border-radius:22px;
+ box-shadow:0 20px 30px #03060d8c;border:1px solid #8d779540}
+.lp-labs-art-game{grid-row:span 2;background:#382533}
+.lp-labs-hero-art img{width:100%;height:100%;min-height:125px;object-fit:cover;display:block}
+.lp-labs-hero-art a:hover img{transform:scale(1.035)}
+.lp-labs-hero-art img{transition:transform .3s}
+.lp-labs-hero-art strong{position:absolute;bottom:10px;left:10px;right:10px;padding:7px 9px;
+ background:#10182cc7;backdrop-filter:blur(6px);border-radius:10px;font-size:.73rem}
+.lp-labs-art-wildlife{background:#224b43}
+.lp-labs-art-tech{background:radial-gradient(circle at 70% 20%,#64489d,#172740 65%);
+ padding:20px 13px}
+.lp-labs-art-tech span{display:block;letter-spacing:.12em;font-size:.6rem;color:#d6bffa;font-weight:850}
+.lp-labs-art-tech code{display:block;margin-top:12px;border:1px solid #7175b7;background:#0c1c33;
+ border-radius:10px;padding:10px;color:#8ef4c8;font-size:.75rem}
+.lp-labs-art-tech strong{background:#0e1636ab}
+.lp-labs-section{padding:clamp(32px,5vw,62px) 0}
+.lp-labs-section.alt{background:linear-gradient(125deg,#141f3373,#32203c45);border-block:1px solid #3b3a5378}
+.lp-labs-section-heading{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:20px}
+.lp-labs-section-heading h2{font-size:clamp(1.75rem,3.4vw,2.7rem);letter-spacing:-.04em;margin:8px 0}
+.lp-labs-section-heading p{max-width:360px;color:#b8c6d6;font-size:.85rem;line-height:1.55;margin:0}
+.lp-labs-section-heading small{font-size:.69rem;font-weight:850;color:#a7e6dd;letter-spacing:.11em;text-transform:uppercase}
+.lp-labs-app-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.lp-labs-app-card{display:flex;flex-direction:column;position:relative;overflow:hidden;gap:11px;
+ min-height:210px;padding:19px;background:linear-gradient(150deg,#25304e,#19243a 70%,#1c293c);
+ border:1px solid #535d7e;border-radius:21px;box-shadow:inset 0 1px #ffffff17;
+ color:#fff;transition:transform .18s,border-color .18s,box-shadow .18s}
+.lp-labs-app-card:nth-child(2){background:linear-gradient(150deg,#462741,#232640 80%)}
+.lp-labs-app-card:nth-child(3){background:linear-gradient(150deg,#1c3c51,#162b48 75%)}
+.lp-labs-app-card:nth-child(4){background:linear-gradient(150deg,#1d3552,#222640 80%)}
+.lp-labs-app-card:nth-child(5){background:linear-gradient(150deg,#21433e,#1c2a43 85%)}
+.lp-labs-app-card:nth-child(6){background:linear-gradient(150deg,#303758,#182c3b 85%)}
+.lp-labs-app-card:hover,.lp-labs-app-card:focus-visible{transform:translateY(-4px);
+ border-color:#ffb081;box-shadow:0 14px 37px #0007}
+.lp-labs-app-card .lp-directory-icon{display:grid;place-items:center;width:49px;height:49px;
+ border:1px solid #b8a2d3;border-radius:15px;background:#9787ca2b;color:#ffd4a3}
+.lp-labs-app-card .lp-directory-icon svg{width:29px;height:29px}
+.lp-labs-app-card .lp-labs-type{font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;
+ color:#bccef1;font-weight:870}
+.lp-labs-app-card h3{font-size:1.13rem;font-weight:860;letter-spacing:-.026em;margin:0}
+.lp-labs-app-card p{font-size:.8rem;line-height:1.55;color:#cbd4e5;margin:0;flex:1}
+.lp-labs-app-card .lp-labs-open{font-size:.77rem;color:#ffd0a6;font-weight:850}
+.lp-labs-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.lp-labs-feature{position:relative;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;
+ padding:24px;overflow:hidden;border-radius:24px;border:1px solid #85617a;background:#142737;color:white}
+.lp-labs-feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7;
+ filter:saturate(1.2);transition:transform .3s}
+.lp-labs-feature::before{content:"";position:absolute;inset:0;
+ background:linear-gradient(0deg,#101324 0%,#101324b5 43%,transparent 95%);z-index:1}
+.lp-labs-feature>*:not(img){position:relative;z-index:2}
+.lp-labs-feature:hover img{transform:scale(1.04)}
+.lp-labs-feature strong{font-size:1.6rem;letter-spacing:-.04em}
+.lp-labs-feature p{font-size:.84rem;color:#e5e6ef;max-width:460px;margin:8px 0}
+.lp-labs-feature span{font-size:.76rem;font-weight:800;color:#ffd0a3}
+.lp-labs-footnote{display:flex;align-items:center;justify-content:space-between;gap:18px;
+ background:linear-gradient(115deg,#45305e,#453138,#24465a);border:1px solid #a2768a;
+ border-radius:23px;padding:23px 27px}
+.lp-labs-footnote h2{font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.04em;margin:0 0 7px}
+.lp-labs-footnote p{color:#f1dfea;font-size:.86rem;max-width:680px;margin:0}
+.lp-labs-footer{background:#101a2b;border-top:1px solid #3b5365;padding:22px 0;color:#afbfd3;font-size:.76rem}
+.lp-labs-footer-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.lp-labs-footer-links{display:flex;gap:12px;flex-wrap:wrap}
+.lp-labs-footer-links a{color:#d9d9ee}
+@media(max-width:850px){
+ .lp-labs-hero{grid-template-columns:1fr;padding-top:29px;gap:21px}
+ .lp-labs-hero-art{min-height:245px;max-height:320px}
+ .lp-labs-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+ .lp-labs-wrap{width:calc(100% - 26px)}
+ .lp-labs-hero{padding-top:27px}
+ .lp-labs-hero h1{font-size:clamp(2.45rem,11vw,3.7rem)}
+ .lp-labs-hero-art{min-height:200px;grid-template-columns:1.12fr .88fr}
+ .lp-labs-hero-art a{border-radius:15px}
+ .lp-labs-section{padding:31px 0}
+ .lp-labs-section-heading{display:block}
+ .lp-labs-section-heading p{max-width:none}
+ .lp-labs-app-grid{gap:9px}
+ .lp-labs-app-card{padding:13px;min-height:216px;border-radius:16px;gap:8px}
+ .lp-labs-app-card h3{font-size:1rem}
+ .lp-labs-app-card p{font-size:.75rem}
+ .lp-labs-app-card .lp-directory-icon{width:41px;height:41px}
+ .lp-labs-gallery{grid-template-columns:1fr}
+ .lp-labs-feature{min-height:210px}
+ .lp-labs-footnote{display:block;padding:21px}
+ .lp-labs-footnote .lp-labs-action{margin-top:15px}
+}
+@media(prefers-reduced-motion:reduce){
+ .lp-labs-directory a,.lp-labs-directory img{transition:none!important}
+}

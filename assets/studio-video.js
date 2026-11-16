@@ -1210,9 +1210,24 @@
     });
   }
   player.addEventListener('loadeddata',()=>{
-    if(typeof player.requestVideoFrameCallback==='function'){
-      player.requestVideoFrameCallback(()=>draw());
+    // Some browser decoders report HAVE_CURRENT_DATA before the first paused
+    // frame has been composited. A tiny seek prompts a real decoded frame
+    // without requiring the person to press Play.
+    if(!playing&&Number.isFinite(player.duration)&&player.duration>.05&&player.currentTime<.001){
+      try{player.currentTime=Math.min(.012,player.duration/8);}catch(e){}
     }
+    if(typeof player.requestVideoFrameCallback==='function'){
+      player.requestVideoFrameCallback(()=>{if(!recording)draw();});
+    }
+    // Repaint across a few animation frames for browsers that defer the
+    // initial still frame until the video has completed its ready-state change.
+    let frames=0;
+    const paintFirst=()=>{
+      if(playing||recording||++frames>8)return;
+      draw();
+      requestAnimationFrame(paintFirst);
+    };
+    requestAnimationFrame(paintFirst);
   });
   player.addEventListener('loadedmetadata',()=>{
     const b=getBlock(at);

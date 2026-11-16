@@ -117,12 +117,16 @@
   function maxTimeline(){
     const headers=['.video-player-bar','.video-view-controls','.video-transport','.video-timeline-header','.video-status','#video-split-timeline'];
     const fixed=headers.reduce((n,sel)=>n+(center.querySelector(sel)?.getBoundingClientRect().height||0),0);
-    return Math.max(160,center.clientHeight-fixed-155);
+    return Math.max(160,center.clientHeight-fixed-130);
   }
   function resizePanel(kind,value){
     if(!desktop())return;
     if(kind==='timeline'){
-      layout.style.setProperty('--video-timeline-height',Math.round(clamp(value,155,maxTimeline()))+'px');
+      // User-controlled timeline growth is not capped by the initial monitor
+      // split. Extra height scrolls inside the workbench rather than squeezing
+      // the monitor beneath its readable minimum size.
+      const max=Math.max(420,center.clientHeight*.95);
+      layout.style.setProperty('--video-timeline-height',Math.round(clamp(value,155,max))+'px');
       return;
     }
     const available=layout.clientWidth;
