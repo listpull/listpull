@@ -132,7 +132,30 @@
   return {id:uid(),name:file.name,kind,url,duration:Number.isFinite(el.duration)?el.duration:5,
     width:el.videoWidth||0,height:el.videoHeight||0};
  }
- async function buildThumbnail(info){
+ async function buildThumbnail(info,file){
+  if(info.kind==='audio'&&file){
+   try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    const context=new AC(),buffer=await context.decodeAudioData(await file.arrayBuffer());
+    const samples=buffer.getChannelData(0),meter=document.createElement('canvas');
+    meter.width=240;meter.height=72;
+    const g=meter.getContext('2d');g.fillStyle='#123c34';g.fillRect(0,0,240,72);
+    g.fillStyle='#8ce8bb';
+    const windowSize=Math.max(1,Math.floor(samples.length/120));
+    for(let i=0;i<120;i++){
+      let max=0;
+      for(let j=0;j<windowSize;j+=Math.max(1,Math.floor(windowSize/40))){
+        const point=samples[i*windowSize+j]||0;max=Math.max(max,Math.abs(point));
+      }
+      const size=Math.max(2,max*65);
+      g.fillRect(i*2,36-size/2,1.4,size);
+    }
+    info.thumbnail=meter.toDataURL('image/png');
+    context.close().catch(()=>{});renderLibrary();renderAll();
+   }catch(e){}
+   return;
+  }
   if(info.kind==='image'){info.thumbnail=info.url;renderLibrary();renderAll();return;}
   if(info.kind!=='video')return;
   const video=document.createElement('video');video.preload='auto';video.muted=true;video.playsInline=true;video.src=info.url;
@@ -159,7 +182,7 @@
    if(/\.srt$/i.test(file.name)){addSrt(await file.text());continue;}
    if(!/^(video|image|audio)\//.test(file.type))continue;
    const info=await measure(file);files.push(info);chosenMedia=info.id;
-   buildThumbnail(info).catch(()=>{});
+   buildThumbnail(info,file).catch(()=>{});
    for(const [oldId,name] of pendingRelinks){
     if(name.toLowerCase()!==info.name.toLowerCase())continue;
     for(const collection of [clips,overlays,audioClips]){
@@ -282,7 +305,7 @@
      code(c.start)+' - '+code(c.end):code(duration(c));
    btn.append(small);
    btn.style.minWidth=Math.max(85,(kind==='title'||kind==='overlay'?c.end-c.start:duration(c))*timelineScale)+'px';
-   if(a?.thumbnail&&kind!=='audio'&&kind!=='title'){
+   if(a?.thumbnail&&kind!=='title'){
     btn.style.backgroundImage='linear-gradient(0deg,#11192bdd,#11192b33),url("'+a.thumbnail+'")';
     btn.style.backgroundSize='cover';btn.style.backgroundPosition='center';
    }
@@ -774,6 +797,19 @@
    status('Recording from microphone… press Stop recording when finished.');
   }catch(e){status('Microphone could not start: '+e.message);}
  }
+ function duplicateTimelineItem(){
+  const original=item(selectedId);if(!original){status('Select a clip, overlay, title or audio segment first.');return;}
+  const copy=structuredClone(original);copy.id=uid();
+  const set=[clips,overlays,titles,audioClips].find(list=>list.includes(original));
+  if(!set)return;
+  const index=set.indexOf(original);set.splice(index+1,0,copy);
+  if(copy.type==='title'||copy.type==='overlay'||copy.type==='audio'){
+    const length=copy.type==='title'?copy.end-copy.start:duration(copy);
+    copy.start+=length;if(copy.end!==undefined)copy.end+=length;
+  }
+  selectedId=copy.id;changed('Timeline item duplicated. You can edit the copy independently.');
+  fillInspector(copy);seek(at);
+ }
  function command(name){
   if(name==='demo'){sample();return;}
   if(name==='add-media'){addFileToTimeline(asset(chosenMedia));return;}
@@ -781,6 +817,7 @@
   if(name==='previous'){pause();seek(0);return;}
   if(name==='next'){pause();seek(total());return;}
   if(name==='undo'){history(-1);return;}
+  if(name==='duplicate-item'){duplicateTimelineItem();return;}
   if(name==='redo'){history(1);return;}
   if(name==='split'){split();return;}
   if(name==='add-overlay'){addOverlay();return;}
@@ -944,6 +981,9 @@
   document.addEventListener('keydown',e=>{
     if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
     if(e.key===' '){e.preventDefault();playing?pause():play();}
+    if(e.key.toLowerCase()==='s'&&!e.metaKey&&!e.ctrlKey){e.preventDefault();split();}
+    if(e.key==='Delete'||e.key==='Backspace'){if(selectedId){e.preventDefault();command('remove');}}
+    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='d'){e.preventDefault();duplicateTimelineItem();}
     if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'){e.preventDefault();history(e.shiftKey?1:-1);}
     if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='y'){e.preventDefault();history(1);}
   });
