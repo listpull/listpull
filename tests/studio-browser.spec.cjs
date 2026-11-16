@@ -231,8 +231,15 @@ test('Video Studio allows moving footage directly and adding editable picture-in
  await page.locator('#video-clip-track button').first().click();
  const stage=await page.locator('#video-canvas').boundingBox();
  const x=stage.x+stage.width*.5,y=stage.y+stage.height*.5;
+ console.log('PROGRAM MONITOR HIT:',JSON.stringify(await page.evaluate(({x,y})=>({
+  target:document.elementFromPoint(x,y)?.tagName,
+  rect:document.getElementById('video-canvas').getBoundingClientRect().toJSON(),
+  duration:document.getElementById('video-project-duration').textContent
+ }),{x,y})));
  await page.mouse.move(x,y);await page.mouse.down();
+ console.log('PROGRAM MONITOR DOWN:',await page.locator('#video-status').textContent());
  await page.mouse.move(x+48,y+13,{steps:5});await page.mouse.up();
+ console.log('PROGRAM MONITOR UP:',await page.locator('#video-status').textContent(),await page.locator('#video-x').inputValue());
  await expect.poll(async()=>Number(await page.locator('#video-x').inputValue())).toBeGreaterThan(50);
  await page.locator('#video-library li').first().click();
  await page.locator('[data-video="add-overlay"]').click();
