@@ -120,7 +120,8 @@
     return Math.max(160,center.clientHeight-fixed-155);
   }
   function resizePanel(kind,value){
-    if(!desktop())return;
+    layout.dataset.resizeInput=kind+':'+Math.round(value);
+    if(!desktop()){layout.dataset.resizeBlocked='mobile';return;}
     if(kind==='timeline'){
       layout.style.setProperty('--video-timeline-height',Math.round(clamp(value,155,maxTimeline()))+'px');
       return;
@@ -139,6 +140,7 @@
     const grip=$(id);if(!grip)return;
     grip.addEventListener('pointerdown',event=>{
       if(!desktop()||event.button!==0)return;
+      layout.dataset.resizePointer='down:'+kind;
       resize={kind,id:event.pointerId,start:axis==='x'?event.clientX:event.clientY,
         value:panelSize(kind),axis,sign};
       grip.classList.add('is-dragging');
@@ -158,6 +160,7 @@
   window.addEventListener('pointermove',event=>{
     if(!resize||resize.id!==event.pointerId)return;
     const next=resize.axis==='x'?event.clientX:event.clientY;
+    layout.dataset.resizePointer='move:'+resize.kind;
     resizePanel(resize.kind,resize.value+resize.sign*(next-resize.start));
     showScale();
   },true);
