@@ -244,14 +244,14 @@
   handle.addEventListener('pointerdown',event=>{
    if(event.button!==0)return;
    event.preventDefault();event.stopPropagation();
-   const originX=event.clientX,initialIn=clip.in,initialOut=clip.out;
+   const originX=event.clientX,initialIn=clip.in,initialOut=clip.out,initialStart=clip.start||0;
    const secondsPerPixel=duration(clip)/Math.max(20,button.getBoundingClientRect().width);
    handle.setPointerCapture(event.pointerId);
    const move=e=>{
     const delta=(e.clientX-originX)*secondsPerPixel*(clip.speed||1);
     if(side==='start'){
      clip.in=limit(initialIn+delta,0,Math.max(0,clip.out-.08));
-     if(clip.type==='overlay')clip.start+=clip.in-initialIn;
+     if(clip.type==='overlay')clip.start=initialStart+(clip.in-initialIn)/Math.max(.05,clip.speed||1);
     }else clip.out=limit(initialOut+delta,clip.in+.08,asset(clip.assetId)?.duration||initialOut);
     const label=button.querySelector('span.video-clip-length');
     if(label)label.textContent=code(duration(clip));
