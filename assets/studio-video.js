@@ -932,7 +932,7 @@
  function previewDown(event){
   if(event.button!==0||recording)return;
   const p=previewPoint(event);if(!p)return;
-  const hit=pickPreviewObject(p);if(!hit)return;
+  const hit=pickPreviewObject(p);if(!hit){status('Select a visible clip, title or overlay to move it.');return;}
   pause();selectedId=hit.item.id;
   const key=(hit.item.keyframes||[]).find(k=>Math.abs(k.at-activeOffset(hit.item))<.03);
   const state=visualAt(hit.item,activeOffset(hit.item));
@@ -941,7 +941,7 @@
    distance:Math.max(1,Math.hypot(p.x-hit.rect.x,p.y-hit.rect.y)),
    key};
   canvas.setPointerCapture(event.pointerId);
-  renderAll();fillInspector(hit.item);event.preventDefault();
+  renderAll();fillInspector(hit.item);status('Drag to move the selected layer, or drag a corner to resize.');event.preventDefault();
  }
  function previewMove(event){
   if(!dragging)return;
