@@ -108,7 +108,7 @@
       const points=[];for(let i=0;i<10;i++){const angle=-Math.PI/2+i*Math.PI/5,r=i%2?54:110;points.push({x:110+Math.cos(angle)*r,y:110+Math.sin(angle)*r});}
       obj=new F.Polygon(points,{...options,width:220,height:220});
     }else if(type==='line')obj=new F.Line([0,0,300,0],{stroke:'#ffb27c',strokeWidth:9,fill:null,...options});
-    else if(type==='text')obj=new F.IText('Create something extraordinary',{fontFamily:'Arial',fontSize:51,fontWeight:'800',fill:'#f7f2ff',left:85,top:300,...options});
+    else if(type==='text')obj=new F.IText(String(options.text||'Create something extraordinary'),{fontFamily:'Arial',fontSize:51,fontWeight:'800',fill:'#f7f2ff',left:85,top:300,...options});
     else return;
     stamp(obj,type==='text'?'Editable text':type.charAt(0).toUpperCase()+type.slice(1));
     canvas.add(obj);canvas.setActiveObject(obj);syncInputs();noteMutation('Added editable '+type+'. Drag to position; use corners to resize.');
@@ -390,7 +390,7 @@
     }
     const top=await o.clone(extras);layers.push(top);
     const index=objects().indexOf(o);canvas.remove(o);
-    for(let i=0;i<layers.length;i++)canvas.insertAt(i===steps?stamp(layers[i],o.name||'Extruded artwork'):layers[i],index+i);
+    for(let i=0;i<layers.length;i++)canvas.insertAt(index+i,i===steps?stamp(layers[i],o.name||'Extruded artwork'):layers[i]);
     canvas.setActiveObject(layers.at(-1));layers.at(-1).depthValue=depth;
     noteMutation('Created editable 2.5D depth layers with front-face controls.');
   }
