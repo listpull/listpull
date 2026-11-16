@@ -448,6 +448,23 @@ test('video media bin, inspector and timeline resize independently and layout ca
  await page.goto('/studio/video-editor.html');
  const bin=page.locator('.video-assets'),panel=page.locator('.video-inspector'),timeline=page.locator('#video-timeline');
  const firstBin=await bin.evaluate(el=>el.getBoundingClientRect().width);
+ await page.evaluate(()=>{
+   window.__splitterEvents=[];
+   const grip=document.getElementById('video-split-assets');
+   for(const type of ['pointerdown','mousedown','pointermove','mousemove','pointerup','mouseup']){
+     const capture=event=>{
+       if(window.__splitterEvents.length>=50)return;
+       window.__splitterEvents.push({
+         type,at:event.currentTarget===window?'window':'grip',
+         target:event.target?.id||event.target?.tagName,
+         x:Math.round(event.clientX),y:Math.round(event.clientY),
+         pointerId:event.pointerId,button:event.button,buttons:event.buttons,
+         defaultPrevented:event.defaultPrevented});
+     };
+     window.addEventListener(type,capture,true);
+     grip.addEventListener(type,capture,true);
+   }
+ });
  const grip=page.locator('#video-split-assets'),a=await grip.boundingBox();
  const splitterHit=await page.evaluate(({x,y})=>document.elementFromPoint(x,y)?.id,
   {x:a.x+a.width/2,y:a.y+a.height/2});
@@ -466,6 +483,7 @@ test('video media bin, inspector and timeline resize independently and layout ca
      gripClass:grip.className,gripWidth:grip.getBoundingClientRect().width};
  });
  console.log('SPLITTER STATE:',JSON.stringify(splitterState));
+ console.log('SPLITTER EVENTS:',JSON.stringify(await page.evaluate(()=>window.__splitterEvents)));
  await expect.poll(async()=>bin.evaluate(el=>el.getBoundingClientRect().width)).toBeGreaterThan(firstBin+35);
  const firstPanel=await panel.evaluate(el=>el.getBoundingClientRect().width);
  const right=await page.locator('#video-split-inspector').boundingBox();
