@@ -102,5 +102,6 @@ for(const key of ['html','css','js']){
  $('fiddle-tab-'+key).addEventListener('click',()=>activate(key));
  $('fiddle-'+key).addEventListener('keydown',event=>{if(event.ctrlKey&&event.key==='Enter'){event.preventDefault();execute()}});
 }
-load('inventory');
+const requested=new URLSearchParams(location.search).get('app');
+load(Object.prototype.hasOwnProperty.call(examples,requested)?requested:'inventory');
 })();
