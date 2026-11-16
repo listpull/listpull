@@ -266,7 +266,9 @@ test('Still images can be extended and timed overlays can be repositioned withou
  await expect(page.locator('#video-project-duration')).toContainText('00:17');
  await page.locator('#video-library li').first().click();
  await page.locator('#video-scrub').fill('2');
+ console.log('TIMED OVERLAY BEFORE:',await page.locator('#video-status').textContent(),'selection',await page.locator('#video-library li.is-selected').textContent());
  await page.locator('[data-video="add-overlay"]').click();
+ console.log('TIMED OVERLAY AFTER:',await page.locator('#video-status').textContent(),'children',await page.locator('#video-overlay-track').innerHTML());
  await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
  await page.locator('#video-timeline-start').fill('4');
  await page.locator('#video-timeline-start').dispatchEvent('change');
