@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ListPull | Blobby's Woodland Wonder & Nature Tech</title>
-  <meta name="description" content="Discover Listpull's magical 3D puzzle merge game, and explore high-definition wildlife media by ListPull.">
-  <link rel="icon" type="image/jpeg" href="https://listpull.com/favicon.ico">
+  <title>ListPull | Wildlife Media - Gaming and Creative Studio </title>
+  <meta name="description" content="From high-definition global nature production to ListPull's Creative Studio - ListPull brings the wild world straight to your screen.">
+  <link rel="icon" type="image/jpeg" href="favicon.ico">
  
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://listpull.com/">
@@ -14,13 +14,13 @@
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ListPull">
-  <meta property="og:title" content="ListPull | Blobby's Woodland Wonder & Nature Tech">
-  <meta property="og:description" content="Match, merge, build, and explore a magical woodland village with Blobby and friends.">
+  <meta property="og:title" content="ListPull | Blobby, Studio & Wildlife Media">
+  <meta property="og:description" content="Play Blobby, create with ListPull Studio, and explore wildlife media.">
   <meta property="og:url" content="https://listpull.com/">
   <meta property="og:image" content="https://listpull.com/blobby-promo.webp">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ListPull | Blobby's Woodland Wonder & Nature Tech">
-  <meta name="twitter:description" content="tech, media, Match, merge, build, and explore a magical woodland village with Blobby and friends.">
+  <meta name="twitter:description" content="Play Blobby, create with ListPull Studio, and discover wildlife media.">
   <meta name="twitter:image" content="https://listpull.com/blobby-promo.webp">
 
   <script type="application/ld+json">
@@ -117,7 +117,7 @@
       top: 16px;
       margin: 0 24px;
       padding: 14px 28px;
-      background: var(--glass-bg);
+      background: linear-gradient(110deg, rgba(118, 68, 221, .2), rgba(255, 143, 73, .16));
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--glass-border);
@@ -301,12 +301,6 @@
       font-weight: 700;
     }
 
-    .hero-metrics {
-      display: flex;
-      gap: 32px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 24px;
-    }
 
     .metric h3 {
       font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
@@ -627,9 +621,7 @@
       .store-buttons {
         justify-content: center;
       }
-      .hero-metrics {
-        justify-content: center;
-      }
+
     }
 
     @media (max-width: 640px) {
@@ -662,12 +654,7 @@
         width: 100%;
         justify-content: center;
       }
-      .hero-metrics {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        text-align: center;
-      }
+
       .metric h3 {
         font-size: 1.25rem;
       }
@@ -700,6 +687,15 @@
       }
     }
   </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"ListPull, LLC","url":"https://listpull.com/","description":"ListPull offers independent game and creative products alongside custom software engineering services.","hasOfferCatalog":{"@type":"OfferCatalog","name":"ListPull offerings","itemListElement":[{"@type":"OfferCatalog","name":"ListPull Labs","url":"https://listpull.com/labs.html"},{"@type":"OfferCatalog","name":"ListPull Engineering","url":"https://listpull.com/solutions.html"}]}}
+  </script>
+  
+  <script>
+    window.location.href = 'https://listpull.com/';
+  </script>
+  <link rel="stylesheet" href="/assets/home-enhancements.css">
+  <script src="/assets/site-v2.js" defer></script>
 </head>
 <body>
 
@@ -708,24 +704,44 @@
   <div class="content-wrapper">
     <!-- Navigation Bar -->
     <nav class="navbar" aria-label="Main Navigation">
-        <a href="https://listpull.com/" class="brand-logo" aria-label="ListPull Home">
+        <a href="/" class="brand-logo" aria-label="ListPull Home">
           <img src="favicon.ico" alt="Blobby Icon" class="brand-avatar" loading="lazy" onerror="this.src='favicon.ico'">
           <span>ListPull</span>
         </a>
       <ul class="nav-links">
-        <li><a href="https://listpull.com/about-blobby">Meet Blobby</a></li>
+        <li><a href="/about-blobby">Meet Blobby</a></li>
         <li><a href="#wildlife">Wildlife Media</a></li>
         <li><a href="#community">Community</a></li>
+        <li><a href="/engineering.html">Engineering</a></li>
       </ul>
-      <a href="https://listpull.com/blobby.html" target="_blank" rel="noopener noreferrer" class="nav-cta">
-        Build with Blobby
-      </a>
+      <div class="labs-menu" data-labs-menu>
+        <button type="button" class="nav-cta labs-trigger" data-labs-trigger aria-expanded="false" aria-haspopup="true" aria-controls="labs-options">
+          ListPull Labs <svg class="labs-chevron-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="labs-list" id="labs-options" data-labs-list data-open="false" aria-label="ListPull Labs destinations">
+          <a href="/labs.html">Explore Labs <span>All of our games, media & creative tools</span></a>
+          <a href="/blobby.html">Blobby's Woodland Wonder <span>Play our mobile puzzle adventure</span></a>
+          <a href="/labs.html#wildlife">Wildlife Media <span>Explore the natural world</span></a>
+          <a href="/studio.html">ListPull Studio <span>Free creative tools & live demos</span></a>
+        </div>
+      </div>
     </nav>
 
     <main class="container">
       <!-- Hero Section -->
       <section class="hero" id="game">
         <div class="hero-text">
+          <a class="studio-spotlight" href="/studio.html" aria-label="Open free ListPull Studio image and vector creation tools">
+            <span class="studio-sparkle" aria-hidden="true">☆</span>
+            <span><strong>Create with ListPull's Creative Studio.</strong><small>Edit video's, Images, Code with AI agents and more with ListPull Studio.</small></span>
+            <span class="studio-go" aria-hidden="true">↗</span>
+          </a>
+          <nav class="experience-pills" aria-label="Choose your ListPull experience">
+            <a href="/blobby.html" class="experience-play"><span aria-hidden="true">✦</span> Play with Blobby</a>
+            <a href="/studio.html" class="experience-create"><span aria-hidden="true">✎</span> Create</a>
+            <a href="#wildlife" class="experience-wild"><span aria-hidden="true">❀</span> Explore Wildlife</a>
+          </nav>
+          <a class="experience-enterprise" href="/engineering.html">Building software for your business? Explore Engineering <span aria-hidden="true">↗</span></a>
           <div class="tag-badge">
             <svg class="icon" viewBox="0 0 24 24" style="width: 15px; height: 15px;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
             NOW AVAILABLE! • Stunning Free Merge Puzzle Game
@@ -736,6 +752,7 @@
           <p class="hero-description">
             Match and merge colorful items, help adorable woodland animals, and grow your own forest village. Blobby’s Woodland Wonder is an easy-to-play puzzle game for relaxing, exploring, and creating.
           </p>
+
 
           <div class="store-buttons">
             <a href="https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429" target="_blank" rel="noopener noreferrer" class="btn-store apple" aria-label="Download Blobby's Woodland Wonder on the Apple App Store">
@@ -753,23 +770,7 @@
               </div>
             </a>
           </div>
-
-          <div class="hero-metrics" aria-label="Blobby's Woodland Wonder highlights">
-            <div class="metric">
-              <h3>5.0 ★</h3>
-              <p>Player Rating</p>
-            </div>
-            <div class="metric">
-              <h3>251K+</h3>
-              <p>Wildlife Followers</p>
-            </div>
-            <div class="metric">
-              <h3>Beautiful 4K game</h3>
-              <p>Animal Media</p>
-            </div>
-          </div>
         </div>
-
         <!-- Mascot Spotlight Card -->
         <div class="blobby-card-wrapper">
           <div class="blobby-hologram">
@@ -787,9 +788,57 @@
               </div>
             </div>
           </div>
-        </div>
       </section>
 
+      <!-- Three ways to experience ListPull; designed for social and product traffic. -->
+      <section class="section-labs" id="listpull-labs" aria-labelledby="labs-title">
+        <div class="section-head">
+          <div class="labs-overline">✦ WELCOME TO LISTPULL LABS</div>
+          <h2 id="labs-title">Play. Create. <span class="gradient-text">Discover.</span></h2>
+          <p>Three colorful doors into the ListPull world. Whether you're here for adventures, creativity, or a little inspiration, you belong here.</p>
+        </div>
+        <div class="labs-showcase-grid">
+          <article class="labs-experience labs-game">
+            <a class="labs-visual" href="/blobby.html" aria-label="Explore Blobby's Woodland Wonder">
+              <img src="/blobby-promo.webp" alt="Blobby's woodland game world" loading="lazy">
+              <span class="labs-label">PLAY</span>
+            </a>
+            <div class="labs-experience-body"><h3>Blobby's Woodland Wonder</h3>
+              <p>Match, merge and make a magical world with Blobby and his woodland friends.</p>
+              <a href="/blobby.html" class="labs-experience-link">Let's play... <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="labs-experience labs-studio">
+            <a class="labs-visual labs-studio-art" href="/studio.html" aria-label="Explore ListPull Studio">
+              <div class="studio-artboard" aria-hidden="true"><span class="artboard-top"><i></i><i></i><i></i> LISTPULL STUDIO</span><div class="artboard-landscape"><b>✦</b></div><span class="artboard-tools">◐　▣　✎　◇　↺</span></div>
+              <span class="labs-label">CREATE</span>
+            </a>
+            <div class="labs-experience-body"><h3>ListPull Studio <span class="labs-free">FREE</span></h3>
+              <p>Design layered images and SVG artwork, edit videos, and explore interactive technology—all in your browser.</p>
+              <div class="labs-creative-direct">          
+                
+                <a class="studio-spotlight" href="/studio/video-editor.html" aria-label="Open free ListPull Studio video editor">
+                  <span class="studio-sparkle" aria-hidden="true">🎬</span>
+                  <span><strong>Create with ListPull's Creative Studio.</strong><small>Edit Video's, Video Editor</small></span>
+                  <span class="studio-go" aria-hidden="true">↗</span>
+                </a>
+                <a class="studio-spotlight" href="/studio/image-editor.html" aria-label="Open free ListPull Studio image and vector editor">
+                  <span class="studio-sparkle" aria-hidden="true">📷</span>
+                  <span><strong>Create with ListPull's Creative Studio.</strong><small>Edit Images's, Image Editor</small></span>
+                  <span class="studio-go" aria-hidden="true">↗</span>
+                </a>
+              <a href="/studio.html" class="labs-experience-link">Exlplore More... <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="labs-experience labs-nature">
+            <a class="labs-visual" href="#wildlife" aria-label="Explore ListPull wildlife media">
+              <img src="/wildlife.webp" alt="Wildlife photography shared by ListPull" loading="lazy"><span class="labs-label">DISCOVER</span>
+            </a>
+            <div class="labs-experience-body"><h3>Wildlife Media</h3>
+              <p>Meet remarkable animals, curious creatures and nature stories from across the world.</p>
+              <a href="#wildlife" class="labs-experience-link">Explore the wild... <span aria-hidden="true">↗</span></a></div>
+          </article>
+        </div>
+      </section>
+      
       <!-- Social Community Channels -->
       <div class="social-showcase" id="community">
         <h3 style="font-size: 1.8rem; font-weight: 800; font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;">Join 251,000+ Nature & Wildlife Adventures</h3>
@@ -826,7 +875,7 @@
             <div class="wildlife-content">
               <h3>WilfLife inspired mobile game</h3>
               <p>A closer look at Listpull's Blobby game, Explore a magical world featuring fantasy animals with Blobby.</p>
-              <a href="https://listpull.com/blobby/wiki/" target="_blank" rel="noopener noreferrer" class="wildlife-link" style="color: var(--neon-cyan);">
+              <a href="/blobby/wiki/" target="_blank" rel="noopener noreferrer" class="wildlife-link" style="color: var(--neon-cyan);">
                 Take a look! <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
@@ -851,7 +900,7 @@
             <div class="wildlife-content">
               <h3>Art Meets Living Nature</h3>
               <p>Our love of animals and the outdoors helps shape the playful forest world of Blobby’s Woodland Wonder.</p>
-              <a href="https://listpull.com/about-listpull/" target="_blank" rel="noopener noreferrer" class="wildlife-link" style="color: var(--blobby-orange);">
+              <a href="/about-listpull/" target="_blank" rel="noopener noreferrer" class="wildlife-link" style="color: var(--blobby-orange);">
                 Learn about ListPull <svg class="icon" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
@@ -871,6 +920,16 @@
           </div>
         </div>
       </section>
+      <!-- A direct route for organizations seeking engineering expertise. -->
+      <section class="engineering-invite cta-panel" id="engineering" aria-labelledby="engineering-title">
+        <div class="engineering-glow" aria-hidden="true">✧</div>
+        <div class="engineering-copy"><div class="engineering-eyebrow">THE TECHNOLOGY BEHIND THE MAGIC</div>
+          <h2 id="engineering-title">We build more than worlds.<br><span>We build what's next.</span></h2>
+          <p>ListPull Engineering brings cloud architecture, AI, and custom software experience to real-world business challenges. Explore capabilities, see founder experience, or start a project conversation.</p>
+          <div class="engineering-tags" aria-label="Engineering capabilities"><span>AI solutions</span><span>AWS & cloud</span><span>Full-stack apps</span><span>Data platforms</span></div>
+        </div>
+        <div class="engineering-actions"><a class="engineering-button" href="/solutions.html">Explore Engineering <span aria-hidden="true">↗</span></a><a class="engineering-secondary" href="/contact/#engineering">Talk about a project</a></div>
+      </section>
     </main>
 
     <!-- Footer -->
@@ -878,16 +937,19 @@
       <div class="container footer-inner">
         <div>
           <strong>ListPull, LLC</strong><br>
-          Creating wildlife media, digital experiences, and games.
+          Games, wildlife stories, free creative tools, and engineering solutions.
         </div>
 
         <nav class="footer-links" aria-label="Site links">
-          <a href="https://listpull.com/about-listpull/">About ListPull</a>
-          <a href="https://listpull.com/about-blobby">About Blobby</a>
-          <a href="https://listpull.com/blobby/wiki/">Blobby Gameplay Wiki</a>
-          <a href="https://listpull.com/contact/">Contact Us</a>
-          <a href="https://listpull.com/policies/privacy-policy/">Privacy Policy</a>
-          <a href="https://listpull.com/policies/terms-of-service/">Terms of Service</a>
+          <a href="/about-listpull/">About ListPull</a>
+          <a href="/solutions.html">ListPull Engineering</a>
+          <a href="/labs.html">ListPull Labs</a>
+          <a href="/studio.html">ListPull Studio</a>
+          <a href="/about-blobby">About Blobby</a>
+          <a href="/blobby/wiki/">Blobby Gameplay Wiki</a>
+          <a href="/contact/">Contact Us</a>
+          <a href="/policies/privacy-policy/">Privacy Policy</a>
+          <a href="/policies/terms-of-service/">Terms of Service</a>
         </nav>
 
         <div>© 2026 ListPull. All rights reserved.</div>
