@@ -170,6 +170,15 @@ test('An imported video immediately previews its first frame and adopts its dime
  await expect(page.locator('#video-quick-width')).toHaveValue('320');
  await expect(page.locator('#video-quick-height')).toHaveValue('180');
  await expect(page.locator('#video-play')).toContainText('Play');
+ await page.waitForTimeout(700);
+ console.log('VIDEO DECODE DIAGNOSTICS:',JSON.stringify(await page.evaluate(()=>{
+   const p=document.getElementById('video-source'),c=document.getElementById('video-canvas');
+   const pixel=c.getContext('2d').getImageData(Math.round(c.width/2),Math.round(c.height/2),1,1).data;
+   return {readyState:p.readyState,networkState:p.networkState,currentTime:p.currentTime,
+     duration:p.duration,videoWidth:p.videoWidth,videoHeight:p.videoHeight,paused:p.paused,
+     src:p.currentSrc.slice(0,65),error:p.error?.message,
+     pixel:[...pixel],status:document.getElementById('video-status').textContent};
+ })));
  await expect.poll(async()=>page.evaluate(()=>{
   const c=document.getElementById('video-canvas'),g=c.getContext('2d');
   const pixel=g.getImageData(Math.round(c.width/2),Math.round(c.height/2),1,1).data;
