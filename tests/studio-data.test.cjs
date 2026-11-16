@@ -68,7 +68,7 @@ test('all published HTML routes use contact page, not mailto',()=>{
 });
 test('sitemap includes all new public destinations once',()=>{
  const xml=fs.readFileSync(path.resolve(__dirname,'../sitemap.xml'),'utf8');
- const urls=['/solutions.html','/engineering.html','/labs.html','/studio.html','/studio/vector.html','/studio/strategy.html','/studio/forecast.html','/studio/ai.html','/studio/image-editor.html'];
+ const urls=['/solutions.html','/engineering.html','/labs.html','/studio.html','/studio/video-editor.html','/studio/strategy.html','/studio/forecast.html','/studio/ai.html','/studio/image-editor.html'];
  for(const url of urls){
   const found=xml.split('https://listpull.com'+url+'</loc>').length-1;
   assert.equal(found,1,'Expected exactly one sitemap entry for '+url);
@@ -93,4 +93,18 @@ test('entry pages advertise recognizable consumer and business paths',()=>{
  for(const id of ['forecast-upload','forecast-column','forecast-backtest'])assert.ok(forecast.includes('id="'+id+'"'));
  const ai=fs.readFileSync(path.join(root,'studio/ai.html'),'utf8');
  for(const id of ['ai-local-start','fiddle-preview','fiddle-html'])assert.ok(ai.includes('id="'+id+'"'));
+});
+
+test('Creative and Video Studio route one editor each, without sign-in controls',()=>{
+ const root=path.resolve(__dirname,'..');
+ const creative=fs.readFileSync(path.join(root,'studio/image-editor.html'),'utf8');
+ const video=fs.readFileSync(path.join(root,'studio/video-editor.html'),'utf8');
+ for(const name of ['creative-document-width','creative-document-height','creative-z','creative-gradient-angle','creative-shadow-blur','creative-depth','creative-ai-request','creative-canvas'])
+  assert.ok(creative.includes('id="'+name+'"'),name);
+ for(const name of ['video-canvas','video-clip-track','video-title-track','video-audio-track','video-scrub','video-export-type','video-ai-request'])
+  assert.ok(video.includes('id="'+name+'"'),name);
+ assert.ok(creative.includes('data-fullscreen-target=".creative-main"'));
+ assert.ok(video.includes('data-fullscreen-target=".video-main"'));
+ assert.ok(video.includes('data-fullscreen-target=".video-monitor"'));
+ assert.ok(!/\b(sign\s?in|subscribe|paywall)\b/i.test(creative+' '+video));
 });

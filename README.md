@@ -6,11 +6,13 @@ Static, mobile-first web presence for **ListPull, LLC**, published with ListPull
 
 - `/` — original Blobby's Woodland Wonder hero, game store links, wildlife media and community, with added consumer discovery paths.
 - `/labs.html` — product and media hub for Blobby, wildlife, and Studio.
-- `/studio.html` — free creative Studio hub with the image editor embedded.
-- `/studio/vector.html` — dependency-free, local-first vector creation preview.
+- `/studio.html` — free entry hub for creative production, business insight and AI applications.
+- `/studio/image-editor.html` — unified Creative Studio: image editing, vector design, layers, gradients, shadows, cropping, 2.5D effects and exports.
+- `/studio/video-editor.html` — browser-native video editor with timeline, titles, media library, audio, voiceover, editing and local video export.
+- `/studio/vector.html` — legacy route redirecting into the unified Creative Studio.
 - `/studio/strategy.html` — editable Nash equilibrium teaching calculator.
 - `/studio/forecast.html` — transparent ARIMA(1,1,0) educational forecast.
-- `/studio/ai.html` — grounded retrieval, optional opt-in local WebGPU model, and safe Fiddle code experiments.
+- `/studio/ai.html` — integrated IDE, live app preview and optional on-device AI Agent.
 - `/solutions.html` — dedicated client-oriented ListPull Engineering marketing landing page.
 - `/engineering.html` — consulting capabilities, engagement approach, and founder-experience attribution.
 - Existing Blobby, wiki, support, legal, and contact routes remain unchanged.
@@ -36,8 +38,8 @@ for file in assets/*.js; do node --check "$file"; done
 
 Automated static/math/data/SEO checks run in `.github/workflows/studio-checks.yml`; a separate Chromium journey test is in `.github/workflows/studio-browser-smoke.yml` and requires Playwright dependencies in GitHub Actions.
 
-## Architecture, provenance & release readiness
+## Architecture & release readiness
 
-Read `docs/STUDIO_ARCHITECTURE.md` for explicit implemented-vs-planned capabilities, privacy boundaries, references to the separate private SVG editor and ListPull Studio systems, and the pre-merge manual browser checklist. Read `docs/ENGINEERING_LABS_LAUNCH.md` for client acquisition, SAM.gov verification, and launch strategy.
+Read `docs/STUDIO_ARCHITECTURE.md` for application modules, browser media technology, licensing, privacy, testing and deployment guidance. Read `docs/ENGINEERING_LABS_LAUNCH.md` for client acquisition, SAM.gov verification, and launch strategy.
 
-**Do not merge draft PR changes into `main` until the site owner has reviewed them.** Publicly hosted examples are previews—not production security certifications or federal contract claims.
+**Review and validate draft PR changes before merging into `main`.** Creative projects run without a sign-in, paywall or file-upload server.

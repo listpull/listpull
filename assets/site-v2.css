@@ -17,3 +17,7 @@
 .engineering-live-link .text-link:hover{color:#fff4db}
 .grid-2>.tile,.grid-3>.tile{display:flex;flex-direction:column}
 @media(max-width:680px){.engineering-live-link{padding-top:11px}.engineering-proof-note{font-size:.78rem}}
+
+.labs-creative-direct{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 5px}
+.labs-creative-direct a{display:inline-flex;align-items:center;border:1px solid #8077a4;background:#433d65;color:#ffdbb8;border-radius:9px;padding:6px 10px;font-size:.72rem;font-weight:800;text-decoration:none}
+.labs-creative-direct a:hover{background:#6b527d;border-color:#ffbf90;color:#fff}

@@ -72,3 +72,9 @@ body{background:radial-gradient(ellipse at 84% -8%,#3c234e,transparent 46%),#0b1
  .ai-preview-pane .ai-message-history{min-height:85px}
  .ai-compose-actions{display:flex!important}
 }
+
+.ai-workbench-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:end}
+.ai-fullscreen-button{border:1px solid #6a708b;border-radius:9px;background:#2f3354;padding:8px 12px;cursor:pointer}
+.ai-workbench:fullscreen,.ai-workbench.studio-faux-fullscreen{background:#0b1222;position:fixed;inset:0;width:100vw;height:100dvh;max-height:none;overflow-y:auto;z-index:9999;padding:10px 0}
+.ai-workbench:fullscreen .ai-workspace,.ai-workbench.studio-faux-fullscreen .ai-workspace{height:calc(100dvh - 217px)}
+@media(max-width:900px){.ai-workbench:fullscreen .ai-workspace,.ai-workbench.studio-faux-fullscreen .ai-workspace{height:auto}.ai-workbench-actions{justify-content:start}}

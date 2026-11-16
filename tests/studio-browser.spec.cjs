@@ -55,63 +55,119 @@ test('Forecast Lab imports CSV and shows validation against a baseline',async({p
  await expect(page.locator('#forecast-business-summary')).toContainText('next value is estimated');
  await expect(page.locator('#forecast-backtest')).toContainText('average miss');
 });
-test('Image Studio supports one-click look and destination-sized download',async({page})=>{
+test('one Creative Studio edits SVG shapes and photos with real dimensions, gradients, Z and export',async({page})=>{
  await page.goto('/studio/image-editor.html');
- await page.locator('[data-image-look="social"]').click();
- await expect(page.locator('#editor-canvas')).toBeVisible();
- await page.locator('#image-export-size').selectOption('square');
- await page.locator('#image-check').click();
- await expect(page.locator('#image-check-result')).toContainText('transparent space');
+ await expect(page.locator('#creative-canvas')).toBeVisible();
+ await page.locator('[data-template="badge"]').click();
+ await expect(page.locator('#creative-layers li')).toHaveCount(5);
+ await page.locator('#creative-layers li').first().click();
+ await page.locator('#creative-w').fill('420');await page.locator('#creative-w').press('Tab');
+ await expect(page.locator('#creative-w')).toHaveValue('420');
+ await page.locator('#creative-z').fill('0');await page.locator('#creative-z').press('Tab');
+ await page.locator('#creative-fill-mode').selectOption('linear');
+ await page.locator('#creative-color1').fill('#ff6644');
+ await page.locator('#creative-color1').dispatchEvent('change');
+ await page.locator('#creative-shadow-blur').fill('20');await page.locator('#creative-shadow-blur').press('Tab');
+ await page.locator('#creative-depth').fill('18');await page.locator('#creative-depth').press('Tab');
+ await page.locator('[data-creative="extrude"]').click();
+ await expect(page.locator('#creative-layers li')).toHaveCount(11);
+ await page.locator('[data-creative-tab="document"]').click();
+ await page.locator('#creative-document-width').fill('2000');
+ await page.locator('#creative-document-height').fill('1200');
+ await page.locator('[data-creative="resize"]').click();
+ await expect(page.locator('#creative-size-label')).toContainText('2,000 × 1,200');
+ await page.locator('#creative-export-format').selectOption('svg');
  const download=page.waitForEvent('download');
- await page.locator('#export-png').click();
- expect((await download).suggestedFilename()).toContain('1080x1080');
+ await page.locator('[data-creative="export"]').click();
+ expect((await download).suggestedFilename()).toContain('.svg');
 });
-test('Vector Studio template loads and PNG export works',async({page})=>{
- await page.goto('/studio/vector.html');
- await page.locator('[data-vector-template="badge"]').click();
- await expect(page.locator('#vector-layers')).toContainText('Label border');
- await page.locator('#vector-export-size').selectOption('square');
- await page.locator('#vector-preflight').click();
- await expect(page.locator('#vector-preflight-results')).toContainText('preflight');
- const download=page.waitForEvent('download');
- await page.locator('#vector-export-png').click();
- expect((await download).suggestedFilename()).toContain('1080x1080');
+test('Unified Creative Studio imports uploaded raster and editable SVG shapes',async({page})=>{
+ await page.goto('/studio/image-editor.html');
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect x="10" y="10" width="170" height="80" fill="#ffae77"/></svg>';
+ await page.locator('#creative-upload').setInputFiles({name:'client-icon.svg',mimeType:'image/svg+xml',buffer:Buffer.from(svg)});
+ await expect(page.locator('#creative-layers')).toContainText('client-icon');
+ const project=page.waitForEvent('download');
+ await page.locator('[data-creative="save"]').click();
+ expect((await project).suggestedFilename()).toContain('.listpull.json');
 });
-test('Vector selected shape has direct resize handles',async({page})=>{
- await page.goto('/studio/vector.html');
- await page.locator('[data-vector-template="badge"]').click();
- await page.locator('#vector-layers button').filter({hasText:'Label border'}).click();
- const field=page.locator('[data-property="w"]');
- const initial=Number(await field.inputValue());
- const handle=page.locator('#vector-stage [data-resize-handle="ne"]');
- await expect(handle).toBeVisible();
- await handle.scrollIntoViewIfNeeded();
- const box=await handle.boundingBox();
- const diag=await page.evaluate(({x,y})=>{const el=document.elementFromPoint(x,y),stage=document.getElementById('vector-stage');return {target:el?.outerHTML?.slice(0,200),x,y,viewport:[innerWidth,innerHeight],stage:stage.getBoundingClientRect().toJSON()};},{x:box.x+box.width/2,y:box.y+box.height/2});
- console.log('VECTOR TARGET:',JSON.stringify(diag));
- await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
- await page.mouse.down();
- console.log('POINTER HIT:', await page.locator('#vector-status').textContent());
- await page.mouse.move(box.x+box.width/2+55,box.y+box.height/2-15,{steps:6});
- await page.mouse.up();
- console.log('VECTOR DRAG CHECK:', 'original',initial,'current',await field.inputValue(),'status',await page.locator('#vector-status').textContent());
- await expect.poll(async()=>Number(await field.inputValue())).toBeGreaterThan(initial);
+test('Creative Studio edits typography and crops an imported photo with editable values',async({page})=>{
+ await page.goto('/studio/image-editor.html');
+ await page.locator('[data-template="badge"]').click();
+ await page.locator('#creative-layers li').first().click();
+ await expect(page.locator('#creative-text-fields')).toBeVisible();
+ await page.locator('#creative-text-content').fill('LISTPULL MAKES ART');
+ await page.locator('#creative-text-content').dispatchEvent('change');
+ await page.locator('#creative-font').selectOption('Georgia');
+ await expect(page.locator('#creative-status')).toContainText('Typography updated');
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFUlEQVR4nGP8n+L2nwEJMDGgAcICAK9fArDZr6mIAAAAAElFTkSuQmCC','base64');
+ await page.locator('#creative-upload').setInputFiles({name:'tiny-artwork.png',mimeType:'image/png',buffer:png});
+ await expect(page.locator('#creative-layers')).toContainText('tiny-artwork.png');
+ await page.locator('#creative-layers li').first().click();
+ await expect(page.locator('#creative-crop-fields')).toBeVisible();
+ await page.locator('#creative-crop-w').fill('2');
+ await page.locator('#creative-crop-h').fill('3');
+ await page.locator('[data-creative="apply-crop"]').click();
+ await expect(page.locator('#creative-crop-w')).toHaveValue('2');
+ await page.locator('[data-creative="reset-crop"]').click();
+ await expect(page.locator('#creative-crop-w')).toHaveValue('4');
 });
-test('Vector Studio can draw, restyle and export a freehand layer',async({page})=>{
+test('legacy vector route opens the unified Creative Studio',async({page})=>{
  await page.goto('/studio/vector.html');
- await page.locator('#vector-pen').click();
- await expect(page.locator('#vector-pen')).toHaveAttribute('aria-pressed','true');
- const stage=await page.locator('#vector-stage').boundingBox();
- const x=stage.x+stage.width*.38,y=stage.y+stage.height*.45;
- await page.mouse.move(x,y);await page.mouse.down();
- await page.mouse.move(x+34,y+22,{steps:4});
- await page.mouse.move(x+85,y-18,{steps:5});await page.mouse.up();
- await expect(page.locator('#vector-layers')).toContainText('Drawing');
- await expect(page.locator('#vector-brush-wrapper')).toBeVisible();
- await page.locator('[data-property="strokeWidth"]').evaluate(input=>{input.value='13';input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));});
- await expect(page.locator('#vector-brush-output')).toContainText('13 px');
- const download=page.waitForEvent('download');await page.locator('#vector-export-svg').click();
- expect((await download).suggestedFilename()).toContain('svg');
+ await expect(page).toHaveURL(/\/studio\/image-editor.html/);
+ await expect(page.locator('#creative-canvas')).toBeVisible();
+});
+test('full-screen controls expand both editor workspaces and the video monitor',async({page})=>{
+ await page.goto('/studio/image-editor.html');
+ await page.locator('[data-fullscreen-target=".creative-main"]').click();
+ await expect(page.locator('[data-fullscreen-target=".creative-main"]')).toHaveAttribute('aria-pressed','true');
+ await page.keyboard.press('Escape');
+ await expect(page.locator('[data-fullscreen-target=".creative-main"]')).toHaveAttribute('aria-pressed','false');
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-fullscreen-target=".video-main"]').click();
+ await expect(page.locator('[data-fullscreen-target=".video-main"]')).toHaveAttribute('aria-pressed','true');
+ await page.keyboard.press('Escape');
+ await page.locator('[data-fullscreen-target=".video-monitor"]').click();
+ await expect(page.locator('[data-fullscreen-target=".video-monitor"]')).toHaveAttribute('aria-pressed','true');
+ await page.goto('/studio/ai.html');
+ await page.locator('[data-fullscreen-target=".ai-workbench"]').click();
+ await expect(page.locator('[data-fullscreen-target=".ai-workbench"]')).toHaveAttribute('aria-pressed','true');
+ await page.keyboard.press('Escape');
+ await expect(page.locator('[data-fullscreen-target=".ai-workbench"]')).toHaveAttribute('aria-pressed','false');
+});
+test('Video Studio demo can play, trim, split, add title and capture a still',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ await expect(page.locator('#video-clip-track button')).toHaveCount(3);
+ await expect(page.locator('#video-title-track button')).toHaveCount(3);
+ await page.locator('#video-scrub').fill('2');
+ await page.locator('[data-video="split"]').click();
+ await expect(page.locator('#video-clip-track button')).toHaveCount(4);
+ await page.locator('[data-video="add-title"]').click();
+ await expect(page.locator('#video-title-track button')).toHaveCount(4);
+ const still=page.waitForEvent('download');
+ await page.locator('[data-video="snapshot"]').click();
+ expect((await still).suggestedFilename()).toContain('still.png');
+});
+test('Video Studio exports a real encoded WebM from a trimmed local timeline',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ while(await page.locator('#video-clip-track button').count()>1){
+   await page.locator('#video-clip-track button').last().click();
+   await page.locator('[data-video="remove"]').click();
+ }
+ await page.locator('#video-clip-track button').first().click();
+ await page.locator('#video-out').fill('1.2');
+ await page.locator('#video-apply').click();
+ await page.locator('[data-video-tab="project"]').click();
+ await page.locator('#video-width').fill('320');
+ await page.locator('#video-height').fill('180');
+ await page.locator('[data-video="apply-project"]').click();
+ await page.locator('#video-export-type').selectOption('webm');
+ const download=page.waitForEvent('download',{timeout:45000});
+ await page.locator('[data-video="export"]').click();
+ const file=await download;
+ expect(file.suggestedFilename()).toMatch(/\.webm$/);
+ await expect(page.locator('#video-export-progress')).toHaveJSProperty('value',100);
 });
 test('Visual business explorer shows tracking scenario',async({page})=>{
  await page.goto('/studio/strategy.html');
@@ -122,11 +178,11 @@ test('Visual business explorer shows tracking scenario',async({page})=>{
 });
 test('Studio hub launches separate full editors',async({page})=>{
  await page.goto('/studio.html');
- await expect(page.locator('#editor-canvas')).toHaveCount(0);
+ await expect(page.locator('#creative-canvas')).toHaveCount(0);
  await expect(page.locator('a[href="/studio/image-editor.html"]').first()).toBeVisible();
  await page.locator('a[href="/studio/image-editor.html"]').first().click();
  await expect(page).toHaveURL(/\/studio\/image-editor.html/);
- await expect(page.locator('#editor-canvas')).toBeAttached();
+ await expect(page.locator('#creative-canvas')).toBeAttached();
 });
 test('IDE has working isolated preview and friendly sample',async({page})=>{
  await page.goto('/studio/ai.html#fiddle');
