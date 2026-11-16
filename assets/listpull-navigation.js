@@ -40,7 +40,7 @@
   const current=(href)=>{
     const path=location.pathname;
     if(href==='/')return path==='/';
-    if(href.includes('#'))return path===href.split('#')[0]&&location.hash===href.split('#')[1];
+    if(href.includes('#'))return path===href.split('#')[0]&&location.hash==='#'+href.split('#')[1];
     return path===href;
   };
   const appLink=(app,kind)=>{
@@ -128,6 +128,10 @@
     });
     popover.addEventListener('click',event=>{
       if(event.target.closest('a'))closeLabs();
+    });
+    document.querySelectorAll('[data-lp-icon]').forEach(element=>{
+      const id=element.dataset.lpIcon;
+      if(apps.some(app=>app.id===id))element.innerHTML=iconFor(id);
     });
     host.querySelectorAll('a[href]').forEach(link=>{
       if(current(link.getAttribute('href')))link.setAttribute('aria-current','page');
