@@ -156,9 +156,13 @@ test('An imported video immediately previews its first frame and adopts its dime
   const stream=c.captureStream(24),r=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});
   const chunks=[];r.ondataavailable=e=>chunks.push(e.data);
   const done=new Promise(resolve=>r.onstop=resolve);
-  r.start();
-  await new Promise(resolve=>setTimeout(resolve,550));
-  r.stop();await done;stream.getTracks().forEach(t=>t.stop());
+  r.start(100);
+  const paint=setInterval(()=>{
+   g.fillStyle='#37bfa2';g.fillRect(0,0,320,180);
+   g.fillStyle='#246bfa';g.fillRect(0,0,14,14);
+  },36);
+  await new Promise(resolve=>setTimeout(resolve,900));
+  clearInterval(paint);r.stop();await done;stream.getTracks().forEach(t=>t.stop());
   const buffer=await new Blob(chunks).arrayBuffer(),bytes=new Uint8Array(buffer);
   let str='';for(let i=0;i<bytes.length;i+=8192)str+=String.fromCharCode(...bytes.subarray(i,i+8192));
   return btoa(str);
@@ -174,7 +178,12 @@ test('An imported video immediately previews its first frame and adopts its dime
  console.log('VIDEO DECODE DIAGNOSTICS:',JSON.stringify(await page.evaluate(()=>{
    const p=document.getElementById('video-source'),c=document.getElementById('video-canvas');
    const pixel=c.getContext('2d').getImageData(Math.round(c.width/2),Math.round(c.height/2),1,1).data;
-   return {readyState:p.readyState,networkState:p.networkState,currentTime:p.currentTime,
+   const copy=document.createElement('canvas');copy.width=320;copy.height=180;
+   let sourcePixel=null,paintError=null;
+   try{copy.getContext('2d').drawImage(p,0,0,320,180);
+    sourcePixel=[...copy.getContext('2d').getImageData(160,90,1,1).data];}
+   catch(error){paintError=String(error);}
+   return {sourcePixel,paintError,readyState:p.readyState,networkState:p.networkState,currentTime:p.currentTime,
      duration:p.duration,videoWidth:p.videoWidth,videoHeight:p.videoHeight,paused:p.paused,
      src:p.currentSrc.slice(0,65),error:p.error?.message,
      pixel:[...pixel],status:document.getElementById('video-status').textContent};
