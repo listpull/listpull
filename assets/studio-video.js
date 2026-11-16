@@ -139,7 +139,7 @@
    const info=await measure(file);files.push(info);chosenMedia=info.id;
    for(const [oldId,name] of pendingRelinks){
     if(name.toLowerCase()!==info.name.toLowerCase())continue;
-    for(const collection of [clips,audioClips]){
+    for(const collection of [clips,overlays,audioClips]){
      for(const record of collection)if(record.assetId===oldId)record.assetId=info.id;
     }
     pendingRelinks.delete(oldId);
@@ -499,20 +499,39 @@
  function addTitle(){
   const start=Math.min(at,total()),end=start+Math.max(1,Math.min(4,total()-start||4));
   const t={id:uid(),type:'title',text:'Your story starts here',start,end,size:76,color:'#ffffff',
-    x:50,y:80,scale:100,rotation:0,animation:'fade'};
+    x:50,y:80,scale:100,rotation:0,opacity:100,animation:'none',keyframes:[]};
   titles.push(t);selectedId=t.id;changed('Added editable animated title.');
-  fillInspector(t);
+  fillInspector(t);seek(at);
+ }
+ function addOverlay(){
+  const a=asset(chosenMedia);
+  if(!a||a.kind==='audio'){status('Select a photo or video from the media library first.');return;}
+  if(!clips.length){status('Add a main clip to the timeline first.');return;}
+  const start=limit(at,0,Math.max(0,total()-.05));
+  const available=Math.max(.05,total()-start);
+  const out=Math.min(available,a.duration);
+  const o={id:uid(),type:'overlay',assetId:a.id,start,end:start+out,in:0,out,speed:1,volume:0,
+   ...defaults(),scale:45,fit:'contain',filter:'none',transition:'cut',fade:.3};
+  overlays.push(o);selectedId=o.id;changed('Overlay added. Drag or resize it in the preview.');
+  fillInspector(o);seek(at);
  }
  function split(){
   const b=getBlock(at);
   if(!b||at<=b.start+.05||at>=b.end-.05){status('Move the playhead inside a clip to split it.');return;}
   const c=b.clip,i=clips.indexOf(c),cut=c.in+(at-b.start)*c.speed;
-  const newClip={...c,id:uid(),in:cut};
-  c.out=cut;clips.splice(i+1,0,newClip);selectedId=newClip.id;changed('Split clip at playhead.');
+  const offset=at-b.start,current=visualAt(c,offset);
+  const keys=(c.keyframes||[]).slice();
+  const next={...c,id:uid(),in:cut,
+    keyframes:keys.filter(k=>k.at>=offset).map(k=>({...k,at:k.at-offset}))};
+  if(keys.length&&next.keyframes.length&&!next.keyframes.some(k=>Math.abs(k.at)<.025))
+   next.keyframes.unshift({at:0,...current});
+  c.keyframes=keys.filter(k=>k.at<=offset);
+  c.out=cut;clips.splice(i+1,0,next);selectedId=next.id;changed('Split into two independently editable clips.');
+  fillInspector(next);seek(at);
  }
  function sample(){
   if(clips.length&&!confirm('Replace this video timeline with a sample? Save your project first.'))return;
-  pause();clips.length=0;titles.length=0;audioClips.length=0;at=0;
+  pause();clips.length=0;overlays.length=0;titles.length=0;audioClips.length=0;at=0;
   const colors=['#4b337d','#185d59','#f19e71'];const prompts=['Create the moment','Tell your story','Made with ListPull'];
   for(let i=0;i<3;i++){
    const temp=document.createElement('canvas');temp.width=1280;temp.height=720;
@@ -524,12 +543,12 @@
    const img=new Image();img.src=temp.toDataURL('image/png');
    const id=uid(),url=img.src;images.set(url,img);
    files.push({id,kind:'image',name:'ListPull Sample Scene '+(i+1)+'.png',url,duration:4,width:1280,height:720});
-   clips.push({id:uid(),type:'image',assetId:id,in:0,out:4,speed:1,volume:0,x:50,y:50,scale:100,rotation:0,
+   clips.push({id:uid(),type:'image',assetId:id,in:0,out:4,speed:1,volume:0,...defaults(),
      filter:'none',transition:'fade',fade:.45});
    titles.push({id:uid(),type:'title',text:prompts[i],start:i*4+.35,end:i*4+3.65,size:92,
      color:'#ffffff',x:50,y:71,scale:100,rotation:0,animation:'rise'});
   }
-  sourceId=null;selectedId=null;resize();changed('Three-scene video sample ready. Play, split, edit titles and export.');
+  sourceId=null;selectedId=null;if(sizeMode==='auto'){width=1280;height=720;}resize();changed('Three-scene video sample ready. Play, split, edit titles and export.');seek(0);
  }
  function drawSnapshot(){
   draw(at,false);canvas.toBlob(blob=>{if(blob)download(blob,'listpull-video-still.png');draw();},'image/png');
@@ -619,25 +638,25 @@
  function saveProject(){
   const summary={version:1,project:{width,height,fps,bitrate},
    assets:files.map(({id,name,kind,duration,width,height})=>({id,name,kind,duration,width,height})),
-   clips,titles,audioClips};
+   clips,overlays,titles,audioClips,sizeMode};
   download(new Blob([JSON.stringify(summary,null,2)],{type:'application/json'}),'listpull-video-project.json');
   status('Editable timeline saved. Keep original media files with this project to reopen it.');
  }
  async function openProject(file){
   const data=JSON.parse(await file.text());
   if(!data?.project||!Array.isArray(data.clips))throw Error('Invalid project file.');
-  pause();({width,height,fps,bitrate}=data.project);
-  clips.splice(0,clips.length,...data.clips);titles.splice(0,titles.length,...(data.titles||[]));
+  pause();({width,height,fps,bitrate}=data.project);sizeMode=data.sizeMode||'manual';
+  clips.splice(0,clips.length,...data.clips);overlays.splice(0,overlays.length,...(data.overlays||[]));titles.splice(0,titles.length,...(data.titles||[]));
   audioClips.splice(0,audioClips.length,...(data.audioClips||[]));
   const matched=new Map(files.map(x=>[x.name,x]));
   for(const descriptor of data.assets||[]){
    const local=matched.get(descriptor.name);
    if(!local)pendingRelinks.set(descriptor.id,descriptor.name);
-   if(local)for(const collection of [clips,audioClips]){
+   if(local)for(const collection of [clips,overlays,audioClips]){
     for(const record of collection)if(record.assetId===descriptor.id)record.assetId=local.id;
    }
   }
-  resize();now=0;changed(pendingRelinks.size?'Timeline loaded. Import the matching original media files to relink '+pendingRelinks.size+' assets.':'Timeline loaded and media connected.');
+  resize();at=0;sourceId=null;changed(pendingRelinks.size?'Timeline loaded. Import the matching original media files to relink '+pendingRelinks.size+' assets.':'Timeline loaded and media connected.');seek(at);
  }
  async function voiceover(){
   if(voiceRecorder?.state==='recording'){voiceRecorder.stop();return;}
