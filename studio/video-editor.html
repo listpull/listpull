@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101529"><meta name="description" content="ListPull Video Studio: browser-based timeline video editing, trimming, multi-clip projects, audio, animated titles, captions and local exports with an optional AI editing agent.">
+<title>Video Studio — Edit, Compose & Export | ListPull</title><link rel="canonical" href="https://listpull.com/studio/video-editor.html">
+<link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/assets/site-v2.css"><link rel="stylesheet" href="/assets/studio-video.css">
+<script src="/assets/studio-video.js" defer></script><script src="/assets/studio-media-agent.js" defer></script>
+</head><body class="video-studio">
+<a class="skip" href="#video-preview">Skip to video preview</a>
+<header class="video-header"><a class="video-logo" href="/">✦ ListPull</a><strong>Video Studio</strong><span>PRODUCTION WORKSPACE</span>
+<nav><a href="/studio.html">Studio</a><a href="/studio/image-editor.html">Creative Editor</a><a href="/contact/#engineering">Business integration</a></nav></header>
+<main class="video-main">
+<section class="video-toolbar" aria-label="Video project toolbar">
+<label class="video-tool-main" for="video-upload">＋ Import video, audio & images</label><input id="video-upload" type="file" accept="video/*,image/*,audio/*,.srt,text/plain" multiple>
+<button type="button" data-video="demo">Open sample project</button><button type="button" data-video="save">Save project</button><label for="video-project-open">Open project</label>
+<input type="file" id="video-project-open" accept=".json,application/json">
+<button type="button" data-video="undo">↶ Undo</button><button type="button" data-video="redo">↷ Redo</button>
+<div class="video-toolbar-push"></div>
+<select id="video-export-type" aria-label="Export format"><option value="auto">Best supported format</option><option value="mp4">MP4 (if supported)</option><option value="webm">WebM</option></select>
+<button type="button" data-video="export" class="video-tool-main">↓ Export video</button></section>
+<div class="video-work-layout">
+<aside class="video-assets" aria-label="Imported footage and audio">
+<div class="video-panel-title"><strong>Media library</strong><small>Drag in footage or images</small></div>
+<div class="video-import-drop" id="video-import-drop" tabindex="0">
+<span>▧</span><p>Drop your video, images or sound here.</p><label for="video-upload">Browse files</label></div>
+<ul class="video-library" id="video-library" aria-label="Available media"></ul>
+<div class="video-asset-controls"><button type="button" data-video="add-media">＋ Add selected to timeline</button><button type="button" data-video="record-voice">● Record voiceover</button></div>
+<p class="video-small">Media is edited on your device. Save the project and keep its source files together when transferring projects.</p>
+</aside>
+<section class="video-center" aria-label="Video editing and timeline">
+<div class="video-player-bar"><strong>◧ Program monitor</strong><span id="video-frame-size">1920 × 1080</span><span id="video-timecode">00:00.00 / 00:00.00</span></div>
+<div class="video-monitor" id="video-preview"><canvas id="video-canvas" width="1920" height="1080" aria-label="Video preview with editable overlays"></canvas>
+<div class="video-drop-message" id="video-empty">Import footage or choose the sample project to begin.</div></div>
+<div class="video-transport"><button type="button" data-video="previous" aria-label="Go to beginning">⏮</button><button type="button" data-video="play" id="video-play" aria-label="Play or pause">▶ Play</button><button type="button" data-video="next" aria-label="Go to end">⏭</button>
+<input type="range" id="video-scrub" min="0" max="100" value="0" step="0.01" aria-label="Video timeline position"><output id="video-current">00:00</output>
+<button type="button" data-video="snapshot">↓ Still</button></div>
+<div class="video-timeline-header"><div><strong>Timeline</strong><span>Click clips to edit · drag to reorder</span></div>
+<div class="video-timeline-actions"><button type="button" data-video="split">✂ Split at playhead</button><button type="button" data-video="remove">× Remove clip</button><button type="button" data-video="add-title">T Add title</button><button type="button" data-video="add-music">♫ Add audio</button></div></div>
+<div class="video-timeline" id="video-timeline"><div class="video-timeline-track"><span class="video-track-label">VIDEO / IMAGE</span><div class="video-track-clips" id="video-clip-track"></div></div>
+<div class="video-timeline-track"><span class="video-track-label">TITLES / CAPTIONS</span><div class="video-track-clips" id="video-title-track"></div></div>
+<div class="video-timeline-track"><span class="video-track-label">AUDIO / VOICE</span><div class="video-track-clips" id="video-audio-track"></div></div></div>
+<div class="video-status"><span id="video-status" role="status" aria-live="polite">Ready to create your video.</span><span id="video-project-duration">Duration 00:00</span></div>
+</section>
+<aside class="video-inspector" aria-label="Video properties and AI tools">
+<div class="video-property-tabs" role="tablist"><button type="button" data-video-tab="clip" aria-selected="true">Edit</button>
+<button type="button" data-video-tab="project" aria-selected="false">Project</button><button type="button" data-video-tab="ai" aria-selected="false">AI Agent</button></div>
+<div class="video-property-body">
+<div data-video-panel="clip"><div class="video-panel-title"><strong id="video-selected-title">Select a clip</strong><small>Every setting is editable</small></div>
+<div class="video-properties-grid"><label>Start in source (s) <input id="video-in" type="number" min="0" step="0.01"></label>
+<label>End in source (s) <input id="video-out" type="number" min="0" step="0.01"></label>
+<label>Speed <input id="video-speed" type="number" min=".1" step=".1" value="1"></label>
+<label>Volume % <input id="video-volume" type="number" min="0" max="200" step="1" value="100"></label>
+<label>X % <input id="video-x" type="number" value="50" step=".5"></label><label>Y % <input id="video-y" type="number" value="50" step=".5"></label>
+<label>Scale % <input id="video-scale" type="number" value="100" min="1" step=".5"></label><label>Rotation ° <input id="video-rotation" type="number" value="0" step="1"></label></div>
+<label>Visual effect <select id="video-filter"><option value="none">Original</option><option value="vibrant">Vibrant</option><option value="cinematic">Cinematic</option><option value="mono">Black & white</option><option value="warm">Golden hour</option><option value="cool">Cool blue</option><option value="blur">Soft focus</option></select></label>
+<label>Transition <select id="video-transition"><option value="cut">Clean cut</option><option value="fade">Fade through black</option></select></label>
+<label>Fade duration (s) <input id="video-fade" type="number" min="0" step=".1" value=".5"></label>
+<div id="video-title-fields" hidden><label>Title / caption <textarea id="video-caption-text" rows="3"></textarea></label>
+<label>Font size (px) <input type="number" id="video-title-size" min="1" value="66"></label>
+<label>Text color <input id="video-title-color" type="color" value="#ffffff"></label>
+<label>Title start (s) <input id="video-title-start" type="number" min="0" step=".1"></label>
+<label>Title end (s) <input id="video-title-end" type="number" min="0" step=".1"></label>
+<label>Title movement <select id="video-title-animation"><option value="none">Still</option><option value="fade">Fade in & out</option><option value="rise">Rise into view</option></select></label></div>
+<button type="button" id="video-apply" class="video-accent">Apply selected edits</button>
+<p class="video-small">Select any clip, title or audio item in the timeline to change its properties.</p>
+</div>
+<div data-video-panel="project" hidden>
+<div class="video-panel-title"><strong>Production settings</strong><small>Use your own frame size</small></div>
+<div class="video-properties-grid"><label>Canvas width <input type="number" id="video-width" min="1" value="1920"></label>
+<label>Canvas height <input type="number" id="video-height" min="1" value="1080"></label><label>Frame rate <input type="number" id="video-fps" min="1" value="30"></label>
+<label>Bitrate (Mbps) <input type="number" id="video-bitrate" min=".2" step=".2" value="8"></label></div>
+<div class="video-presets"><button data-video-size="1920,1080">16:9 HD</button><button data-video-size="1080,1920">9:16 Vertical</button><button data-video-size="1080,1080">1:1 Square</button><button data-video-size="3840,2160">4K</button></div>
+<button type="button" data-video="apply-project" class="video-accent">Apply resolution</button>
+<div class="video-panel-title"><strong>Export progress</strong></div><progress id="video-export-progress" value="0" max="100"></progress>
+<p id="video-export-status" role="status" aria-live="polite">Select Export video when your timeline is ready.</p>
+<button type="button" data-video="cancel-export" id="video-cancel-export" hidden>Cancel export</button>
+</div>
+<div data-video-panel="ai" hidden><div class="video-panel-title"><strong>AI Production Agent</strong><small>Storyboard and editing assistance</small></div>
+<p class="video-small">Ask for a project outline, promotional titles, concise captions or an editing sequence tailored to the footage in your media library.</p>
+<button type="button" data-media-ai="enable" class="video-accent">✧ Enable AI Agent</button><span data-media-ai="status" role="status" aria-live="polite">Optional on-device model</span>
+<label for="video-ai-request">Describe your video goal <textarea id="video-ai-request" rows="4" placeholder="Create a 30-second wildlife teaser with short titles and an inspiring final call to action."></textarea></label>
+<div class="video-ai-actions"><button data-media-ai="plan">Generate edit plan</button><button data-media-ai="ask">Ask about my footage</button></div>
+<div id="video-ai-response" role="status" aria-live="polite"></div>
+<button id="video-ai-apply" type="button" hidden>Apply suggested titles</button><button id="video-ai-discard" type="button" hidden>Discard</button>
+</div></div>
+</aside>
+</div></main><video id="video-source" preload="auto" playsinline style="display:none"></video>
+<audio id="video-sound" preload="auto" style="display:none"></audio></body></html>
