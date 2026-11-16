@@ -45,6 +45,7 @@
   }
   function showEditControls(){
     const edit=mode.value==='edit';
+    if(edit)target.value=window.ListPullIDE?.getCode?.().tab||target.value||'html';
     target.hidden=!edit;
     document.querySelector('.ai-edit-target-label').hidden=!edit;
     question.placeholder=edit?'Describe the change (for example: turn the inventory cards green).':
