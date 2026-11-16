@@ -301,8 +301,11 @@
  }
  function renderTrack(element,collection,kind){
   element.replaceChildren();
-  for(const c of collection){
-   const btn=document.createElement('button');btn.type='button';btn.draggable=true;
+  const timed=kind!=='clip';
+  element.style.position='relative';
+  element.style.minWidth=Math.max(390,total()*timelineScale+90)+'px';
+  for(const c of timed?collection.slice().sort((a,b)=>(a.start||0)-(b.start||0)):collection){
+   const btn=document.createElement('button');btn.type='button';btn.draggable=!timed;
    btn.className=c.id===selectedId?'is-selected':'';btn.dataset.type=kind;
    const a=asset(c.assetId);
    btn.textContent=kind==='title'?(c.text||'Title').slice(0,27):(a?.name||'Missing media').slice(0,26);
@@ -310,6 +313,8 @@
      code(c.start)+' - '+code(c.end):code(duration(c));
    btn.append(small);
    btn.style.minWidth=Math.max(85,(kind==='title'||kind==='overlay'?c.end-c.start:duration(c))*timelineScale)+'px';
+   if(timed){btn.style.position='absolute';btn.style.left=Math.max(0,c.start||0)*timelineScale+'px';}
+
    if(a?.thumbnail&&kind!=='title'){
     btn.style.backgroundImage='linear-gradient(0deg,#11192bdd,#11192b33),url("'+a.thumbnail+'")';
     btn.style.backgroundSize='cover';btn.style.backgroundPosition='center';
@@ -318,6 +323,28 @@
     trimHandle(btn,c,'start');trimHandle(btn,c,'end');
    }
    btn.addEventListener('click',()=>{selectedId=c.id;renderAll();fillInspector(c);if(kind==='title'||kind==='overlay'){pause();seek(Math.min(c.start,total()));}else seek(at);});
+   if(timed){
+    btn.addEventListener('pointerdown',event=>{
+     if(event.button!==0||event.target.closest('.video-trim-handle'))return;
+     const originX=event.clientX,initialStart=c.start||0,initialEnd=c.end;
+     btn.setPointerCapture(event.pointerId);
+     const move=pointer=>{
+       const next=Math.max(0,initialStart+(pointer.clientX-originX)/timelineScale);
+       c.start=round(next);
+       if(typeof initialEnd==='number')c.end=initialEnd+c.start-initialStart;
+       btn.style.left=c.start*timelineScale+'px';
+     };
+     const up=()=>{
+       btn.removeEventListener('pointermove',move);
+       btn.removeEventListener('pointerup',up);
+       btn.removeEventListener('pointercancel',up);
+       changed('Timeline position updated.');if(selectedId===c.id)fillInspector(c);seek(at);
+     };
+     btn.addEventListener('pointermove',move);
+     btn.addEventListener('pointerup',up,{once:true});
+     btn.addEventListener('pointercancel',up,{once:true});
+    });
+   }
    btn.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',c.id);});
    btn.addEventListener('dragover',e=>e.preventDefault());
    btn.addEventListener('drop',e=>{
@@ -344,6 +371,9 @@
   switchTab('clip');
   const isTitle=c.type==='title';
   $('video-title-fields').hidden=!isTitle;
+  $('video-timing-fields').hidden=!['overlay','audio'].includes(c.type);
+  $('video-timeline-start').value=round(c.start||0);
+  $('video-timeline-duration').value=round(c.type==='overlay'?c.end-c.start:duration(c));
   const position=visualAt(c,activeOffset(c));
   const values={
    'video-in':c.in||0,'video-out':c.out||0,'video-speed':c.speed||1,'video-volume':c.volume??100,
@@ -389,7 +419,13 @@
    }
   }
   Object.assign(c,fields);
-  if(c.type==='overlay')c.end=c.start+duration(c);
+  if(c.type==='overlay'||c.type==='audio'){
+    c.start=Math.max(0,number('video-timeline-start'));
+    const intendedDuration=Math.max(.01,number('video-timeline-duration',duration(c)));
+    const source=asset(c.assetId);
+    c.out=Math.min(source?.duration||Infinity,c.in+intendedDuration*(c.speed||1));
+    if(c.type==='overlay')c.end=c.start+duration(c);
+  }
   const key=(c.keyframes||[]).find(k=>Math.abs(k.at-activeOffset(c))<.025);
   if(key)for(const field of ['x','y','scale','rotation','opacity'])key[field]=fields[field]??key[field];
   at=Math.min(at,total());changed('Edits applied to the preview and exported video.');seek(at);
@@ -957,6 +993,9 @@
     field.addEventListener('change',()=>{if(selectedId)applyInspector();});
   }
   $('video-apply').addEventListener('click',applyInspector);
+  for(const key of ['video-timeline-start','video-timeline-duration']){
+    $(key).addEventListener('change',()=>{if(selectedId)applyInspector();});
+  }
   for(const name of ['in','out','speed','volume','x','y','scale','rotation','fit',
     'crop-left','crop-right','crop-top','crop-bottom','filter','transition','fade',
     'caption-text','title-size','title-color','title-start','title-end','title-animation']){
