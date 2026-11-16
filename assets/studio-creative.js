@@ -25,6 +25,7 @@
   let docW=1200,docH=800,zoom=1,history=[],cursor=-1,restoring=false,ignore=false,brush=false;
   let timer=null,lastName='listpull-artwork';
   const extras=['name','zValue','depthValue','fillDefinition','fillOpacity','shadowSettings','effectSettings','sourceName'];
+  if(F.FabricObject){F.FabricObject.customProperties=[...new Set([...(F.FabricObject.customProperties||[]),...extras])];}
   const presets={
     social:[1080,1080],product:[1200,1200],nature:[1600,1000],badge:[1000,1000]
   };
