@@ -263,7 +263,11 @@
    title.textContent=f.name;small.textContent=f.kind+' · '+code(f.duration);
    text.append(title,small);li.append(ico,text);
    if(f.thumbnail){const preview=document.createElement('img');preview.src=f.thumbnail;preview.alt='';preview.className='video-library-thumbnail';li.prepend(preview);}
-   li.addEventListener('click',()=>{chosenMedia=f.id;renderLibrary();});
+   li.addEventListener('click',()=>{
+     chosenMedia=f.id;
+     for(const entry of list.querySelectorAll('li[data-asset]'))
+       entry.classList.toggle('is-selected',entry.dataset.asset===chosenMedia);
+   });
    li.addEventListener('dblclick',()=>addFileToTimeline(f));
    li.addEventListener('dragstart',event=>{
      if(!event.dataTransfer)return;
