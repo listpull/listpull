@@ -10,11 +10,11 @@
  const uid=()=>Date.now()+'-'+Math.random().toString(36).slice(2,9);
  const code=t=>{t=Math.max(0,Number(t)||0);return String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0')+'.'+String(Math.floor(t%1*100)).padStart(2,'0');};
  const status=s=>{$('video-status').textContent=String(s).slice(0,400);};
- const files=[],clips=[],titles=[],audioClips=[],images=new Map(),audioPlayers=new Map();
+ const files=[],clips=[],titles=[],audioClips=[],images=new Map(),audioPlayers=new Map(),pendingRelinks=new Map();
  let chosenMedia=null,selectedId=null,at=0,playing=false,raf=0,lastTime=0,sourceId=null;
  let width=1920,height=1080,fps=30,bitrate=8000000;
  let recorder=null,recording=false,cancelExport=false,voiceRecorder=null,voiceStream=null,voiceParts=[];
- let audioContext=null,mix=null,playerSource=null,mediaSources=new Map();
+ let audioContext=null,mix=null,playerSource=null,videoGain=null,mediaSources=new Map();
  let undo=[],undoIndex=-1,restoring=false;
  const effects={none:'none',vibrant:'contrast(115%) saturate(138%)',cinematic:'contrast(125%) brightness(94%) saturate(91%)',mono:'grayscale(100%) contrast(110%)',warm:'sepia(25%) saturate(115%)',cool:'hue-rotate(18deg) saturate(115%)',blur:'blur(3px)'};
  const duration=c=>Math.max(.01,(c.out-c.in)/Math.max(.05,c.speed||1));
@@ -70,6 +70,13 @@
    if(/\.srt$/i.test(file.name)){addSrt(await file.text());continue;}
    if(!/^(video|image|audio)\//.test(file.type))continue;
    const info=await measure(file);files.push(info);chosenMedia=info.id;
+   for(const [oldId,name] of pendingRelinks){
+    if(name.toLowerCase()!==info.name.toLowerCase())continue;
+    for(const collection of [clips,audioClips]){
+     for(const record of collection)if(record.assetId===oldId)record.assetId=info.id;
+    }
+    pendingRelinks.delete(oldId);
+   }
   }
   renderAll();status('Media imported. Choose an asset and add it to your timeline.');
  }
@@ -244,7 +251,8 @@
     try{player.currentTime=limit(expected,0,Math.max(0,player.duration-.02));}catch(e){}
    }
    player.playbackRate=b.clip.speed;
-   player.volume=audioContext?0:limit(b.clip.volume/100,0,1);
+   player.volume=audioContext?1:limit(b.clip.volume/100,0,1);
+   if(videoGain)videoGain.gain.value=limit(b.clip.volume/100,0,2);
    if(playing&&player.paused)player.play().catch(()=>{});
   }else if(!player.paused)player.pause();
   syncSound();draw();renderTime();
@@ -274,7 +282,8 @@
    if(Number.isFinite(el.duration)&&Math.abs(el.currentTime-expected)>.24){
     try{el.currentTime=limit(expected,0,Math.max(0,el.duration-.02));}catch(e){}
    }
-   el.volume=audioContext?0:limit(clip.volume/100,0,1);el.playbackRate=clip.speed;
+   el.volume=audioContext?1:limit(clip.volume/100,0,1);el.playbackRate=clip.speed;
+   const routed=mediaSources.get(el);if(routed)routed.gain.gain.value=limit(clip.volume/100,0,2);
    if(playing&&el.paused)el.play().catch(()=>{});
   }
  }
@@ -350,8 +359,8 @@
   audioContext=new AC();mix=audioContext.createMediaStreamDestination();
   try{
    playerSource=audioContext.createMediaElementSource(player);
-   const gain=audioContext.createGain();gain.gain.value=1;
-   playerSource.connect(gain);gain.connect(audioContext.destination);gain.connect(mix);
+   videoGain=audioContext.createGain();videoGain.gain.value=1;
+   playerSource.connect(videoGain);videoGain.connect(audioContext.destination);videoGain.connect(mix);
   }catch(e){status('Original video audio capture unavailable: '+e.message);}
  }
  function wireAudioElement(element){
@@ -435,11 +444,12 @@
   const matched=new Map(files.map(x=>[x.name,x]));
   for(const descriptor of data.assets||[]){
    const local=matched.get(descriptor.name);
+   if(!local)pendingRelinks.set(descriptor.id,descriptor.name);
    if(local)for(const collection of [clips,audioClips]){
     for(const record of collection)if(record.assetId===descriptor.id)record.assetId=local.id;
    }
   }
-  resize();now=0;changed('Timeline loaded. Reimport matching source media for any missing clips.');
+  resize();now=0;changed(pendingRelinks.size?'Timeline loaded. Import the matching original media files to relink '+pendingRelinks.size+' assets.':'Timeline loaded and media connected.');
  }
  async function voiceover(){
   if(voiceRecorder?.state==='recording'){voiceRecorder.stop();return;}
@@ -452,7 +462,7 @@
    voiceRecorder.onstop=async()=>{
     voiceStream.getTracks().forEach(t=>t.stop());voiceStream=null;
     const blob=new Blob(voiceParts,{type:voiceRecorder.mimeType||'audio/webm'});
-    const file=new File([blob],'Voiceover '+Date.now()+'.webm',{type:blob.type});
+    const file=new File([blob],'Voiceover '+Date.now()+(blob.type.includes('mp4')?'.m4a':'.webm'),{type:blob.type});
     try{await ingest([file]);const media=files.at(-1);
      audioClips.push({id:uid(),type:'audio',assetId:media.id,start:begin,in:0,out:Math.min(media.duration,(performance.now()-started)/1000),
       speed:1,volume:100});changed('Voiceover added to the audio track.');}
