@@ -120,8 +120,7 @@
     return Math.max(160,center.clientHeight-fixed-155);
   }
   function resizePanel(kind,value){
-    layout.dataset.resizeInput=kind+':'+Math.round(value);
-    if(!desktop()){layout.dataset.resizeBlocked='mobile';return;}
+    if(!desktop())return;
     if(kind==='timeline'){
       layout.style.setProperty('--video-timeline-height',Math.round(clamp(value,155,maxTimeline()))+'px');
       return;
@@ -139,13 +138,20 @@
   function configureGrip(id,kind,axis,sign){
     const grip=$(id);if(!grip)return;
     grip.addEventListener('pointerdown',event=>{
-      if(!desktop()||event.button!==0)return;
-      layout.dataset.resizePointer='down:'+kind;
+      if(!desktop()||event.button!==0||event.pointerType==='mouse')return;
       resize={kind,id:event.pointerId,start:axis==='x'?event.clientX:event.clientY,
-        value:panelSize(kind),axis,sign};
+        value:panelSize(kind),axis,sign,mouse:false};
       grip.classList.add('is-dragging');
       try{grip.setPointerCapture(event.pointerId);}catch(e){}
       event.preventDefault();
+    });
+    // Use native mouse events on desktop as well: this prevents pointer-capture
+    // cancellation and browser drag compatibility quirks on narrow dividers.
+    grip.addEventListener('mousedown',event=>{
+      if(!desktop()||event.button!==0)return;
+      resize={kind,id:'mouse',start:axis==='x'?event.clientX:event.clientY,
+        value:panelSize(kind),axis,sign,mouse:true};
+      grip.classList.add('is-dragging');event.preventDefault();
     });
     grip.addEventListener('keydown',event=>{
       if(!desktop())return;
@@ -160,12 +166,17 @@
   window.addEventListener('pointermove',event=>{
     if(!resize||resize.id!==event.pointerId)return;
     const next=resize.axis==='x'?event.clientX:event.clientY;
-    layout.dataset.resizePointer='move:'+resize.kind;
+    resizePanel(resize.kind,resize.value+resize.sign*(next-resize.start));
+    showScale();
+  },true);
+  window.addEventListener('mousemove',event=>{
+    if(!resize||!resize.mouse)return;
+    const next=resize.axis==='x'?event.clientX:event.clientY;
     resizePanel(resize.kind,resize.value+resize.sign*(next-resize.start));
     showScale();
   },true);
   const finishResize=event=>{
-    if(!resize||resize.id!==event.pointerId)return;
+    if(!resize||resize.mouse||resize.id!==event.pointerId)return;
     $(resize.kind==='assets'?'video-split-assets':
       resize.kind==='inspector'?'video-split-inspector':'video-split-timeline')
       ?.classList.remove('is-dragging');
@@ -173,6 +184,13 @@
   };
   window.addEventListener('pointerup',finishResize,true);
   window.addEventListener('pointercancel',finishResize,true);
+  window.addEventListener('mouseup',()=>{
+    if(!resize||!resize.mouse)return;
+    $(resize.kind==='assets'?'video-split-assets':
+      resize.kind==='inspector'?'video-split-inspector':'video-split-timeline')
+      ?.classList.remove('is-dragging');
+    resize=null;saveLayout();
+  },true);
   configureGrip('video-split-assets','assets','x',1);
   configureGrip('video-split-inspector','inspector','x',-1);
   configureGrip('video-split-timeline','timeline','y',-1);
