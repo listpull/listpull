@@ -182,6 +182,9 @@
    if(/\.srt$/i.test(file.name)){addSrt(await file.text());continue;}
    if(!/^(video|image|audio)\//.test(file.type))continue;
    const info=await measure(file);files.push(info);chosenMedia=info.id;
+   if(!clips.length&&sizeMode==='auto'&&info.kind!=='audio'&&info.width&&info.height){
+     width=info.width;height=info.height;resize();
+   }
    buildThumbnail(info,file).catch(()=>{});
    for(const [oldId,name] of pendingRelinks){
     if(name.toLowerCase()!==info.name.toLowerCase())continue;
