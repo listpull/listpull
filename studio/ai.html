@@ -2,26 +2,27 @@
 <a class="skip" href="#fiddle">Skip to coding workspace</a>
 <header class="vector-header"><div class="wrap vector-nav"><a class="vector-brand" href="/"><span aria-hidden="true">✦</span> ListPull</a><span class="vector-crumb"><a href="/studio.html">Studio</a> / <strong>AI Workspace</strong></span><div class="vector-navlinks"><a href="/studio.html">All tools</a><a href="/solutions.html">Engineering</a><a href="/contact/#engineering">Work with us</a></div></div></header>
 <main class="ai-workbench" id="ai-main">
-<div class="wrap ai-workspace-title"><div><span class="eyebrow orange">ListPull Studio / AI & applications</span><h1>Code. Preview. Create with AI.</h1><p>Open an example, change the code, and see a working app. For a hands-on AI experience, load the optional model and ask for an explanation.</p></div><a href="/solutions.html" class="ai-workbench-service">See integration services ↗</a></div>
+<div class="wrap ai-workspace-title"><div><span class="eyebrow orange">ListPull Studio / AI & live applications</span><h1>Build applications with a live AI Agent.</h1><p>Choose an application, edit its code and see the result instantly. Enable the AI Agent to ask questions about your app, get coding help and apply suggested changes.</p></div><a href="/solutions.html" class="ai-workbench-service">See integration services ↗</a></div>
 <section class="wrap ai-webllm ai-model-strip" id="local-ai" aria-labelledby="local-ai-title">
-<div class="ai-model-caption"><div><strong id="local-ai-title">✧ Local AI Assistant</strong><span>Ask questions about code or the sample business knowledge. Runs on compatible devices.</span></div><span class="ai-chip">Optional · WebGPU</span></div>
-<div class="ai-local-controls"><button id="ai-local-start" class="btn orange" type="button">Enable AI assistant</button><label for="ai-local-model">Model</label><select id="ai-local-model" disabled><option>Choose after setup</option></select><button id="ai-local-ask" class="btn secondary" type="button" disabled>Ask AI ↗</button></div>
-<p id="ai-local-status" role="status" aria-live="polite">Works without a login. Loading the AI may require a substantial one-time download.</p><progress id="ai-local-progress" max="100" value="0" hidden aria-label="AI model loading progress"></progress><div id="ai-local-answer" role="region" aria-label="AI response" tabindex="0" hidden></div>
+<div class="ai-model-caption"><div><strong id="local-ai-title">✧ AI Agent</strong><span>A real on-device model for live conversations and code assistance.</span></div><span class="ai-chip">Optional · WebGPU</span></div>
+<div class="ai-local-controls"><button id="ai-local-start" class="btn orange" type="button">Enable AI Agent</button><label for="ai-local-model">Model</label><select id="ai-local-model" disabled><option>Choose after setup</option></select><button id="ai-local-ask" class="btn secondary" type="button">Open AI chat ↓</button></div>
+<p id="ai-local-status" role="status" aria-live="polite">Enable the agent to chat about the open app. First-time setup downloads a model on compatible devices.</p><progress id="ai-local-progress" max="100" value="0" hidden aria-label="AI model loading progress"></progress>
 </section>
 <div class="wrap ai-mobile-jump" aria-label="Workspace navigation"><a href="#examples">Examples</a><a href="#code-editor">Code</a><a href="#app-preview">Preview</a><a href="#assistant">Assistant</a></div>
-<section id="fiddle" class="wrap ai-workspace" aria-label="AI and application creation workspace">
+<section id="fiddle" class="wrap ai-workspace" aria-label="Integrated code editor, preview and AI Agent">
 <aside class="ai-preset-sidebar" id="examples">
-<div class="ai-pane-heading"><strong>✦ Your examples</strong><small>Click one to load</small></div>
+<div class="ai-pane-heading"><strong>✦ Example apps</strong><small>Select to edit and run</small></div>
 <div class="fiddle-presets" role="group" aria-label="Example applications">
 <button type="button" data-fiddle-preset="inventory">📦 <span>Stock dashboard</span></button>
 <button type="button" data-fiddle-preset="wildlife">🦉 <span>Wildlife sightings</span></button>
 <button type="button" data-fiddle-preset="service">📊 <span>Service report</span></button>
 <button type="button" data-fiddle-preset="poster">🎨 <span>Creative poster</span></button>
 </div>
-<div class="ai-source-controls"><div class="ai-pane-heading"><strong>Business knowledge</strong><small>For evidence-backed answers</small></div><label for="ai-corpus">Sample collection</label><select id="ai-corpus"><option value="operations">Cloud operations</option><option value="service">Customer support</option><option value="wildlife">Wildlife research</option></select><details><summary>View source records</summary><div id="ai-dataset" class="ai-dataset"></div></details></div>
+<div class="ai-source-controls"><details><summary>Optional business reference data</summary><label for="ai-corpus">Choose reference topic</label><select id="ai-corpus"><option value="operations">Cloud operations</option><option value="service">Customer support</option><option value="wildlife">Wildlife research</option></select><div id="ai-dataset" class="ai-dataset"></div></details></div>
 </aside>
+<div class="ai-resize-grip" id="ai-resize-sidebar" role="separator" aria-label="Resize examples and code editor" aria-orientation="vertical" tabindex="0"></div>
 <section class="ai-code-pane" id="code-editor" aria-label="Code editor and output">
-<div class="fiddle-edit-head"><strong>⌘ Code Editor</strong><span>HTML / CSS / JavaScript</span></div>
+<div class="fiddle-edit-head"><strong>⌘ IDE / Code Editor</strong><span>HTML / CSS / JavaScript</span></div>
 <div class="fiddle-tabs" role="tablist" aria-label="Choose code language">
 <button id="fiddle-tab-html" type="button" role="tab" aria-selected="true" aria-controls="fiddle-html">HTML</button>
 <button id="fiddle-tab-css" type="button" role="tab" aria-selected="false" aria-controls="fiddle-css" tabindex="-1">CSS</button>
@@ -29,18 +30,20 @@
 <label for="fiddle-html" class="fiddle-label">Page content</label><textarea id="fiddle-html" spellcheck="false" rows="12" maxlength="15000" role="tabpanel" aria-labelledby="fiddle-tab-html"></textarea>
 <label for="fiddle-css" class="fiddle-label" hidden>Colors and layout</label><textarea id="fiddle-css" spellcheck="false" rows="12" maxlength="15000" role="tabpanel" aria-labelledby="fiddle-tab-css" hidden></textarea>
 <label for="fiddle-js" class="fiddle-label" hidden>Interactions and calculations</label><textarea id="fiddle-js" spellcheck="false" rows="12" maxlength="15000" role="tabpanel" aria-labelledby="fiddle-tab-js" hidden></textarea>
-<div class="fiddle-actions"><button id="fiddle-run" type="button" class="btn orange">▶ Run</button><button id="fiddle-export" type="button" class="btn secondary">Download app</button><button id="fiddle-explain" type="button" class="btn secondary">✧ Explain this code</button></div>
+<div class="fiddle-actions"><button id="fiddle-run" type="button" class="btn orange">▶ Run</button><button id="fiddle-export" type="button" class="btn secondary">Download app</button><button id="fiddle-explain" type="button" class="btn secondary">✧ Ask AI about code</button></div>
 <p id="fiddle-tip" role="status" aria-live="polite" class="fiddle-tip">Choose an example. Everything you edit can be tested in the preview.</p>
 <div class="fiddle-console-head">Console <span>• App messages</span></div><pre id="fiddle-console" aria-live="polite">Ready to run.</pre>
 </section>
+<div class="ai-resize-grip" id="ai-resize-preview" role="separator" aria-label="Resize code editor and app preview" aria-orientation="vertical" tabindex="0"></div>
 <section class="ai-preview-pane" id="app-preview" aria-label="Live preview and assistant">
 <div class="fiddle-preview-head"><strong>◧ Live App Preview</strong><span>Updates when you press Run</span></div>
 <iframe id="fiddle-preview" title="Live preview of your code" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
-<div class="ai-chat" id="assistant" aria-label="AI assistant">
-<div class="ai-chat-head"><div><strong>✧ AI Assistant</strong><small>Explore and understand your app</small></div><span class="ai-chip">Source-aware</span></div>
-<div class="ai-message-history" id="ai-messages" aria-live="polite"><div class="ai-msg ai-msg-bot"><strong>ListPull Assistant</strong><p>Ask me about your example, or choose “Explain this code” to prepare a question for the local AI model.</p></div></div>
-<form id="ai-form" class="ai-compose"><label for="ai-question">Your question</label><textarea id="ai-question" rows="2" maxlength="350" placeholder="How could this help my business?" required></textarea><div class="ai-compose-actions"><button id="ai-example" type="button" class="btn secondary">Example</button><button type="submit" class="btn orange">Find evidence</button></div></form>
-<div class="ai-retrieval" id="ai-retrieval" hidden><h3>Relevant information</h3><ol id="ai-sources"></ol><details><summary>See the assembled question</summary><label for="ai-prompt">Question and supporting records</label><textarea id="ai-prompt" rows="7" readonly></textarea><button type="button" id="ai-copy" class="btn secondary">Copy question</button></details></div>
+<div class="ai-resize-grip ai-resize-grip-horizontal" id="ai-resize-chat" role="separator" aria-label="Resize app preview and AI chat" aria-orientation="horizontal" tabindex="0"></div>
+<div class="ai-chat" id="assistant" aria-label="Live AI Agent conversation">
+<div class="ai-chat-head"><div><strong>✧ AI Agent</strong><small>Ask about your code or request an edit</small></div><span class="ai-chip" id="ai-agent-indicator">Agent off</span></div>
+<div class="ai-message-history" id="ai-messages" role="log" aria-live="polite" aria-relevant="additions text"><div class="ai-msg ai-msg-bot"><strong>ListPull AI Agent</strong><p>Choose an app on the left. Enable the AI Agent above, then ask a question or select “Edit app” to propose a change.</p></div></div>
+<div class="ai-edit-proposal" id="ai-edit-proposal" hidden><div class="ai-proposal-head"><strong id="ai-edit-label">Suggested code change</strong><span>Review before applying</span></div><textarea id="ai-edit-draft" rows="5" readonly aria-label="Proposed replacement code"></textarea><div class="ai-proposal-actions"><button id="ai-apply-code" class="btn orange" type="button">Apply change & run</button><button id="ai-discard-code" class="btn secondary" type="button">Discard</button></div></div>
+<form id="ai-form" class="ai-compose"><div class="ai-mode-controls"><label for="ai-agent-mode">What would you like to do?</label><select id="ai-agent-mode"><option value="ask">Ask the agent</option><option value="edit">Edit app code</option></select><label for="ai-edit-target" class="ai-edit-target-label" hidden>Edit file</label><select id="ai-edit-target" hidden><option value="html">HTML</option><option value="css">CSS</option><option value="js">JavaScript</option></select></div><label for="ai-question">Your message</label><textarea id="ai-question" rows="2" maxlength="1200" placeholder="What does this app do? Or choose Edit app to request a change." required></textarea><div class="ai-compose-actions"><span id="ai-compose-status" role="status" aria-live="polite">Enable the AI Agent to start chatting.</span><button id="ai-send" type="submit" class="btn orange">Send <span aria-hidden="true">↑</span></button></div></form>
 </div>
 </section>
 </section>
