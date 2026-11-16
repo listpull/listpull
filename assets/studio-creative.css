@@ -59,3 +59,13 @@ body.creative-app{background:var(--cs-bg);color:var(--cs-text);min-height:100vh;
 @media(max-width:710px){.creative-topbar{padding:0 10px;gap:9px}.creative-title span{display:none}.creative-toplinks{gap:8px}.creative-toplinks a{font-size:.68rem}.creative-toplinks a:last-child{display:none}
 .creative-toolbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;justify-content:flex-start}.creative-tool-group{flex:0 0 auto;flex-wrap:nowrap}.creative-export-group{margin-left:0}
 .creative-layout{display:flex;flex-direction:column}.creative-left{overflow:visible}.creative-templates{grid-template-columns:repeat(2,1fr)}.creative-work{min-height:430px;height:55vh}.creative-canvas-top,.creative-status{padding:8px}.creative-drop{padding:12px}.creative-status span:last-child{display:none}.creative-properties{overflow:visible}.creative-tabs{position:sticky}.creative-panel-scroll{max-height:none}.creative-panel-scroll [data-creative-panel]{padding-bottom:12px}}
+
+.creative-main:fullscreen,.creative-main.studio-faux-fullscreen,.video-main:fullscreen,.video-main.studio-faux-fullscreen,.video-monitor:fullscreen,.video-monitor.studio-faux-fullscreen{background:#101727;position:fixed;inset:0;width:100vw;height:100dvh;max-height:none;min-height:0;z-index:9999;margin:0;overflow:hidden}
+.creative-main:fullscreen .creative-layout,.creative-main.studio-faux-fullscreen .creative-layout{height:calc(100dvh - 64px)}
+.creative-main:fullscreen .creative-drop,.creative-main.studio-faux-fullscreen .creative-drop{min-height:0}
+.video-main:fullscreen .video-work-layout,.video-main.studio-faux-fullscreen .video-work-layout{min-height:0}
+.video-main:fullscreen .video-monitor,.video-main.studio-faux-fullscreen .video-monitor{min-height:0}
+.video-monitor:fullscreen,.video-monitor.studio-faux-fullscreen{display:grid;place-items:center;padding:12px}
+.video-monitor:fullscreen canvas,.video-monitor.studio-faux-fullscreen canvas{width:auto;height:auto;max-width:100vw;max-height:100dvh}
+[data-fullscreen-target][aria-pressed=true]{background:#ab584e!important;border-color:#f8c39d!important;color:white!important}
+.video-preview-fullscreen{border:1px solid #59718a;border-radius:7px;background:#2e3c59;color:#fff;padding:5px 10px;cursor:pointer;font-size:.72rem}
