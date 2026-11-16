@@ -90,6 +90,27 @@ test('Unified Creative Studio imports uploaded raster and editable SVG shapes',a
  await page.locator('[data-creative="save"]').click();
  expect((await project).suggestedFilename()).toContain('.listpull.json');
 });
+test('Creative Studio edits typography and crops an imported photo with editable values',async({page})=>{
+ await page.goto('/studio/image-editor.html');
+ await page.locator('[data-template="badge"]').click();
+ await page.locator('#creative-layers li').first().click();
+ await expect(page.locator('#creative-text-fields')).toBeVisible();
+ await page.locator('#creative-text-content').fill('LISTPULL MAKES ART');
+ await page.locator('#creative-text-content').dispatchEvent('change');
+ await page.locator('#creative-font').selectOption('Georgia');
+ await expect(page.locator('#creative-status')).toContainText('Typography updated');
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFUlEQVR4nGP8n+L2nwEJMDGgAcICAK9fArDZr6mIAAAAAElFTkSuQmCC','base64');
+ await page.locator('#creative-upload').setInputFiles({name:'tiny-artwork.png',mimeType:'image/png',buffer:png});
+ await expect(page.locator('#creative-layers')).toContainText('tiny-artwork.png');
+ await page.locator('#creative-layers li').first().click();
+ await expect(page.locator('#creative-crop-fields')).toBeVisible();
+ await page.locator('#creative-crop-w').fill('2');
+ await page.locator('#creative-crop-h').fill('3');
+ await page.locator('[data-creative="apply-crop"]').click();
+ await expect(page.locator('#creative-crop-w')).toHaveValue('2');
+ await page.locator('[data-creative="reset-crop"]').click();
+ await expect(page.locator('#creative-crop-w')).toHaveValue('4');
+});
 test('legacy vector route opens the unified Creative Studio',async({page})=>{
  await page.goto('/studio/vector.html');
  await expect(page).toHaveURL(/\/studio\/image-editor.html/);
@@ -107,6 +128,11 @@ test('full-screen controls expand both editor workspaces and the video monitor',
  await page.keyboard.press('Escape');
  await page.locator('[data-fullscreen-target=".video-monitor"]').click();
  await expect(page.locator('[data-fullscreen-target=".video-monitor"]')).toHaveAttribute('aria-pressed','true');
+ await page.goto('/studio/ai.html');
+ await page.locator('[data-fullscreen-target=".ai-workbench"]').click();
+ await expect(page.locator('[data-fullscreen-target=".ai-workbench"]')).toHaveAttribute('aria-pressed','true');
+ await page.keyboard.press('Escape');
+ await expect(page.locator('[data-fullscreen-target=".ai-workbench"]')).toHaveAttribute('aria-pressed','false');
 });
 test('Video Studio demo can play, trim, split, add title and capture a still',async({page})=>{
  await page.goto('/studio/video-editor.html');
