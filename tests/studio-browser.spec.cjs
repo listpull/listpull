@@ -225,6 +225,29 @@ test('Creative artboard takes imported image dimensions and allows immediate cus
  await expect(page.locator('#creative-size-label')).toContainText('640 × 360');
  await expect(page.locator('#creative-layers')).toContainText('client-banner.png');
 });
+test('Video Studio allows moving footage directly and adding editable picture-in-picture layers',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ await page.locator('#video-clip-track button').first().click();
+ const stage=await page.locator('#video-canvas').boundingBox();
+ const x=stage.x+stage.width*.5,y=stage.y+stage.height*.5;
+ await page.mouse.move(x,y);await page.mouse.down();
+ await page.mouse.move(x+48,y+13,{steps:5});await page.mouse.up();
+ await expect.poll(async()=>Number(await page.locator('#video-x').inputValue())).toBeGreaterThan(50);
+ await page.locator('#video-library li').first().click();
+ await page.locator('[data-video="add-overlay"]').click();
+ await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
+ await page.locator('#video-scrub').fill('1');
+ await page.locator('#video-overlay-track button').first().click();
+ await page.locator('#video-scale').fill('60');
+ await page.locator('#video-scale').dispatchEvent('change');
+ await expect(page.locator('#video-scale')).toHaveValue('60');
+ await page.locator('[data-video="keyframe"]').first().click();
+ await expect(page.locator('#video-keyframe-list')).toContainText('00:00');
+ const save=page.waitForEvent('download');
+ await page.locator('[data-video="save"]').click();
+ expect((await save).suggestedFilename()).toContain('video-project.json');
+});
 test('Video Studio exports a real encoded WebM from a trimmed local timeline',async({page})=>{
  await page.goto('/studio/video-editor.html');
  await page.locator('[data-video="demo"]').click();
