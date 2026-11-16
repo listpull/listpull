@@ -141,21 +141,10 @@
       if(!desktop()||event.button!==0)return;
       resize={kind,id:event.pointerId,start:axis==='x'?event.clientX:event.clientY,
         value:panelSize(kind),axis,sign};
-      grip.classList.add('is-dragging');grip.setPointerCapture(event.pointerId);event.preventDefault();
+      grip.classList.add('is-dragging');
+      try{grip.setPointerCapture(event.pointerId);}catch(e){}
+      event.preventDefault();
     });
-    grip.addEventListener('pointermove',event=>{
-      if(!resize||resize.kind!==kind||resize.id!==event.pointerId)return;
-      const next=axis==='x'?event.clientX:event.clientY;
-      resizePanel(kind,resize.value+resize.sign*(next-resize.start));
-      showScale();
-    });
-    const finish=event=>{
-      if(!resize||resize.id!==event.pointerId||resize.kind!==kind)return;
-      resize=null;grip.classList.remove('is-dragging');saveLayout();
-    };
-    grip.addEventListener('pointerup',finish);
-    grip.addEventListener('pointercancel',finish);
-    grip.addEventListener('lostpointercapture',()=>{if(resize?.kind===kind)resize=null;grip.classList.remove('is-dragging');});
     grip.addEventListener('keydown',event=>{
       if(!desktop())return;
       const keys=axis==='x'?['ArrowLeft','ArrowRight']:['ArrowUp','ArrowDown'];
@@ -165,6 +154,22 @@
       showScale();saveLayout();event.preventDefault();
     });
   }
+  // Window-level handlers keep dragging stable when the pointer leaves the narrow gutter.
+  window.addEventListener('pointermove',event=>{
+    if(!resize||resize.id!==event.pointerId)return;
+    const next=resize.axis==='x'?event.clientX:event.clientY;
+    resizePanel(resize.kind,resize.value+resize.sign*(next-resize.start));
+    showScale();
+  },true);
+  const finishResize=event=>{
+    if(!resize||resize.id!==event.pointerId)return;
+    $(resize.kind==='assets'?'video-split-assets':
+      resize.kind==='inspector'?'video-split-inspector':'video-split-timeline')
+      ?.classList.remove('is-dragging');
+    resize=null;saveLayout();
+  };
+  window.addEventListener('pointerup',finishResize,true);
+  window.addEventListener('pointercancel',finishResize,true);
   configureGrip('video-split-assets','assets','x',1);
   configureGrip('video-split-inspector','inspector','x',-1);
   configureGrip('video-split-timeline','timeline','y',-1);
