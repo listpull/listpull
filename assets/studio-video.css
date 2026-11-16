@@ -296,3 +296,11 @@ body.video-studio{background:var(--vbg);color:var(--vtext);font:14px/1.5 system-
  .video-track-label{min-width:90px;width:90px}
  .video-monitor-tools{margin-left:-110px}
 }
+
+/* Monitor overlays must never consume layout width or cover editing hit targets. */
+.video-center .video-monitor-tools{position:absolute;bottom:10px;left:12px;align-self:auto;
+ margin:0;width:auto;height:auto;display:flex;max-width:calc(100% - 24px);pointer-events:none}
+.video-center .video-monitor-tools button{pointer-events:auto}
+.video-center .video-monitor.is-pan-mode .video-preview-stage canvas{cursor:grab}
+.video-center .video-monitor.is-panning .video-preview-stage canvas{cursor:grabbing}
+.video-center .video-monitor.is-panning{user-select:none}
