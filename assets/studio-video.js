@@ -301,7 +301,7 @@
    if(event.button!==0)return;
    event.preventDefault();event.stopPropagation();
    const originX=event.clientX,initialIn=clip.in,initialOut=clip.out,initialStart=clip.start||0;
-   const secondsPerPixel=duration(clip)/Math.max(20,button.getBoundingClientRect().width);
+   const secondsPerPixel=1/Math.max(1,timelineScale);
    handle.setPointerCapture(event.pointerId);
    const move=e=>{
     const delta=(e.clientX-originX)*secondsPerPixel*(clip.speed||1);
@@ -313,7 +313,10 @@
     }
     const label=button.querySelector('span.video-clip-length');
     if(label)label.textContent=code(duration(clip));
-    button.style.minWidth=Math.max(85,duration(clip)*timelineScale)+'px';
+    const pixels=Math.max(25,duration(clip)*timelineScale);
+    button.style.width=pixels+'px';
+    button.style.flexBasis=pixels+'px';
+    button.style.minWidth='25px';
     renderTime();
    };
    const up=()=>{
@@ -342,7 +345,11 @@
    const small=document.createElement('span');small.className='video-clip-length';small.textContent=kind==='title'||kind==='overlay'?
      code(c.start)+' - '+code(c.end):code(duration(c));
    btn.append(small);
-   btn.style.minWidth=Math.max(85,(kind==='title'||kind==='overlay'?c.end-c.start:duration(c))*timelineScale)+'px';
+   const seconds=kind==='title'||kind==='overlay'?c.end-c.start:duration(c);
+   const pixels=Math.max(25,Math.max(.01,seconds)*timelineScale);
+   btn.style.width=pixels+'px';btn.style.flexBasis=pixels+'px';
+   btn.style.minWidth='25px';
+   btn.dataset.clipId=c.id;
    if(timed){btn.style.position='absolute';btn.style.left=Math.max(0,c.start||0)*timelineScale+'px';}
 
    if(a?.thumbnail&&kind!=='title'){
@@ -375,15 +382,118 @@
      btn.addEventListener('pointercancel',up,{once:true});
     });
    }
-   btn.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',c.id);});
+   btn.addEventListener('dragstart',e=>{
+     if(!e.dataTransfer)return;
+     e.dataTransfer.setData('text/plain','clip:'+c.id);
+     e.dataTransfer.setData('application/x-listpull-clip',c.id);
+     e.dataTransfer.effectAllowed='move';
+   });
    btn.addEventListener('dragover',e=>e.preventDefault());
    btn.addEventListener('drop',e=>{
-    e.preventDefault();const dragged=e.dataTransfer.getData('text/plain');
+    if(e.dataTransfer?.types?.includes('application/x-listpull-media'))return;
+    const dragged=e.dataTransfer?.getData('application/x-listpull-clip')||
+      String(e.dataTransfer?.getData('text/plain')||'').replace(/^clip:/,'');
     const ix=collection.findIndex(x=>x.id===dragged),to=collection.indexOf(c);
-    if(ix>=0&&ix!==to){collection.splice(to,0,collection.splice(ix,1)[0]);changed('Timeline clips reordered.');}
+    if(ix<0)return;
+    e.preventDefault();e.stopPropagation();
+    if(ix!==to){
+      collection.splice(to,0,collection.splice(ix,1)[0]);
+      changed('Timeline clips reordered.');
+      seek(at);
+    }
    });
    element.append(btn);
   }
+ }
+ function setupLibraryTimelineDrop(){
+   const targets=[
+     {id:'video-clip-track',kind:'clip'},
+     {id:'video-overlay-track',kind:'overlay'},
+     {id:'video-audio-track',kind:'audio'},
+     {id:'video-title-track',kind:'title'}
+   ];
+   const assetId=transfer=>{
+     if(!transfer)return '';
+     const exact=transfer.getData('application/x-listpull-media');
+     const fallback=transfer.getData('text/plain');
+     return exact||(fallback.startsWith('asset:')?fallback.slice(6):'');
+   };
+   const supported=(info,track)=>{
+     if(!info)return false;
+     if(track==='title')return false;
+     if(track==='audio')return info.kind==='audio';
+     if(track==='overlay')return info.kind==='image'||info.kind==='video';
+     return info.kind==='image'||info.kind==='video';
+   };
+   const timelinePosition=(event,el)=>Math.max(0,(event.clientX-el.getBoundingClientRect().left-4)/Math.max(1,timelineScale));
+   function insert(event,track,element){
+     const data=event.dataTransfer;
+     const info=asset(assetId(data));
+     if(info){
+       event.preventDefault();event.stopPropagation();
+       if(!supported(info,track)){
+         status(info.kind==='audio'?'Drop sound onto AUDIO / VOICE.':'Drop video or images onto VIDEO / IMAGE or OVERLAY / PIP.');
+         return;
+       }
+       const time=timelinePosition(event,element);
+       if(track==='clip'){
+         const sequence=blocks();
+         // Insert before the closest clip boundary and ripple later timed layers.
+         const index=sequence.findIndex(x=>time<(x.start+x.end)/2);
+         addFileToTimeline(info,{track,index:index<0?clips.length:index,time});
+       }else{
+         addFileToTimeline(info,{track,time});
+       }
+       return;
+     }
+     const clipId=data?.getData('application/x-listpull-clip')||
+       String(data?.getData('text/plain')||'').replace(/^clip:/,'');
+     if(track==='clip'&&clipId){
+       const index=clips.findIndex(x=>x.id===clipId);
+       if(index<0)return;
+       event.preventDefault();event.stopPropagation();
+       const time=timelinePosition(event,element);
+       const boundaries=blocks();
+       let to=boundaries.findIndex(x=>time<(x.start+x.end)/2);
+       if(to<0)to=clips.length;
+       const [moved]=clips.splice(index,1);
+       const target=Math.min(to>index?to-1:to,clips.length);
+       clips.splice(target,0,moved);
+       selectedId=moved.id;
+       changed('Clip moved to the new position on the timeline.');
+       seek(at);
+     }
+   }
+   for(const {id,kind} of targets){
+     const target=$(id);if(!target)continue;
+     target.dataset.dropKind=kind;
+     target.addEventListener('dragenter',event=>{
+       event.preventDefault();target.classList.add('is-drop-target');
+     });
+     target.addEventListener('dragover',event=>{
+       event.preventDefault();
+       if(event.dataTransfer)event.dataTransfer.dropEffect=
+         event.dataTransfer.types.includes('application/x-listpull-clip')?'move':'copy';
+       target.classList.add('is-drop-target');
+     });
+     target.addEventListener('dragleave',event=>{
+       if(!target.contains(event.relatedTarget))target.classList.remove('is-drop-target');
+     });
+     target.addEventListener('drop',event=>{
+       target.classList.remove('is-drop-target');
+       insert(event,kind,target);
+     });
+   }
+   const timeline=$('video-timeline');
+   // Dropping in the empty timeline gutter is also useful for first-time users.
+   timeline.addEventListener('dragover',e=>{if(e.dataTransfer?.types.includes('application/x-listpull-media'))e.preventDefault();});
+   timeline.addEventListener('drop',e=>{
+     if(e.target.closest('.video-track-clips'))return;
+     const info=asset(assetId(e.dataTransfer));if(!info)return;
+     const track=info.kind==='audio'?'audio':'clip';
+     const el=$(track==='audio'?'video-audio-track':'video-clip-track');
+     insert(e,track,el);
+   });
  }
  function renderAll(){
   renderLibrary();renderTrack($('video-clip-track'),clips,'clip');renderTrack($('video-overlay-track'),overlays,'overlay');
@@ -1000,6 +1110,7 @@
   if(edited)fillInspector(edited);draw();
  }
  function startup(){
+  setupLibraryTimelineDrop();
   document.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',()=>command(button.dataset.video)));
   document.querySelectorAll('[data-video-tab]').forEach(button=>button.addEventListener('click',()=>switchTab(button.dataset.videoTab)));
   document.querySelectorAll('[data-video-size]').forEach(button=>button.addEventListener('click',()=>{
