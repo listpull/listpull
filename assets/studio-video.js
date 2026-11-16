@@ -718,6 +718,85 @@
    }selectedId=null;at=Math.min(at,total());changed('Selected item removed.');seek(at);return;
   }
  }
+ function previewPoint(event){
+  const bounds=canvas.getBoundingClientRect();
+  if(!bounds.width||!bounds.height)return null;
+  return {x:(event.clientX-bounds.left)*width/bounds.width,
+   y:(event.clientY-bounds.top)*height/bounds.height};
+ }
+ function hitBox(c){
+  if(!c)return null;
+  if(c.type==='title'){
+   if(at<c.start||at>=c.end)return null;
+   const state=visualAt(c,at-c.start),fs=(c.size||66)*state.scale/100;
+   return {x:state.x*width/100,y:state.y*height/100,
+    w:Math.min(width*.82,Math.max(fs*2,String(c.text||'').length*fs*.46)),
+    h:fs*1.6,rotation:state.rotation||0};
+  }
+  const block=blocks().find(b=>b.clip.id===c.id);
+  if(c.type!=='overlay'&&!block)return null;
+  if(c.type==='overlay'&&(at<c.start||at>=c.end))return null;
+  const a=asset(c.assetId);
+  return mediaBounds(a?.kind==='image'?images.get(a.url):a?.kind==='video'?
+    (c.type==='overlay'?overlayElement(c):player):null,c,at,c.type==='overlay'?c.start:block?.start||0);
+ }
+ function pickPreviewObject(p){
+  const activeTitles=titles.filter(x=>at>=x.start&&at<x.end).reverse();
+  const activeOverlays=overlays.filter(x=>at>=x.start&&at<x.end).reverse();
+  const main=getBlock(at)?.clip;
+  for(const o of [...activeTitles,...activeOverlays,...(main?[main]:[])]){
+   const rect=hitBox(o);if(!rect)continue;
+   const dx=p.x-rect.x,dy=p.y-rect.y,angle=-(rect.rotation||0)*Math.PI/180;
+   const x=dx*Math.cos(angle)-dy*Math.sin(angle);
+   const y=dx*Math.sin(angle)+dy*Math.cos(angle);
+   const margin=Math.max(8,width/150);
+   if(Math.abs(x)<=rect.w/2+margin&&Math.abs(y)<=rect.h/2+margin){
+    const corner=Math.abs(Math.abs(x)-rect.w/2)<margin*3&&Math.abs(Math.abs(y)-rect.h/2)<margin*3;
+    return {item:o,mode:corner?'resize':'move',rect};
+   }
+  }
+  return null;
+ }
+ function previewDown(event){
+  if(event.button!==0||recording)return;
+  const p=previewPoint(event);if(!p)return;
+  const hit=pickPreviewObject(p);if(!hit)return;
+  pause();selectedId=hit.item.id;
+  const key=(hit.item.keyframes||[]).find(k=>Math.abs(k.at-activeOffset(hit.item))<.03);
+  const state=visualAt(hit.item,activeOffset(hit.item));
+  dragging={id:hit.item.id,mode:hit.mode,start:p,
+   scale:state.scale,x:state.x,y:state.y,
+   distance:Math.max(1,Math.hypot(p.x-hit.rect.x,p.y-hit.rect.y)),
+   key};
+  canvas.setPointerCapture(event.pointerId);
+  renderAll();fillInspector(hit.item);event.preventDefault();
+ }
+ function previewMove(event){
+  if(!dragging)return;
+  const p=previewPoint(event);if(!p)return;
+  const o=item(dragging.id);if(!o)return;
+  const next={};
+  if(dragging.mode==='resize'){
+   const rect=hitBox(o);if(!rect)return;
+   const distance=Math.hypot(p.x-rect.x,p.y-rect.y);
+   next.scale=limit(dragging.scale*distance/dragging.distance,1,1500);
+  }else{
+   next.x=dragging.x+(p.x-dragging.start.x)/width*100;
+   next.y=dragging.y+(p.y-dragging.start.y)/height*100;
+  }
+  for(const [key,value] of Object.entries(next)){
+   if(dragging.key)dragging.key[key]=value;
+   else o[key]=value;
+   const field=$('video-'+key);if(field)field.value=round(value);
+  }
+  draw();event.preventDefault();
+ }
+ function previewUp(){
+  if(!dragging)return;
+  const edited=item(dragging.id);dragging=null;
+  changed('Preview transform updated. Changes are reflected in the video export.');
+  if(edited)fillInspector(edited);draw();
+ }
  function startup(){
   document.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',()=>command(button.dataset.video)));
   document.querySelectorAll('[data-video-tab]').forEach(button=>button.addEventListener('click',()=>switchTab(button.dataset.videoTab)));
@@ -773,7 +852,11 @@
     }
   });
   player.addEventListener('error',()=>status('This video could not be decoded in the current browser. Try another format or codec.'));
-  resize();save();renderAll();
+  canvas.addEventListener('pointerdown',previewDown);
+  canvas.addEventListener('pointermove',previewMove);
+  canvas.addEventListener('pointerup',previewUp);
+  canvas.addEventListener('pointercancel',previewUp);
+    resize();save();renderAll();
   window.ListPullVideo=Object.freeze({
    inspect:()=>({width,height,fps,duration:total(),clips:clips.map(c=>({name:asset(c.assetId)?.name||'missing media',
       duration:round(duration(c)),filter:c.filter,speed:c.speed})),titles:titles.map(t=>({text:t.text,start:t.start,end:t.end})),
