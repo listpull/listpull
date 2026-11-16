@@ -44,7 +44,15 @@
 <div class="creative-asset-help"><a href="/studio/video-editor.html">Need motion? Open the Video Editor ↗</a></div>
 </aside>
 <section class="creative-work" id="creative-stage" aria-label="Interactive design canvas">
-<div class="creative-canvas-top"><span>Artboard: <strong id="creative-size-label">1200 × 800</strong></span>
+<div class="creative-canvas-top"><div class="creative-size-toolbar" aria-label="Edit artboard dimensions"><strong>Artboard</strong>
+<label for="creative-quick-width" class="sr-only">Canvas width in pixels</label><input id="creative-quick-width" type="number" min="1" step="1" value="1200" aria-label="Canvas width in pixels">
+<span aria-hidden="true">×</span><label for="creative-quick-height" class="sr-only">Canvas height in pixels</label><input id="creative-quick-height" type="number" min="1" step="1" value="800" aria-label="Canvas height in pixels">
+<button type="button" data-creative="quick-resize">Apply size</button>
+<button type="button" data-creative="match-import">Match image</button>
+<label class="creative-auto-size"><input type="checkbox" id="creative-auto-size" checked> Match imported image dimensions</label>
+<select id="creative-size-select" aria-label="Artboard size presets">
+<option value="">Presets</option><option value="1080,1080">Square · 1080 × 1080</option><option value="1080,1920">Portrait · 1080 × 1920</option><option value="1920,1080">Landscape · 1920 × 1080</option><option value="1200,630">Web cover · 1200 × 630</option><option value="2480,3508">A4 · 2480 × 3508</option><option value="custom">Custom dimensions</option>
+</select></div><span class="creative-size-readout">Document <strong id="creative-size-label">1200 × 800</strong></span>
 <div class="creative-zoom"><button type="button" data-creative="zoomout" aria-label="Zoom out">−</button><output id="creative-zoom-label">Fit</output><button type="button" data-creative="zoomin" aria-label="Zoom in">＋</button><button type="button" data-creative="fit">Fit</button></div></div>
 <div id="creative-drop" class="creative-drop" tabindex="0" aria-label="Artwork canvas, drop or paste images">
 <div class="creative-artboard"><canvas id="creative-canvas" width="1200" height="800" aria-label="Editable artboard with draggable and resizable objects"></canvas></div>
