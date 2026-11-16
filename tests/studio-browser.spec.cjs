@@ -128,7 +128,7 @@ test('Studio hub launches separate full editors',async({page})=>{
  await expect(page).toHaveURL(/\/studio\/image-editor.html/);
  await expect(page.locator('#editor-canvas')).toBeAttached();
 });
-test('Fiddle has working isolated preview and friendly sample',async({page})=>{
+test('IDE has working isolated preview and friendly sample',async({page})=>{
  await page.goto('/studio/ai.html#fiddle');
  await page.locator('[data-fiddle-preset="poster"]').click();
  await expect(page.frameLocator('#fiddle-preview').locator('h1')).toContainText('MAKE');
@@ -138,6 +138,91 @@ test('Fiddle has working isolated preview and friendly sample',async({page})=>{
  await page.locator('#fiddle-tab-html').click();
  await expect(page.locator('#fiddle-html')).toBeVisible();
 });
+test('AI Agent chat uses the loaded model to answer about the active IDE app',async({page})=>{
+ await page.goto('/studio/ai.html');
+ await page.locator('#ai-question').fill('What does the inventory app do?');
+ await page.locator('#ai-send').click();
+ await expect(page.locator('#ai-compose-status')).toContainText('Enable the AI Agent');
+ await page.evaluate(()=>{
+   window.__agentRequests=[];
+   window.ListPullAgent={isReady:()=>true,complete:async messages=>{
+     window.__agentRequests.push(messages);
+     return 'The inventory app compares current stock with demand and highlights shortages.';
+   }};
+   window.dispatchEvent(new Event('listpull-agent-state'));
+ });
+ await expect(page.locator('#ai-agent-indicator')).toContainText('online');
+ await page.locator('#ai-question').fill('Explain the inventory app');
+ await page.locator('#ai-send').click();
+ await expect(page.locator('#ai-messages')).toContainText('compares current stock with demand');
+ const requests=await page.evaluate(()=>window.__agentRequests);
+ expect(requests.length).toBe(1);
+ expect(requests[0].at(-1).content).toContain('Which products need attention?');
+ expect(requests[0].at(-1).content).toContain('Explain the inventory app');
+ await page.locator('#ai-local-ask').click();
+ await expect(page.locator('#ai-question')).toBeFocused();
+});
+
+test('AI Agent proposes a reviewed IDE edit, applies it to preview and supports undo',async({page})=>{
+ await page.goto('/studio/ai.html?app=poster');
+ await expect(page.frameLocator('#fiddle-preview').locator('h1')).toContainText('MAKE');
+ const initial=await page.locator('#fiddle-html').inputValue();
+ await page.evaluate(()=>{
+   window.ListPullAgent={isReady:()=>true,complete:async messages=>{
+     if(messages[0].content.includes('editing assistant'))
+       return '```html\n<main><h1>AI AGENT UPDATED THIS APP</h1></main>\n```';
+     return 'The poster is a creative layout.';
+   }};
+   window.dispatchEvent(new Event('listpull-agent-state'));
+ });
+ await page.locator('#ai-agent-mode').selectOption('edit');
+ await page.locator('#ai-edit-target').selectOption('html');
+ await page.locator('#ai-question').fill('Replace the poster title');
+ await page.locator('#ai-send').click();
+ await expect(page.locator('#ai-edit-proposal')).toBeVisible();
+ await expect(page.locator('#ai-edit-draft')).toHaveValue(/AI AGENT UPDATED/);
+ await expect(page.locator('#fiddle-html')).toHaveValue(initial);
+ await page.locator('#ai-apply-code').click();
+ await expect(page.locator('#fiddle-html')).toHaveValue(/AI AGENT UPDATED/);
+ await expect(page.frameLocator('#fiddle-preview').locator('h1')).toHaveText('AI AGENT UPDATED THIS APP');
+ await page.locator('#fiddle-undo-agent').click();
+ await expect(page.locator('#fiddle-html')).toHaveValue(initial);
+ await expect(page.frameLocator('#fiddle-preview').locator('h1')).toContainText('MAKE');
+});
+
+test('IDE panel widths and AI chat height are adjustable',async({page})=>{
+ await page.setViewportSize({width:1400,height:900});
+ await page.goto('/studio/ai.html');
+ const grip=page.locator('#ai-resize-preview');
+ const original=await page.locator('.ai-preview-pane').evaluate(node=>node.getBoundingClientRect().width);
+ const b=await grip.boundingBox();
+ await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();
+ await page.mouse.move(b.x+b.width/2-65,b.y+b.height/2,{steps:5});await page.mouse.up();
+ const wider=await page.locator('.ai-preview-pane').evaluate(node=>node.getBoundingClientRect().width);
+ expect(wider).toBeGreaterThan(original+20);
+ const handle=page.locator('#ai-resize-chat'),chat=page.locator('#assistant');
+ const before=await chat.evaluate(node=>node.getBoundingClientRect().height);
+ const h=await handle.boundingBox();
+ await page.mouse.move(h.x+h.width/2,h.y+h.height/2);await page.mouse.down();
+ await page.mouse.move(h.x+h.width/2,h.y+h.height/2-65,{steps:5});await page.mouse.up();
+ const after=await chat.evaluate(node=>node.getBoundingClientRect().height);
+ expect(after).toBeGreaterThan(before+20);
+});
+
+test('Engineering capabilities each link to a relevant live application',async({page})=>{
+ await page.goto('/engineering.html');
+ const articles=page.locator('article.tile');
+ expect(await articles.count()).toBe(7);
+ for(let i=0;i<7;i++){
+   await expect(articles.nth(i).locator('a.engineering-demo-link')).toHaveCount(1);
+ }
+ await expect(page.locator('a[href="/studio/ai.html#assistant"]').first()).toBeVisible();
+ await page.goto('/studio/strategy.html?scenario=government');
+ await expect(page.locator('#discovery-dataset-name')).toContainText('Public');
+ await page.goto('/studio/ai.html?app=service');
+ await expect(page.frameLocator('#fiddle-preview').locator('h1')).toContainText('Service delivery');
+});
+
 test('mobile visitor can open Labs menu without losing Blobby',async({browser})=>{
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await context.newPage();
