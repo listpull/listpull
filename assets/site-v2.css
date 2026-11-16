@@ -8,3 +8,12 @@
 /* Crisp vector chevron (replaces a font glyph that looked like markup). */
 .labs-chevron-icon{display:inline-block;width:15px;height:15px;flex:0 0 15px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
 .labs-trigger[aria-expanded="true"] .labs-chevron-icon{transform:rotate(180deg)}
+
+/* Engineering buyers: working examples beside each capability, not only generic CTAs. */
+.engineering-proof-note{max-width:890px;font-size:.84rem;color:#c8d3e0;margin:18px 0 0}
+.engineering-live-link{margin-top:auto;padding-top:15px;border-top:1px solid rgba(198,211,235,.17)}
+.engineering-live-link p{font-size:.8rem;color:#becbdc;margin:0 0 9px}
+.engineering-live-link .text-link{font-size:.85rem;color:#ffc19a;font-weight:800}
+.engineering-live-link .text-link:hover{color:#fff4db}
+.grid-2>.tile,.grid-3>.tile{display:flex;flex-direction:column}
+@media(max-width:680px){.engineering-live-link{padding-top:11px}.engineering-proof-note{font-size:.78rem}}

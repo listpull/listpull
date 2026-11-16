@@ -357,5 +357,8 @@
   const url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='listpull-discovery-report.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  });
- const starter=engine.makeDemo('inventory');starter.demoId='inventory';loadDataset(starter);
+ const requested=new URLSearchParams(location.search).get('scenario');
+ const allowed=['inventory','customers','deliveries','wildlife','movement','farming','health','government','strategic'];
+ const starterKey=allowed.includes(requested)?requested:'inventory';
+ const starter=engine.makeDemo(starterKey);starter.demoId=starterKey;loadDataset(starter);
 })();
