@@ -23,7 +23,7 @@
   const objects=()=>canvas.getObjects();
   const num=n=>Math.round((Number(n)||0)*100)/100;
   let docW=1200,docH=800,zoom=1,history=[],cursor=-1,restoring=false,ignore=false,brush=false,clipboard=null;
-  let timer=null,lastName='listpull-artwork';
+  let timer=null,lastName='listpull-artwork',lastImportedSize=null;
   const extras=['name','zValue','depthValue','fillDefinition','fillOpacity','shadowSettings','effectSettings','sourceName','sourceWidth','sourceHeight'];
   if(F.FabricObject){F.FabricObject.customProperties=[...new Set([...(F.FabricObject.customProperties||[]),...extras])];}
   const presets={
@@ -83,20 +83,34 @@
   function fitRatio(){
     const area=$('creative-drop');
     const width=Math.max(180,area.clientWidth-66),height=Math.max(160,area.clientHeight-66);
-    return clamp(Math.min(width/docW,height/docH),.05,3);
+    return clamp(Math.min(width/docW,height/docH),.003,8);
   }
   function applyZoom(scale){
-    zoom=clamp(Number(scale)||1,.05,8);
+    zoom=clamp(Number(scale)||1,.003,16);
     canvas.setDimensions({width:Math.max(1,Math.round(docW*zoom)),height:Math.max(1,Math.round(docH*zoom))});
     canvas.setZoom(zoom);
     canvas.calcOffset();
     text('creative-zoom-label',Math.round(zoom*100)+'%');
     text('creative-size-label',docW.toLocaleString()+' × '+docH.toLocaleString());
     $('creative-document-width').value=docW;$('creative-document-height').value=docH;
+    $('creative-quick-width').value=docW;$('creative-quick-height').value=docH;
   }
   function setSize(w,h){
     if(!Number.isInteger(w)||!Number.isInteger(h)||w<1||h<1)throw Error('Enter positive whole-number canvas dimensions.');
     docW=w;docH=h;applyZoom(fitRatio());noteMutation('Canvas set to '+docW+' × '+docH+' pixels.');
+  }
+  function matchImportedSize(){
+    if(!lastImportedSize){status('Import an image or SVG first to match its dimensions.');return;}
+    setSize(lastImportedSize.width,lastImportedSize.height);
+    status('Artboard matched to imported '+lastImportedSize.width+' × '+lastImportedSize.height+' artwork.');
+  }
+  function inspectSVGSize(raw){
+    const root=new DOMParser().parseFromString(raw,'image/svg+xml').documentElement;
+    const vb=(root.getAttribute('viewBox')||'').split(/[\s,]+/).map(Number);
+    const w=Number.parseFloat(root.getAttribute('width')),h=Number.parseFloat(root.getAttribute('height'));
+    const width=Math.round(Number.isFinite(w)&&w>0?w:vb.length===4?vb[2]:0);
+    const height=Math.round(Number.isFinite(h)&&h>0?h:vb.length===4?vb[3]:0);
+    return width>0&&height>0?{width,height}:null;
   }
   function createShape(type,opts={}){
     const options={left:90+Math.random()*80,top:95+Math.random()*85,fill:'#8b65e5',strokeWidth:0,
@@ -143,6 +157,12 @@
       createShape('star',{left:150,top:165,fill:'#ffd57b'});
       createShape('text',{left:120,top:440,text:'MAKE IT',fontSize:140,fill:'#ffffff'});
       createShape('text',{left:120,top:630,text:'MAGICAL.',fontSize:130,fill:'#ffcaaf'});
+    }
+    for(const layer of objects()){
+      if(!['text','i-text','textbox'].includes(layer.type))continue;
+      const available=Math.max(120,docW-(layer.left||0)-45);
+      if(layer.getScaledWidth()>available)layer.scaleX*=available/layer.getScaledWidth();
+      layer.setCoords();
     }
     canvas.discardActiveObject();syncInputs();renderLayers();
     noteMutation('Template loaded. Customize every shape, word, color and layer.');
@@ -362,10 +382,16 @@
       if(file.name.toLowerCase().endsWith('.json')){await loadState(await file.text());saveState();continue;}
       if(file.type==='image/svg+xml'||file.name.toLowerCase().endsWith('.svg')){
         const sanitized=sanitizeSVG(await file.text());
+        const dimensions=inspectSVGSize(sanitized);
+        if(dimensions){
+          lastImportedSize=dimensions;
+          if($('creative-auto-size').checked)setSize(dimensions.width,dimensions.height);
+        }
         const parsed=await F.loadSVGFromString(sanitized);
         const imported=parsed.objects||[];
         if(!imported.length)throw Error('No SVG shapes were found to import.');
-        for(const obj of imported){if(!obj)continue;obj.set({left:(obj.left||0)+50,top:(obj.top||0)+50});
+        const offset=$('creative-auto-size').checked?0:50;
+        for(const obj of imported){if(!obj)continue;obj.set({left:(obj.left||0)+offset,top:(obj.top||0)+offset});
           addObject(obj,file.name.replace(/\.svg$/i,'')+' · '+obj.type);}
         lastName=file.name.replace(/\.svg$/i,'');continue;
       }
@@ -374,9 +400,13 @@
       try{
         const element=new Image();element.decoding='async';
         element.src=url;await element.decode();
-        const image=new F.FabricImage(element,{left:40,top:40});
-        const factor=Math.min(1,Math.min(docW*.78/image.width,docH*.78/image.height));
+        lastImportedSize={width:element.naturalWidth,height:element.naturalHeight};
+        const auto=$('creative-auto-size').checked;
+        if(auto)setSize(lastImportedSize.width,lastImportedSize.height);
+        const image=new F.FabricImage(element,{left:0,top:0});
+        const factor=auto?1:Math.min(1,Math.min(docW*.9/image.width,docH*.9/image.height));
         image.scale(factor);
+        if(!auto){image.left=(docW-image.getScaledWidth())/2;image.top=(docH-image.getScaledHeight())/2;}
         image.sourceName=file.name;image.sourceWidth=element.naturalWidth;image.sourceHeight=element.naturalHeight;
         addObject(image,file.name);
         lastName=file.name.replace(/\.[^.]+$/,'');
@@ -468,6 +498,8 @@
     if(action==='apply-crop'){cropSelected(false);return;}
     if(action==='reset-crop'){cropSelected(true);return;}
     if(action==='resize'){setSize(Math.round(val('creative-document-width')),Math.round(val('creative-document-height')));return;}
+    if(action==='quick-resize'){setSize(Math.round(val('creative-quick-width')),Math.round(val('creative-quick-height')));return;}
+    if(action==='match-import'){matchImportedSize();return;}
     if(action==='background'){applyBackground();return;}
     if(action==='new'){
       if(objects().length&&!confirm('Start a new blank project? Export or save your current design first.'))return;
@@ -539,6 +571,17 @@
   all('[data-size]').forEach(b=>b.addEventListener('click',()=>{
     const [w,h]=b.dataset.size.split(',').map(Number);setSize(w,h);
   }));
+  $('creative-size-select').addEventListener('change',event=>{
+    if(event.target.value&&event.target.value!=='custom'){
+      const [w,h]=event.target.value.split(',').map(Number);setSize(w,h);
+    }else if(event.target.value==='custom')$('creative-quick-width').focus();
+    event.target.value='';
+  });
+  for(const id of ['creative-quick-width','creative-quick-height']){
+    $(id).addEventListener('keydown',event=>{
+      if(event.key==='Enter'){event.preventDefault();tool('quick-resize');}
+    });
+  }
   all('[data-creative-tab]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.creativeTab)));
   for(const field of ['x','y','w','h','z','angle','skewx','skewy','opacity','stroke','stroke-width']){
     const input=$('creative-'+field);if(!input)continue;
@@ -615,8 +658,10 @@
     }
   });
   window.addEventListener('resize',()=>{if(!document.activeElement?.closest('.creative-zoom'))applyZoom(fitRatio());});
-  doDemo('social');
-  // Browser-only recovery. We do not silently replace the start template with previously saved art.
+  canvas.clear();canvas.backgroundColor='#ffffff';docW=1200;docH=800;
+  applyZoom(fitRatio());saveState();renderLayers();
+  status('Blank artboard ready. Import a photo or SVG to match its dimensions, or choose a starter design.');
+  // Browser-only recovery. Previous work is restored only when requested.
   try{
     const prior=localStorage.getItem('listpull.creative.project');
     if(prior&&prior.length<3_500_000){

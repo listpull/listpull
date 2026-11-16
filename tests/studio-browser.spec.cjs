@@ -148,6 +148,140 @@ test('Video Studio demo can play, trim, split, add title and capture a still',as
  await page.locator('[data-video="snapshot"]').click();
  expect((await still).suggestedFilename()).toContain('still.png');
 });
+test('An imported video immediately previews its first frame and adopts its dimensions',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ const data=await page.evaluate(async()=>{
+  const c=document.createElement('canvas');c.width=320;c.height=180;
+  const g=c.getContext('2d');g.fillStyle='#37bfa2';g.fillRect(0,0,320,180);
+  const stream=c.captureStream(24),r=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});
+  const chunks=[];r.ondataavailable=e=>chunks.push(e.data);
+  const done=new Promise(resolve=>r.onstop=resolve);
+  r.start(100);
+  const paint=setInterval(()=>{
+   g.fillStyle='#37bfa2';g.fillRect(0,0,320,180);
+   g.fillStyle='#246bfa';g.fillRect(0,0,14,14);
+  },36);
+  await new Promise(resolve=>setTimeout(resolve,900));
+  clearInterval(paint);r.stop();await done;stream.getTracks().forEach(t=>t.stop());
+  const buffer=await new Blob(chunks).arrayBuffer(),bytes=new Uint8Array(buffer);
+  let str='';for(let i=0;i<bytes.length;i+=8192)str+=String.fromCharCode(...bytes.subarray(i,i+8192));
+  return btoa(str);
+ });
+ await page.locator('#video-upload').setInputFiles({name:'portrait-test.webm',mimeType:'video/webm',buffer:Buffer.from(data,'base64')});
+ await expect(page.locator('#video-library')).toContainText('portrait-test.webm');
+ await page.locator('[data-video="add-media"]').click();
+ await expect(page.locator('#video-frame-size')).toContainText('320 × 180');
+ await expect(page.locator('#video-quick-width')).toHaveValue('320');
+ await expect(page.locator('#video-quick-height')).toHaveValue('180');
+ await expect(page.locator('#video-play')).toContainText('Play');
+ await page.waitForTimeout(700);
+ console.log('VIDEO DECODE DIAGNOSTICS:',JSON.stringify(await page.evaluate(()=>{
+   const p=document.getElementById('video-source'),c=document.getElementById('video-canvas');
+   const pixel=c.getContext('2d').getImageData(Math.round(c.width/2),Math.round(c.height/2),1,1).data;
+   const copy=document.createElement('canvas');copy.width=320;copy.height=180;
+   let sourcePixel=null,paintError=null;
+   try{copy.getContext('2d').drawImage(p,0,0,320,180);
+    sourcePixel=[...copy.getContext('2d').getImageData(160,90,1,1).data];}
+   catch(error){paintError=String(error);}
+   return {sourcePixel,paintError,readyState:p.readyState,networkState:p.networkState,currentTime:p.currentTime,
+     duration:p.duration,videoWidth:p.videoWidth,videoHeight:p.videoHeight,paused:p.paused,
+     src:p.currentSrc.slice(0,65),error:p.error?.message,
+     pixel:[...pixel],status:document.getElementById('video-status').textContent};
+ })));
+ await expect.poll(async()=>page.evaluate(()=>{
+  const c=document.getElementById('video-canvas'),g=c.getContext('2d');
+  const pixel=g.getImageData(Math.round(c.width/2),Math.round(c.height/2),1,1).data;
+  return pixel[1]-pixel[0];
+ }),{timeout:15000}).toBeGreaterThan(35);
+ await page.locator('#video-quick-width').fill('720');
+ await page.locator('#video-quick-height').fill('1280');
+ await page.locator('[data-video="apply-quick-size"]').click();
+ await expect(page.locator('#video-frame-size')).toContainText('720 × 1280');
+ await page.locator('[data-video="match-source"]').click();
+ await expect(page.locator('#video-frame-size')).toContainText('320 × 180');
+ await page.locator('#video-fit').selectOption('cover');
+ await page.locator('#video-scale').fill('80');
+ await page.locator('#video-crop-left').fill('6');
+ await page.locator('#video-apply').click();
+ await expect(page.locator('#video-status')).toContainText('Edits applied');
+ await page.locator('[data-video="keyframe"]').first().click();
+ await expect(page.locator('#video-keyframe-list')).toContainText('00:00');
+});
+test('Creative artboard takes imported image dimensions and allows immediate custom resize',async({page})=>{
+ await page.goto('/studio/image-editor.html');
+ const png=await page.evaluate(()=>{
+  const c=document.createElement('canvas');c.width=640;c.height=360;
+  const g=c.getContext('2d');g.fillStyle='#72c9a8';g.fillRect(0,0,640,360);
+  return c.toDataURL('image/png').split(',')[1];
+ });
+ await page.locator('#creative-upload').setInputFiles({name:'client-banner.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await expect(page.locator('#creative-size-label')).toContainText('640 × 360');
+ await expect(page.locator('#creative-quick-width')).toHaveValue('640');
+ await page.locator('#creative-quick-width').fill('1500');
+ await page.locator('#creative-quick-height').fill('900');
+ await page.locator('[data-creative="quick-resize"]').click();
+ await expect(page.locator('#creative-size-label')).toContainText('1,500 × 900');
+ await page.locator('[data-creative="match-import"]').click();
+ await expect(page.locator('#creative-size-label')).toContainText('640 × 360');
+ await expect(page.locator('#creative-layers')).toContainText('client-banner.png');
+});
+test('Video Studio allows moving footage directly and adding editable picture-in-picture layers',async({page})=>{
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ await page.locator('#video-clip-track button').first().click();
+ const stage=await page.locator('#video-canvas').boundingBox();
+ const x=stage.x+stage.width*.5,y=stage.y+stage.height*.5;
+ console.log('PROGRAM MONITOR HIT:',JSON.stringify(await page.evaluate(({x,y})=>({
+  target:document.elementFromPoint(x,y)?.outerHTML?.slice(0,420),
+  targetClasses:document.elementsFromPoint(x,y).slice(0,8).map(el=>el.tagName+'#'+el.id+'.'+el.className),
+  inMonitor:!!document.elementFromPoint(x,y)?.closest('#video-preview'),
+  canvasPointerEvents:getComputedStyle(document.getElementById('video-canvas')).pointerEvents,
+  rect:document.getElementById('video-canvas').getBoundingClientRect().toJSON(),
+  duration:document.getElementById('video-project-duration').textContent
+ }),{x,y})));
+ await page.mouse.move(x,y);await page.mouse.down();
+ console.log('PROGRAM MONITOR DOWN:',await page.locator('#video-status').textContent());
+ await page.mouse.move(x+48,y+13,{steps:5});await page.mouse.up();
+ console.log('PROGRAM MONITOR UP:',await page.locator('#video-status').textContent(),await page.locator('#video-x').inputValue());
+ await expect.poll(async()=>Number(await page.locator('#video-x').inputValue())).toBeGreaterThan(50);
+ await page.locator('#video-library li').first().click();
+ await page.locator('[data-video="add-overlay"]').click();
+ console.log('OVERLAY STATUS:',await page.locator('#video-status').textContent(),'rows',await page.locator('#video-overlay-track').textContent(),'media',await page.locator('#video-library').textContent());
+ await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
+ await page.locator('#video-scrub').fill('1');
+ await page.locator('#video-overlay-track button').first().click();
+ await page.locator('#video-scale').fill('60');
+ await page.locator('#video-scale').dispatchEvent('change');
+ await expect(page.locator('#video-scale')).toHaveValue('60');
+ await page.locator('[data-video="keyframe"]').first().click();
+ await expect(page.locator('#video-keyframe-list')).toContainText('00:01');
+ const save=page.waitForEvent('download');
+ await page.locator('[data-video="save"]').click();
+ expect((await save).suggestedFilename()).toContain('video-project.json');
+});
+test('Still images can be extended and timed overlays can be repositioned without a fixed duration',async({page})=>{
+ page.on('pageerror',error=>console.log('VIDEO EDITOR SCRIPT ERROR:',error.message));
+ await page.goto('/studio/video-editor.html');
+ await page.locator('[data-video="demo"]').click();
+ await page.locator('#video-clip-track button').first().click();
+ await page.locator('#video-out').fill('9');
+ await page.locator('#video-out').dispatchEvent('change');
+ await expect(page.locator('#video-project-duration')).toContainText('00:17');
+ await page.locator('#video-library li').first().click();
+ await page.locator('#video-scrub').fill('2');
+ console.log('TIMED OVERLAY BEFORE:',await page.locator('#video-status').textContent(),'selection',await page.locator('#video-library li.is-selected').textContent());
+ await page.locator('[data-video="add-overlay"]').click();
+ console.log('TIMED OVERLAY AFTER:',await page.locator('#video-status').textContent(),'children',await page.locator('#video-overlay-track').innerHTML());
+ await expect(page.locator('#video-overlay-track button')).toHaveCount(1);
+ await page.locator('#video-timeline-start').fill('4');
+ await page.locator('#video-timeline-start').dispatchEvent('change');
+ await page.locator('#video-timeline-duration').fill('8');
+ await page.locator('#video-timeline-duration').dispatchEvent('change');
+ await expect(page.locator('#video-timeline-start')).toHaveValue('4');
+ await expect(page.locator('#video-timeline-duration')).toHaveValue('8');
+ const rect=await page.locator('#video-overlay-track button').first().evaluate(el=>({left:el.style.left,width:el.style.minWidth}));
+ expect(parseFloat(rect.left)).toBeGreaterThan(100);
+});
 test('Video Studio exports a real encoded WebM from a trimmed local timeline',async({page})=>{
  await page.goto('/studio/video-editor.html');
  await page.locator('[data-video="demo"]').click();

@@ -69,3 +69,17 @@ body.creative-app{background:var(--cs-bg);color:var(--cs-text);min-height:100vh;
 .video-monitor:fullscreen canvas,.video-monitor.studio-faux-fullscreen canvas{width:auto;height:auto;max-width:100vw;max-height:100dvh}
 [data-fullscreen-target][aria-pressed=true]{background:#ab584e!important;border-color:#f8c39d!important;color:white!important}
 .video-preview-fullscreen{border:1px solid #59718a;border-radius:7px;background:#2e3c59;color:#fff;padding:5px 10px;cursor:pointer;font-size:.72rem}
+
+/* Creative artboard dimensions remain editable beside the canvas at every size. */
+.creative-canvas-top{flex-wrap:wrap;gap:7px}
+.creative-size-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0}
+.creative-size-toolbar strong{font-size:.76rem;color:#eee4ef}
+.creative-size-toolbar input[type=number]{width:82px;border:1px solid #70819c;background:#102039;color:#fff;border-radius:7px;padding:6px 7px;text-align:center;font-size:.78rem;font-variant-numeric:tabular-nums}
+.creative-size-toolbar button,.creative-size-toolbar select{border:1px solid #61748c;background:#293752;color:#fff;border-radius:7px;padding:7px 8px;min-height:30px;font-size:.72rem;font-weight:750;cursor:pointer}
+.creative-size-toolbar select{max-width:155px}
+.creative-size-toolbar button:hover{background:#544c6e}
+.creative-auto-size{display:flex;align-items:center;gap:4px;color:#cdd4e5;font-size:.69rem;cursor:pointer}
+.creative-auto-size input{accent-color:#d18b78}
+.creative-size-readout{font-size:.67rem;color:#b7c6d9}
+@media(max-width:970px){.creative-size-readout{display:none}.creative-size-toolbar{flex:1}}
+@media(max-width:680px){.creative-canvas-top{align-items:flex-start}.creative-size-toolbar input[type=number]{width:66px}.creative-size-toolbar select{max-width:105px}.creative-auto-size{width:100%}}
