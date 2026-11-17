@@ -46,14 +46,52 @@ test('public pages have one sticky site nav; only overview pages have an app str
  }
 });
 
+test('public navigation is already present in the HTML before any JavaScript runs',async({page})=>{
+ const routes=['/','/labs.html','/studio.html','/engineering.html','/solutions.html',
+  '/studio/image-editor.html','/studio/video-editor.html','/studio/ai.html',
+  '/studio/strategy.html','/studio/forecast.html','/blobby.html',
+  '/blobby/wiki/','/contact/','/about-listpull/','/policies/privacy-policy/',
+  '/policies/terms-of-service/','/about-blobby.html','/contact-us.html',
+  '/contact-us/','/pages/contact/','/pages/privacy-policy/',
+  '/pages/terms-of-service/','/privacy-policy.html','/support/',
+  '/support/privacy-policy/','/support/terms-of-service/'];
+ for(const route of routes){
+  const response=await page.request.get(route);
+  expect(response.ok(),route+' returns a page').toBeTruthy();
+  const html=await response.text();
+  expect(html,route+' contains HTML site navigation').toContain('id="lp-global-navigation"');
+  expect(html,route+' contains 12 direct application links').toContain('class="lp-app-grid"');
+  expect(html,route+' contains direct Labs links').toContain('href="/labs.html"');
+  expect(html,route+' has a native Labs popover').toContain('popovertarget="labs-options"');
+  expect(html,route+' does not load a nav injection script').not.toContain('/assets/listpull-navigation.js');
+ }
+});
+
+test('site navigation works with JavaScript disabled',async({browser})=>{
+ const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:1280,height:800}});
+ const page=await context.newPage();
+ await page.goto('http://127.0.0.1:4173/');
+ await expect(page.locator('#lp-global-navigation .lp-brand')).toBeVisible();
+ await expect(page.locator('#lp-app-strip .lp-app-tile')).toHaveCount(12);
+ await page.locator('.lp-labs-trigger').click();
+ await expect(page.locator('#labs-options')).toBeVisible();
+ await expect(page.locator('#labs-options a[href="/studio.html"]')).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('#labs-options')).toBeHidden();
+ await page.locator('#lp-app-strip .lp-app-creative').click();
+ await expect(page).toHaveURL(/\/studio\/image-editor\.html$/);
+ await expect(page.locator('header.creative-topbar .lp-nav-actions')).toBeVisible();
+ await context.close();
+});
+
 test('icon launcher and Labs popup directly reach individual tools',async({page})=>{
  await page.goto('/');
  await expect(page.locator('#game')).toBeVisible();
  await expect(page.locator('.lp-app-strip .lp-app-blobby img')).toHaveAttribute('src','/blobby-no-bg.webp');
  await expect(page.locator('.lp-app-strip .lp-app-home img')).toHaveAttribute('src','/favicon.ico');
- const open=page.locator('[data-labs-trigger]');
+ const open=page.locator('.lp-labs-trigger');
  await open.click();
- await expect(open).toHaveAttribute('aria-expanded','true');
+ await expect(open).toHaveAttribute('popovertarget','labs-options');
  await expect(page.locator('#labs-options')).toBeVisible();
  await expect(page.locator('#labs-options .lp-app-tile')).toHaveCount(12);
  await expect(page.locator('#labs-options .lp-app-tile').first()).toHaveAttribute('href','/studio.html');
@@ -93,7 +131,7 @@ test('mobile navigation, tool actions and app menus fit inside the viewport',asy
   }else expect(frame.appCount,route).toBe(0);
  }
  await page.goto('http://127.0.0.1:4173/');
- await page.locator('[data-labs-trigger]').click();
+ await page.locator('.lp-labs-trigger').click();
  const popover=page.locator('#labs-options');
  await expect(popover).toBeVisible();
  const box=await popover.boundingBox();
