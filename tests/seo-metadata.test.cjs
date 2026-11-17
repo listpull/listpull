@@ -130,3 +130,32 @@ test('error and redirect files are noindex', () => {
     assert.doesNotMatch(content(tags(html, 'robots')[0]), /\bnoindex\b/, file);
   }
 });
+
+
+test('every indexable or legacy HTML page includes its own navigation source', () => {
+  const special = new Set(['301.html', '404.html', 'studio/vector.html']);
+  const tools = new Set(['studio/image-editor.html', 'studio/video-editor.html',
+    'studio/ai.html', 'studio/strategy.html', 'studio/forecast.html']);
+  const launchers = new Set(['index.html', 'engineering.html', 'solutions.html', 'studio.html']);
+
+  for (const file of Object.keys(canonicalByFile)) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.doesNotMatch(html, /(?:src=["']|href=["'])\/assets\/listpull-navigation\.js/,
+      file + ': no navigation injection script');
+    if (special.has(file)) continue;
+    assert.match(html, /id="lp-global-navigation"/, file + ': direct navbar markup');
+    assert.match(html, /popovertarget="labs-options"/, file + ': native Labs popup');
+    assert.equal((html.match(/class="lp-app-tile lp-app-tile-menu/g) || []).length, 12,
+      file + ': twelve actual app links in HTML');
+    if (tools.has(file)) {
+      assert.match(html, /class="lp-tool-navigation"/, file + ': compact tool navigation');
+      assert.doesNotMatch(html, /class="lp-site-header"/, file + ': no duplicate site navbar');
+    } else {
+      assert.match(html, /class="lp-site-header"/, file + ': full website navbar');
+    }
+    assert.equal(html.includes('id="lp-app-strip"'), launchers.has(file),
+      file + ': launcher only on the four overview pages');
+  }
+  assert.equal(fs.existsSync(path.join(root, 'assets/listpull-navigation.js')), false,
+    'the navigation injection file is deleted');
+});
