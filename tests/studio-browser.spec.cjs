@@ -6,8 +6,8 @@ test.setTimeout(60000);
 test('original consumer homepage and Labs dropdown are reachable',async({page})=>{
  await page.goto('/');
  await expect(page.locator('#game')).toBeVisible();
- await expect(page.locator('#wildlife')).toBeAttached();
- const dropdown=page.locator('[data-labs-trigger]');
+ await expect(page.locator('#instagram')).toBeAttached();
+ const dropdown=page.locator('.lp-labs-trigger');
  await dropdown.click();
  await expect(page.locator('#labs-options a[href="/studio.html"]')).toBeVisible();
  await expect(page.locator('#labs-options a[href="/labs.html"]')).toBeVisible();
@@ -524,7 +524,7 @@ test('mobile visitor can open Labs menu without losing Blobby',async({browser})=
  const page=await context.newPage();
  await page.goto('http://127.0.0.1:4173/');
  await expect(page.locator('#game')).toBeVisible();
- await page.locator('[data-labs-trigger]').click();
+ await page.locator('.lp-labs-trigger').click();
  await expect(page.locator('#labs-options a[href="/studio.html"]')).toBeVisible();
  await context.close();
 });
