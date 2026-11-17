@@ -110,6 +110,15 @@ test('homepage structured data identifies ListPull, not only the game', () => {
   assert.ok(nodes.some(n => n['@type'] === 'WebPage' && n.url === site + '/'));
   assert.ok(!nodes.some(n => n['@type'] === 'VideoGame'), 'game schema belongs on game page');
 });
+test('every indexable page has a clear visible page heading', () => {
+  for (const url of primary) {
+    const file = url === '/' ? 'index.html' : url.endsWith('/') ? url.slice(1) + 'index.html' : url.slice(1);
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
+    assert.equal(headings.length, 1, file + ': one main heading');
+    assert.ok(headings[0][1].replace(/<[^>]*>/g, '').trim().length > 8, file + ': meaningful heading');
+  }
+});
 test('error and redirect files are noindex', () => {
   for (const file of ['301.html', '404.html', 'studio/vector.html']) {
     const html = fs.readFileSync(path.join(root, file), 'utf8');
