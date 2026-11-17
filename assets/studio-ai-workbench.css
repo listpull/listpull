@@ -78,3 +78,17 @@ body{background:radial-gradient(ellipse at 84% -8%,#3c234e,transparent 46%),#0b1
 .ai-workbench:fullscreen,.ai-workbench.studio-faux-fullscreen{background:#0b1222;position:fixed;inset:0;width:100vw;height:100dvh;max-height:none;overflow-y:auto;z-index:9999;padding:10px 0}
 .ai-workbench:fullscreen .ai-workspace,.ai-workbench.studio-faux-fullscreen .ai-workspace{height:calc(100dvh - 217px)}
 @media(max-width:900px){.ai-workbench:fullscreen .ai-workspace,.ai-workbench.studio-faux-fullscreen .ai-workspace{height:auto}.ai-workbench-actions{justify-content:start}}
+
+
+/* Give the editor, preview and agent the available viewport height now that
+ * each tool has one native header instead of two stacked navigation rows. */
+@media(min-width:901px){
+ body.lp-tool-page .ai-workspace-title{padding:10px 0 8px;align-items:center}
+ body.lp-tool-page .ai-workspace-title h1{font-size:clamp(1.5rem,2.3vw,2rem)}
+ body.lp-tool-page .ai-workspace-title p{font-size:.78rem;line-height:1.45}
+ body.lp-tool-page .ai-model-strip{padding:8px 13px;margin-bottom:8px}
+ body.lp-tool-page .ai-model-strip .ai-local-controls{margin:6px 0 3px}
+ body.lp-tool-page .ai-workspace{
+   height:clamp(540px,calc(100dvh - 255px),1100px);min-height:540px
+ }
+}
