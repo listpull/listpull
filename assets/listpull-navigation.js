@@ -63,7 +63,7 @@
           '<div class="lp-nav-actions">'+
             '<div class="lp-more-menu"><button class="lp-more-button" type="button" aria-expanded="false" aria-controls="lp-more-links">More</button>'+
               '<div id="lp-more-links" class="lp-more-links" hidden>'+
-                '<a href="/about-blobby.html">Meet Blobby</a><a href="/#wildlife">Wildlife Media</a>'+
+                '<a href="/blobby.html">Meet Blobby</a><a href="/#wildlife">Wildlife Media</a>'+
                 '<a href="/#community">Community</a><a href="/engineering.html">Engineering</a><a href="/contact/">Contact</a>'+
               '</div></div>'+
             '<div class="lp-labs-menu" data-labs-menu>'+
@@ -95,7 +95,7 @@
             '<a class="lp-brand" href="/" aria-label="ListPull home"><img src="/favicon.ico" width="42" height="42" alt=""><span>ListPull</span></a>'+
             '<div class="lp-nav-links">'+
               '<a href="/studio.html" class="lp-nav-studio">ListPull Studio</a>'+
-              '<a href="/about-blobby.html">Meet Blobby</a>'+
+              '<a href="/blobby.html">Meet Blobby</a>'+
               '<a href="/#wildlife">Wildlife Media</a>'+
               '<a href="/#community">Community</a>'+
               '<a href="/engineering.html">Engineering</a>'+

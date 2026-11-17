@@ -5,7 +5,7 @@ body.creative-app{background:var(--cs-bg);color:var(--cs-text);min-height:100vh;
 .creative-app button{cursor:pointer}
 .creative-topbar{height:58px;background:#131e31;display:flex;align-items:center;gap:18px;padding:0 clamp(10px,2.5vw,32px);border-bottom:1px solid #40516d}
 .creative-brand{font-weight:850;color:#fff;white-space:nowrap;font-size:1rem;text-decoration:none}.creative-brand span{color:#ffb375;font-size:1.3rem}
-.creative-title{display:flex;align-items:center;gap:13px}.creative-title strong{font-size:.99rem}.creative-title span{font-size:.65rem;color:#b2c4de;letter-spacing:.1em}
+.creative-title{display:flex;align-items:center;gap:13px}.creative-title h1{font-size:.99rem;font-weight:750;margin:0;line-height:1.3;letter-spacing:normal}.creative-title span{font-size:.65rem;color:#b2c4de;letter-spacing:.1em}
 .creative-toplinks{margin-left:auto;display:flex;gap:17px}.creative-toplinks a{color:#cad7e8;text-decoration:none;font-size:.8rem}
 .creative-main{display:flex;flex-direction:column;min-height:calc(100dvh - 58px)}
 .creative-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:9px 16px;background:linear-gradient(100deg,#21233b,#122b37);border-bottom:1px solid #4b526d}

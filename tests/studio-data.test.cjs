@@ -84,7 +84,7 @@ test('public Studio pages never mention internal source projects or developer in
 test('entry pages advertise recognizable consumer and business paths',()=>{
  const root=path.resolve(__dirname,'..');
  const home=fs.readFileSync(path.join(root,'index.html'),'utf8');
- assert.ok(home.includes('Play. Create.'));
+ assert.ok(home.includes("Here's what you can do at"));
  assert.ok(home.includes('labs-chevron-icon'));
  assert.ok(home.includes('/solutions.html'));
  const strategy=fs.readFileSync(path.join(root,'studio/strategy.html'),'utf8');
