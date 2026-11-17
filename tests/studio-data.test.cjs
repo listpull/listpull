@@ -85,7 +85,7 @@ test('entry pages advertise recognizable consumer and business paths',()=>{
  const root=path.resolve(__dirname,'..');
  const home=fs.readFileSync(path.join(root,'index.html'),'utf8');
  assert.ok(home.includes("Here's what you can do at"));
- assert.ok(home.includes('labs-chevron-icon'));
+ assert.ok(home.includes('popovertarget="labs-options"'));
  assert.ok(home.includes('/solutions.html'));
  const strategy=fs.readFileSync(path.join(root,'studio/strategy.html'),'utf8');
  for(const id of ['discovery-upload','discovery-group','discovery-outcome','discovery-goal','discovery-insights'])assert.ok(strategy.includes('id="'+id+'"'));

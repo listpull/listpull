@@ -226,3 +226,50 @@ body.lp-tool-page .video-header>nav{display:none}
   body.lp-tool-page .video-logo,
   body.lp-tool-page .creative-brand{display:none}
 }
+
+
+/* Navigation is written into each HTML page. The Labs and More panels use
+   native HTML popovers, so opening, closing, Escape and light-dismiss work
+   without JavaScript-generated elements or click-handler dependencies. */
+#lp-global-navigation .lp-labs-trigger,
+#lp-global-navigation .lp-more-button { cursor:pointer; }
+#lp-global-navigation .lp-app-popover[popover] {
+  position:fixed;
+  inset:82px max(14px,calc((100vw - 1496px)/2 + 18px)) auto auto;
+  margin:0;
+  width:min(400px,calc(100vw - 22px));
+  z-index:3000;
+}
+#lp-global-navigation .lp-app-popover[popover]:not(:popover-open),
+#lp-global-navigation .lp-more-links[popover]:not(:popover-open) {display:none!important}
+#lp-global-navigation .lp-app-popover[popover]:popover-open {display:block}
+#lp-global-navigation .lp-more-links[popover] {
+  position:fixed;
+  inset:82px max(160px,calc((100vw - 1496px)/2 + 165px)) auto auto;
+  min-width:190px;
+  margin:0;
+  z-index:3000;
+}
+#lp-global-navigation .lp-more-links[popover]:popover-open {display:grid;gap:2px}
+#lp-global-navigation .lp-labs-menu:has(.lp-app-popover:popover-open) .lp-labs-trigger svg {transform:rotate(180deg)}
+#lp-global-navigation.lp-tool-navigation .lp-app-popover[popover] {
+  inset:62px 12px auto auto;
+}
+#lp-global-navigation.lp-tool-navigation .lp-more-links[popover] {
+  inset:62px 132px auto auto;
+}
+@media(max-width:600px) {
+  #lp-global-navigation .lp-app-popover[popover] {
+    inset:68px 7px auto auto;
+    width:min(355px,calc(100vw - 14px));
+  }
+  #lp-global-navigation .lp-more-links[popover] {
+    inset:68px 125px auto auto;
+  }
+  #lp-global-navigation.lp-tool-navigation .lp-app-popover[popover] {
+    inset:57px 7px auto auto;
+  }
+  #lp-global-navigation.lp-tool-navigation .lp-more-links[popover] {
+    inset:57px 113px auto auto;
+  }
+}
