@@ -83,3 +83,13 @@ body.creative-app{background:var(--cs-bg);color:var(--cs-text);min-height:100vh;
 .creative-size-readout{font-size:.67rem;color:#b7c6d9}
 @media(max-width:970px){.creative-size-readout{display:none}.creative-size-toolbar{flex:1}}
 @media(max-width:680px){.creative-canvas-top{align-items:flex-start}.creative-size-toolbar input[type=number]{width:66px}.creative-size-toolbar select{max-width:105px}.creative-auto-size{width:100%}}
+
+
+/* Desktop workstations: keep the editor controls on one compact, scrollable
+ * rail rather than consuming a second canvas row when tools wrap. */
+@media(min-width:711px){
+ .creative-toolbar{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+ .creative-tool-group{flex:0 0 auto;flex-wrap:nowrap}
+ .creative-export-group{position:sticky;right:0;z-index:2;margin-left:auto;
+   padding-left:8px;background:#17303e;box-shadow:-8px 0 14px #101827}
+}

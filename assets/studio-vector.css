@@ -24,3 +24,11 @@ body{background:radial-gradient(circle at 75% -5%,#34204b,transparent 40%),radia
 @media(max-width:680px){#vector-main>.vector-intro{padding-top:15px}.vector-templates{padding:13px}.vector-template-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.vector-template-buttons button{min-width:0;font-size:.73rem;padding:10px}.vector-toolbar{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start}.vector-toolbar button,.vector-toolbar .vector-upload{flex:0 0 auto}.vector-canvas-area{min-height:300px;touch-action:none}.vector-inspector{display:block}.vector-help{display:block}.vector-help>p{margin-top:12px}}
 
 .vector-toolbar #vector-pen[aria-pressed="true"]{background:#54324f;border-color:#ffad80;color:#fff}.vector-toolbar #vector-pen:focus-visible{outline:3px solid #94e9e4;outline-offset:2px}
+
+
+/* Compact analytics and forecast workspaces; the tool's data area, not its
+ * marketing introduction, should occupy the majority of the viewport. */
+body.lp-tool-page .vector-intro{padding:20px 0 12px}
+body.lp-tool-page .vector-intro h1{font-size:clamp(1.6rem,3vw,2.55rem);margin:8px 0}
+body.lp-tool-page .vector-intro p{font-size:.84rem;line-height:1.5}
+@media(max-width:680px){body.lp-tool-page .vector-intro{padding:15px 0 10px}}
