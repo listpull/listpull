@@ -51,20 +51,15 @@
   };
   function mount(){
     if(document.getElementById('lp-global-navigation'))return;
-    const original=document.querySelector('.content-wrapper > nav.navbar, header.site-header, header.vector-header, header.video-header, header.creative-topbar, nav.navbar, header.site-header');
+    // Tool workspaces already have a compact application header. Keep it and
+    // integrate the shared Labs menu there instead of stacking a site nav on top.
+    const toolPath=/^\/studio\/(?:ai|image-editor|video-editor|strategy|forecast)\.html$/.test(location.pathname);
+    const toolHeader=toolPath
+      ? document.querySelector('header.creative-topbar, header.video-header, header.vector-header')
+      : null;
+    const original=toolHeader||document.querySelector('.content-wrapper > nav.navbar, header.site-header, header.vector-header, header.video-header, header.creative-topbar, nav.navbar');
     if(!original)return;
-    const host=document.createElement('div');host.id='lp-global-navigation';host.className='lp-global-navigation';
-    host.innerHTML=
-      '<header class="lp-site-header">'+
-        '<nav class="lp-nav" aria-label="Main navigation">'+
-          '<a class="lp-brand" href="/" aria-label="ListPull home"><img src="/favicon.ico" width="42" height="42" alt=""><span>ListPull</span></a>'+
-          '<div class="lp-nav-links">'+
-            '<a href="/studio.html" class="lp-nav-studio">ListPull Studio</a>'+
-            '<a href="/about-blobby.html">Meet Blobby</a>'+
-            '<a href="/#wildlife">Wildlife Media</a>'+
-            '<a href="/#community">Community</a>'+
-            '<a href="/engineering.html">Engineering</a>'+
-          '</div>'+
+    const navActions=
           '<div class="lp-nav-actions">'+
             '<div class="lp-more-menu"><button class="lp-more-button" type="button" aria-expanded="false" aria-controls="lp-more-links">More</button>'+
               '<div id="lp-more-links" class="lp-more-links" hidden>'+
@@ -83,16 +78,45 @@
                 '</div>'+
               '</div>'+
             '</div>'+
-          '</div>'+
-        '</nav>'+
-      '</header>'+
-      '<nav class="lp-app-strip" aria-label="Quick access to ListPull applications">'+
-         '<div class="lp-app-strip-track"><span class="lp-strip-caption" aria-hidden="true">EXPLORE</span>'+
-           apps.map(a=>appLink(a,'strip')).join('')+
-         '</div>'+
-      '</nav>';
-    original.replaceWith(host);
-    document.body.classList.add('lp-has-global-nav');
+          '</div>';
+    const host=document.createElement('div');
+    host.id='lp-global-navigation';
+    if(toolHeader){
+      host.className='lp-tool-navigation';
+      host.setAttribute('aria-label','ListPull application navigation');
+      host.innerHTML=navActions;
+      (toolHeader.querySelector('.vector-nav')||toolHeader).append(host);
+      document.body.classList.add('lp-tool-page');
+    }else{
+      host.className='lp-global-navigation';
+      host.innerHTML=
+        '<header class="lp-site-header">'+
+          '<nav class="lp-nav" aria-label="Main navigation">'+
+            '<a class="lp-brand" href="/" aria-label="ListPull home"><img src="/favicon.ico" width="42" height="42" alt=""><span>ListPull</span></a>'+
+            '<div class="lp-nav-links">'+
+              '<a href="/studio.html" class="lp-nav-studio">ListPull Studio</a>'+
+              '<a href="/about-blobby.html">Meet Blobby</a>'+
+              '<a href="/#wildlife">Wildlife Media</a>'+
+              '<a href="/#community">Community</a>'+
+              '<a href="/engineering.html">Engineering</a>'+
+            '</div>'+
+            navActions+
+          '</nav>'+
+        '</header>';
+      original.replaceWith(host);
+      document.body.classList.add('lp-has-global-nav');
+      // The app strip belongs only to the four overview pages. As a sibling
+      // of the sticky header it scrolls away normally with the page content.
+      const stripPages=new Set(['/','/index.html','/engineering.html','/solutions.html','/studio.html']);
+      if(stripPages.has(location.pathname)){
+        host.insertAdjacentHTML('afterend',
+          '<nav id="lp-app-strip" class="lp-app-strip" aria-label="Quick access to ListPull applications">'+
+            '<div class="lp-app-strip-track"><span class="lp-strip-caption" aria-hidden="true">EXPLORE</span>'+
+              apps.map(a=>appLink(a,'strip')).join('')+
+            '</div>'+
+          '</nav>');
+      }
+    }
     const labButton=host.querySelector('.lp-labs-trigger'),popover=host.querySelector('.lp-app-popover');
     const moreButton=host.querySelector('.lp-more-button'),more=host.querySelector('.lp-more-links');
     function closeLabs(restoreFocus=false){
