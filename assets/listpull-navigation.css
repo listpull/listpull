@@ -183,7 +183,8 @@
 
 /* Only the marketing site's primary navigation stays sticky. The optional
  * overview-page launcher is a normal-flow sibling, not part of the sticky bar. */
-#lp-app-strip{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:#f7f7ff}
+#lp-app-strip,#lp-app-strip *{box-sizing:border-box}
+#lp-app-strip{position:static;font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;color:#f7f7ff}
 #lp-app-strip a:focus-visible{outline:3px solid #83e7ff;outline-offset:3px}
 
 /* The tools use their existing compact header, with shared navigation actions
