@@ -304,3 +304,12 @@ body.video-studio{background:var(--vbg);color:var(--vtext);font:14px/1.5 system-
 .video-center .video-monitor.is-pan-mode .video-preview-stage canvas{cursor:grab}
 .video-center .video-monitor.is-panning .video-preview-stage canvas{cursor:grabbing}
 .video-center .video-monitor.is-panning{user-select:none}
+
+
+/* Keep video controls accessible without letting the toolbar push the
+ * timeline and preview further down the page on desktop-sized workspaces. */
+@media(min-width:901px){
+ .video-toolbar{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+ .video-toolbar>*:not(.video-toolbar-push){flex-shrink:0}
+ .video-toolbar-push{flex:1 0 0}
+}
