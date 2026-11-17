@@ -96,7 +96,7 @@
             '<div class="lp-nav-links">'+
               '<a href="/studio.html" class="lp-nav-studio">ListPull Studio</a>'+
               '<a href="/blobby.html">Meet Blobby</a>'+
-              '<a href="/#wildlife">Wildlife Media</a>'+
+              '<a href="/#instagram">Wildlife Media</a>'+
               '<a href="/#community">Community</a>'+
               '<a href="/engineering.html">Engineering</a>'+
             '</div>'+
