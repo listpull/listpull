@@ -90,7 +90,7 @@ test('production experience remains discoverable and useful with JavaScript disa
   await expect(page.locator('[data-production-compare] img')).toHaveCount(2);
   const comparison=page.locator('[data-production-compare]').first();
   await expect(comparison.locator('input[type="range"]')).toHaveValue('50');
-  await expect(page.locator('a[href="/engineering/projects.html"]').first()).toBeVisible();
+  await expect(page.locator('main a[href="/engineering/projects.html"]').first()).toBeVisible();
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
   expect(overflow).toBe(false);
   await context.close();
