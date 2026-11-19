@@ -1,4 +1,4 @@
-name: Generate wildlife production media from source video
+name: Extract real wildlife production stills
 on:
   push:
     branches:
@@ -8,20 +8,35 @@ on:
 permissions:
   contents: write
 jobs:
-  inspect-video:
+  extract:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install video inspection tools
+      - name: Install FFmpeg
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-      - name: Inspect video and render contact sheet
+      - name: Generate frames from original ListPull edit
         shell: bash
         run: |
           set -euo pipefail
-          video="listpull_production_before_and_after_editing.mp4"
-          ffprobe -v error -show_entries format=duration,size:stream=index,codec_type,width,height,avg_frame_rate -of default=noprint_wrappers=1 "$video"
-          ffmpeg -hide_banner -loglevel error -y -i "$video" -vf "fps=1,scale=250:-2,tile=4x2:padding=8:margin=12" -frames:v 1 -q:v 7 /tmp/production-contact.jpg
-          echo "CONTACT_SHEET_BASE64_BEGIN"
-          base64 -w0 /tmp/production-contact.jpg
-          echo
-          echo "CONTACT_SHEET_BASE64_END"
+          source="listpull_production_before_and_after_editing.mp4"
+          mkdir -p assets/production
+          # One frame from the unedited opening, one from the finished treatment.
+          ffmpeg -hide_banner -loglevel error -y -ss 1.0 -i "$source" -frames:v 1 -vf "scale=810:-2" -c:v libwebp -quality 82 assets/production/fox-cubs-before.webp
+          ffmpeg -hide_banner -loglevel error -y -ss 4.4 -i "$source" -frames:v 1 -vf "scale=810:-2" -c:v libwebp -quality 82 assets/production/fox-cubs-after.webp
+          # Social sharing still: both actual source frames, left/right, no re-created imagery.
+          ffmpeg -hide_banner -loglevel error -y \
+            -i assets/production/fox-cubs-before.webp \
+            -i assets/production/fox-cubs-after.webp \
+            -filter_complex "[0:v]scale=600:675:force_original_aspect_ratio=increase,crop=600:675,drawtext=text=BEFORE:fontcolor=white:fontsize=34:box=1:boxcolor=black@0.6:boxborderw=14:x=26:y=26[left];[1:v]scale=600:675:force_original_aspect_ratio=increase,crop=600:675,drawtext=text=AFTER:fontcolor=white:fontsize=34:box=1:boxcolor=black@0.6:boxborderw=14:x=26:y=26[right];[left][right]hstack=inputs=2[output]" \
+            -map "[output]" -frames:v 1 -c:v libwebp -quality 80 assets/production/fox-cubs-before-after-social.webp
+          file assets/production/*.webp
+      - name: Commit original production stills
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/production/fox-cubs-*.webp
+          if ! git diff --staged --quiet; then
+            git commit -m "Add real before-and-after stills from ListPull production video [skip ci]"
+            git push origin HEAD:feature/wildlife-production-and-engineering-proof
+          fi
