@@ -76,3 +76,22 @@ test('Video Studio adds optional original wildlife footage without replacing the
   await expect(page.locator('#video-upload')).toHaveCount(1);
   await expect(page.locator('[data-video="export"]')).toBeVisible();
 });
+
+
+// TEMP VISUAL AUDIT - remove after inspecting rendered production layouts
+test('visual audit snapshots the real production page across viewports',async({page})=>{
+  for(const [name,url,width,height,selector] of [
+    ['DESKTOP','/wildlife-production.html',1300,850,'.production-hero'],
+    ['MOBILE','/wildlife-production.html',390,844,'.production-hero'],
+    ['HOMEPROMO','/',1280,900,'#wildlife-production']
+  ]){
+    await page.setViewportSize({width,height});
+    await page.goto(url);
+    const target=page.locator(selector);
+    await target.scrollIntoViewIfNeeded();
+    const screenshot=await page.screenshot({type:'jpeg',quality:45,animations:'disabled'});
+    console.log('VISUAL_' + name + '_BEGIN');
+    console.log(screenshot.toString('base64'));
+    console.log('VISUAL_' + name + '_END');
+  }
+});
