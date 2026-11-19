@@ -204,7 +204,8 @@ test('every HTML head has the ListPull bookmark icon, social cards, and verified
     'https://www.youtube.com/@listpull',
     'https://www.instagram.com/listpull/',
     'https://www.facebook.com/listpull',
-    'https://www.tiktok.com/@listpull'
+    'https://www.tiktok.com/@listpull',
+    'https://www.linkedin.com/company/listpull'
   ];
   for (const file of Object.keys(canonicalByFile)) {
     const html = fs.readFileSync(path.join(root, file), 'utf8');
@@ -259,4 +260,57 @@ test('Creative Studio and Image Studio names match their destinations on every H
   assert.match(studio, /"name":"Creative Studio","item":"https:\/\/listpull\.com\/studio\.html"/);
   assert.match(about, /href="\/studio\.html">Explore Creative Studio<\/a>/);
   assert.match(about, /href="\/solutions\.html">Explore ListPull Solutions<\/a>/);
+});
+
+
+test('official LinkedIn and visitor routes are consistent with ListPull identity', () => {
+  const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
+  const home = read('index.html');
+  const contact = read('contact/index.html');
+  const engineering = read('engineering.html');
+  const solutions = read('solutions.html');
+  const about = read('about-listpull/index.html');
+  const linkedIn = 'https://www.linkedin.com/company/listpull';
+  const organizations = [...home.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)]
+    .map(match => JSON.parse(match[1])).flatMap(data => data['@graph'] || [data])
+    .filter(node => node['@type'] === 'Organization' && node.url === site + '/');
+  assert.equal(organizations.length, 1, 'the homepage names one ListPull organization');
+  assert.ok(organizations[0].sameAs.includes(linkedIn), 'Organization lists the official LinkedIn');
+  assert.match(home, /class="social-btn"[^>]*>[\s\S]*?LinkedIn\s*<\/a>/i, 'LinkedIn has a visible homepage link');
+  for (const file of [engineering, solutions, about, contact]) {
+    assert.ok(file.includes('href="' + linkedIn + '"'), 'LinkedIn is reachable from client pages');
+  }
+  const socialLinks = [
+    'https://www.youtube.com/@listpull',
+    'https://www.instagram.com/listpull/',
+    'https://www.tiktok.com/@listpull',
+    'https://www.facebook.com/listpull',
+    linkedIn
+  ];
+  for (const url of socialLinks) {
+    assert.ok(contact.includes('href="' + url + '"'), 'Contact social destination ' + url);
+  }
+  assert.doesNotMatch(contact, /href="https:\/\/www\.(?:youtube|tiktok)\.com\/listpull"/,
+    'no old social URLs remain');
+  assert.match(home, /Explore Creative Studio/, 'clear link to Creative Studio');
+  assert.match(home, /Explore Blobby gameplay guide/, 'clear link to Blobby instructions');
+});
+
+test('Blobby metadata links to a real landing page while preserving app downloads', () => {
+  const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
+  const apple = 'https://apps.apple.com/us/app/blobbys-woodland-wonder/id1507379429';
+  const android = 'https://play.google.com/store/apps/details?id=com.listpull.matchblock4';
+  for (const file of ['blobby.html', 'about-blobby.html']) {
+    const html = read(file);
+    const data = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)]
+      .map(match => JSON.parse(match[1])).flatMap(node => node['@graph'] || [node]);
+    const video = data.find(node => node['@type'] === 'VideoObject');
+    assert.ok(video, file + ': gameplay video metadata');
+    assert.equal(video.url, site + '/about-blobby.html', file + ': real video landing route');
+    assert.equal(video.embedUrl, site + '/about-blobby.html', file + ': real video embed route');
+    assert.ok(fs.existsSync(path.join(root, 'blobby-preview.mp4')), 'gameplay video asset exists');
+  }
+  const page = read('blobby.html');
+  assert.ok(page.includes('href="' + apple + '"'), 'iOS download link');
+  assert.ok(page.includes('href="' + android + '"'), 'Android download link');
 });
