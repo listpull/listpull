@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Validate HTML metadata and naming
+        run: node --test tests/seo-metadata.test.cjs
       - name: Install isolated test dependencies
         run: npm install --no-save @playwright/test
       - name: Install Chromium for tests
