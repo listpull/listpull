@@ -10,10 +10,10 @@
     button.disabled = true;
     const originalLabel = button.textContent;
     button.textContent = 'Loading wildlife footage…';
-    status.textContent = 'Downloading the 15 MB source clip. Your project is unchanged.';
+    status.textContent = 'Downloading the lightweight 4.6 MB wildlife edit. Your project is unchanged.';
     try {
       if (typeof DataTransfer !== 'function') throw new Error('This browser cannot import samples automatically. Use the original MP4 link instead.');
-      const response = await fetch('/listpull_production_before_and_after_editing.mp4');
+      const response = await fetch('/assets/production/fox-cubs-editor-sample.mp4');
       if (!response.ok) throw new Error('The sample video could not be loaded. You can download it from the production page.');
       const blob = await response.blob();
       if (!blob.size || !blob.type.startsWith('video/')) throw new Error('The sample is not a playable video. Please use manual import.');

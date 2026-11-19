@@ -21,4 +21,9 @@ ffmpeg -hide_banner -loglevel error -y -ss 4.4 -i "$source" -frames:v 1 -vf "sca
 ffmpeg -hide_banner -loglevel error -y -i "$output/fox-cubs-before.webp" -i "$output/fox-cubs-after.webp" \
   -filter_complex "[0:v]scale=600:675:force_original_aspect_ratio=increase,crop=600:675,drawtext=text=BEFORE:fontcolor=white:fontsize=34:box=1:boxcolor=black@0.6:boxborderw=14:x=26:y=26[left];[1:v]scale=600:675:force_original_aspect_ratio=increase,crop=600:675,drawtext=text=AFTER:fontcolor=white:fontsize=34:box=1:boxcolor=black@0.6:boxborderw=14:x=26:y=26[right];[left][right]hstack=inputs=2[output]" \
   -map "[output]" -frames:v 1 -c:v libwebp -quality 80 "$output/fox-cubs-before-after-social.webp"
-echo "Original video stills rebuilt in $output"
+# A small, lower-resolution version is optional for the browser editing demo.
+# The public production page continues to use the full-resolution original file.
+ffmpeg -hide_banner -loglevel error -y -i "$source" -vf "scale=720:-2" \
+  -c:v libx264 -preset fast -crf 25 -pix_fmt yuv420p -movflags +faststart \
+  -c:a aac -b:a 96k "$output/fox-cubs-editor-sample.mp4"
+echo "Original video stills and optimized editing sample rebuilt in $output"

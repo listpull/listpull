@@ -334,6 +334,10 @@ test('wildlife production uses the original video, real stills, schema, and Blob
     'assets/production/fox-cubs-before-after-social.webp'
   ];
   assert.ok(fs.existsSync(path.join(root, video)), 'original video asset exists');
+  const proxy = 'assets/production/fox-cubs-editor-sample.mp4';
+  assert.ok(fs.existsSync(path.join(root, proxy)), 'optimized Video Studio sample exists');
+  assert.ok(fs.statSync(path.join(root, proxy)).size < fs.statSync(path.join(root, video)).size,
+    'the optional sample costs less to download than the full-resolution source');
   for (const still of stills) {
     assert.ok(fs.existsSync(path.join(root, still)), still + ': original footage still exists');
     assert.ok(html.includes('/' + still), still + ': featured in direct HTML or metadata');
@@ -355,6 +359,9 @@ test('wildlife production uses the original video, real stills, schema, and Blob
   assert.ok(videoSchema, 'video structured data');
   assert.equal(videoSchema.contentUrl, site + '/' + video, 'video data refers to the real MP4');
   assert.equal(videoSchema.thumbnailUrl[0], site + '/' + stills[1], 'thumbnail refers to the real video');
+  const sampleScript = fs.readFileSync(path.join(root, 'assets/production-sample.js'), 'utf8');
+  assert.ok(sampleScript.includes("'/assets/production/fox-cubs-editor-sample.mp4'"),
+    'Video Studio imports the optimized sample without downloading the full source');
   const script = fs.readFileSync(path.join(root, 'assets/production-showcase.js'), 'utf8');
   for (const text of ["video.play()", "video.pause()", "video.currentTime = 0",
     "video.addEventListener('ended', showPreview)", "video.addEventListener('error', showPreview)"]) {
