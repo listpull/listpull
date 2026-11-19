@@ -1,0 +1,10 @@
+/* Scoped enhancement: preserve Video Studio workspace sizing and editor controls. */
+.video-wildlife-sample { padding:13px 15px; border-top:1px solid rgba(194,225,218,.12); border-bottom:1px solid rgba(194,225,218,.12); background:rgba(71,143,125,.065); color:#d4e6e3; }
+.video-wildlife-sample strong { display:block; font-size:.83rem; margin-bottom:8px; color:#e3f8ed; }
+.video-wildlife-sample button { width:100%; padding:9px 10px; border:1px solid #398a73; border-radius:9px; background:#164b41; color:#e8fff4; font-size:.83rem; font-weight:800; cursor:pointer; }
+.video-wildlife-sample button:hover { background:#226b59; }
+.video-wildlife-sample button:focus-visible { outline:2px solid #9af3cf; outline-offset:2px; }
+.video-wildlife-sample button:disabled { opacity:.65; cursor:progress; }
+.video-wildlife-sample p { font-size:.74rem; line-height:1.55; color:#a5c2bc; margin:7px 0; }
+.video-wildlife-sample a { font-size:.77rem; color:#8af1c6; font-weight:750; text-underline-offset:3px; }
+.video-wildlife-sample #video-wildlife-sample-status { min-height:1.1em; color:#b5ebd5; margin:7px 0 0; }

@@ -204,4 +204,24 @@
           <lastmod>2026-11-19</lastmod>
           <priority>1.0</priority>
   </url>
+
+  <!-- Original media production with the first-party source video and stills -->
+  <url>
+    <loc>https://listpull.com/wildlife-production.html</loc>
+    <lastmod>2026-11-19</lastmod>
+    <priority>0.9</priority>
+    <image:image><image:loc>https://listpull.com/assets/production/fox-cubs-before-after-social.webp</image:loc><image:title>ListPull wildlife video editing before and after</image:title></image:image>
+    <image:image><image:loc>https://listpull.com/assets/production/fox-cubs-after.webp</image:loc><image:title>Two fox cubs in the finished wildlife production edit</image:title></image:image>
+    <video:video>
+      <video:thumbnail_loc>https://listpull.com/assets/production/fox-cubs-after.webp</video:thumbnail_loc>
+      <video:title>ListPull Wildlife Production - Before and After</video:title>
+      <video:description>Original ListPull video production showing two fox cubs before and after the editorial treatment.</video:description>
+      <video:content_loc>https://listpull.com/listpull_production_before_and_after_editing.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+  <url><loc>https://listpull.com/engineering/ai-applications.html</loc><lastmod>2026-11-19</lastmod><priority>0.8</priority></url>
+  <url><loc>https://listpull.com/engineering/cloud-integration.html</loc><lastmod>2026-11-19</lastmod><priority>0.8</priority></url>
+  <url><loc>https://listpull.com/engineering/custom-software.html</loc><lastmod>2026-11-19</lastmod><priority>0.8</priority></url>
+  <url><loc>https://listpull.com/engineering/projects.html</loc><lastmod>2026-11-19</lastmod><priority>0.8</priority></url>
 </urlset>

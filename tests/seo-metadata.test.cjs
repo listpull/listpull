@@ -11,7 +11,10 @@ const primary = [
   '/engineering.html', '/labs.html', '/solutions.html', '/studio.html',
   '/studio/ai.html', '/studio/forecast.html', '/studio/image-editor.html',
   '/studio/strategy.html', '/studio/video-editor.html',
-  '/policies/privacy-policy/', '/policies/terms-of-service/'
+  '/policies/privacy-policy/', '/policies/terms-of-service/',
+  '/wildlife-production.html', '/engineering/ai-applications.html',
+  '/engineering/cloud-integration.html', '/engineering/custom-software.html',
+  '/engineering/projects.html'
 ];
 const canonicalByFile = {
   'index.html': '/',
@@ -20,6 +23,11 @@ const canonicalByFile = {
   'blobby/wiki/index.html': '/blobby/wiki/',
   'contact/index.html': '/contact/',
   'engineering.html': '/engineering.html',
+  'engineering/ai-applications.html': '/engineering/ai-applications.html',
+  'engineering/cloud-integration.html': '/engineering/cloud-integration.html',
+  'engineering/custom-software.html': '/engineering/custom-software.html',
+  'engineering/projects.html': '/engineering/projects.html',
+  'wildlife-production.html': '/wildlife-production.html',
   'labs.html': '/labs.html',
   'solutions.html': '/solutions.html',
   'studio.html': '/studio.html',
@@ -314,4 +322,89 @@ test('Blobby metadata links to a real landing page while preserving app download
   const page = read('blobby.html');
   assert.ok(page.includes('href="' + apple + '"'), 'iOS download link');
   assert.ok(page.includes('href="' + android + '"'), 'Android download link');
+});
+
+
+test('wildlife production uses the original video, real stills, schema, and Blobby-style fallback', () => {
+  const html = fs.readFileSync(path.join(root, 'wildlife-production.html'), 'utf8');
+  const video = 'listpull_production_before_and_after_editing.mp4';
+  const stills = [
+    'assets/production/fox-cubs-before.webp',
+    'assets/production/fox-cubs-after.webp',
+    'assets/production/fox-cubs-before-after-social.webp'
+  ];
+  assert.ok(fs.existsSync(path.join(root, video)), 'original video asset exists');
+  const proxy = 'assets/production/fox-cubs-editor-sample.mp4';
+  assert.ok(fs.existsSync(path.join(root, proxy)), 'optimized Video Studio sample exists');
+  assert.ok(fs.statSync(path.join(root, proxy)).size < fs.statSync(path.join(root, video)).size,
+    'the optional sample costs less to download than the full-resolution source');
+  for (const still of stills) {
+    assert.ok(fs.existsSync(path.join(root, still)), still + ': original footage still exists');
+    assert.ok(html.includes('/' + still), still + ': featured in direct HTML or metadata');
+  }
+  assert.match(html, /class="production-video-wrap"/, 'poster fallback container');
+  assert.match(html, /class="production-play-button"/, 'visible play button');
+  assert.match(html, /class="production-preview-video"/, 'video player');
+  assert.match(html, /poster="\/assets\/production\/fox-cubs-after\.webp"/, 'source-derived poster');
+  assert.match(html, /<source src="\/listpull_production_before_and_after_editing\.mp4" type="video\/mp4">/, 'original MP4 source');
+  assert.match(html, /data-production-compare/, 'native slider starts in HTML');
+  assert.match(html, /type="range" min="0" max="100"/, 'keyboard-accessible comparison');
+  assert.match(html, /<meta property="og:video" content="https:\/\/listpull\.com\//, 'video social metadata');
+  const schema = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)]
+    .flatMap(match => {
+      const json = JSON.parse(match[1]);
+      return json['@graph'] || [json];
+    });
+  const videoSchema = schema.find(node => node['@type'] === 'VideoObject');
+  assert.ok(videoSchema, 'video structured data');
+  assert.equal(videoSchema.contentUrl, site + '/' + video, 'video data refers to the real MP4');
+  assert.equal(videoSchema.thumbnailUrl[0], site + '/' + stills[1], 'thumbnail refers to the real video');
+  const sampleScript = fs.readFileSync(path.join(root, 'assets/production-sample.js'), 'utf8');
+  assert.ok(sampleScript.includes("'/assets/production/fox-cubs-editor-sample.mp4'"),
+    'Video Studio imports the optimized sample without downloading the full source');
+  const script = fs.readFileSync(path.join(root, 'assets/production-showcase.js'), 'utf8');
+  for (const text of ["video.play()", "video.pause()", "video.currentTime = 0",
+    "video.addEventListener('ended', showPreview)", "video.addEventListener('error', showPreview)"]) {
+    assert.ok(script.includes(text), 'video fallback supports ' + text);
+  }
+});
+
+test('media and B2B pathways are directly linked and remain fully indexable', () => {
+  const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+  for (const file of ['index.html', 'engineering.html', 'solutions.html']) {
+    const html = read(file);
+    assert.match(html, /data-production-compare/, file + ': real frame comparison in HTML');
+    assert.ok(html.includes('assets/production-showcase.css'), file + ': comparison CSS');
+    assert.ok(html.includes('assets/production-showcase.js'), file + ': comparison interaction');
+    assert.ok(html.includes('href="/wildlife-production.html"'), file + ': production case route');
+  }
+  for (const file of ['about-listpull/index.html', 'labs.html', 'studio.html',
+    'studio/video-editor.html', 'blobby.html', 'contact/index.html']) {
+    assert.ok(read(file).includes('href="/wildlife-production.html"'), file + ': media work is reachable');
+  }
+  const services = [
+    'engineering/ai-applications.html',
+    'engineering/cloud-integration.html',
+    'engineering/custom-software.html',
+    'engineering/projects.html'
+  ];
+  for (const file of services) {
+    const html = read(file);
+    assert.ok(html.includes('href="/contact/#engineering"'), file + ': contact path for real projects');
+    assert.ok(html.includes('href="/engineering/projects.html"'), file + ': project evidence');
+    assert.match(content(tags(html, 'robots')[0]), /^index,\s*follow/i, file + ': indexable');
+    assert.doesNotMatch(html, /\bnoindex\b/i, file + ': no noindex anywhere');
+  }
+  const navFiles = Object.keys(canonicalByFile)
+    .filter(file => !['301.html', '404.html', 'studio/vector.html'].includes(file));
+  for (const file of navFiles) {
+    const html = read(file);
+    const start = html.indexOf('<div class="lp-more-links" id="lp-more-links" popover="auto">');
+    assert.ok(start >= 0, file + ': static More menu');
+    const menu = html.slice(start, html.indexOf('</div>', start));
+    assert.ok(menu.includes('<a href="/wildlife-production.html">Media Production</a>'),
+      file + ': direct Media Production menu link');
+    assert.ok(menu.includes('<a href="/engineering/projects.html">Selected Work</a>'),
+      file + ': direct Selected Work menu link');
+  }
 });

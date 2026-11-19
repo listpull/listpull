@@ -28,13 +28,14 @@
 <link rel="me" href="https://www.facebook.com/listpull">
 <link rel="me" href="https://www.tiktok.com/@listpull">
 <link rel="me" href="https://www.linkedin.com/company/listpull">
+<link rel="stylesheet" href="/assets/production-sample.css"><script src="/assets/production-sample.js" defer></script>
 </head><body class="video-studio lp-tool-page">
 <a class="skip" href="#video-preview">Skip to video preview</a>
 <header class="video-header"><a class="video-logo" href="/">✦ ListPull</a><h1>Video Studio</h1><span>VIDEO EDITOR · FREE LIMITED VERSION</span>
 <div id="lp-global-navigation" class="lp-tool-navigation" aria-label="ListPull application navigation"><div class="lp-nav-actions">
   <div class="lp-more-menu"><button class="lp-more-button" type="button" popovertarget="lp-more-links">More</button>
     <div class="lp-more-links" id="lp-more-links" popover="auto">
-      <a href="/blobby.html">Meet Blobby</a><a href="/#instagram">Wildlife Media</a><a href="/#community">Community</a><a href="/about-listpull/">About ListPull</a><a href="/engineering.html">Engineering</a><a href="/contact/">Contact</a>
+      <a href="/blobby.html">Meet Blobby</a><a href="/#instagram">Wildlife Media</a><a href="/#community">Community</a><a href="/about-listpull/">About ListPull</a><a href="/wildlife-production.html">Media Production</a><a href="/engineering/projects.html">Selected Work</a><a href="/engineering.html">Engineering</a><a href="/contact/">Contact</a>
     </div>
   </div>
   <div class="lp-labs-menu"><button class="lp-labs-trigger" type="button" popovertarget="labs-options" aria-haspopup="dialog">ListPull Labs <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5 8 5 5 5-5"/></svg></button>
@@ -69,6 +70,13 @@
 <div class="video-panel-title"><strong>Media library</strong><small>Drag assets onto timeline tracks</small></div>
 <div class="video-import-drop" id="video-import-drop" tabindex="0">
 <span>▧</span><p>Drop your video, images or sound here.</p><label for="video-upload">Browse files</label></div>
+<div class="video-wildlife-sample">
+ <strong>Try real ListPull footage</strong>
+ <button type="button" id="video-load-wildlife-sample" aria-describedby="video-wildlife-sample-info">Load fox cub edit sample (4.6 MB)</button>
+ <p id="video-wildlife-sample-info">Optional download. Imports into the media library; your existing project stays in place.</p>
+ <a href="/wildlife-production.html">Watch the finished wildlife edit ↗</a>
+ <p id="video-wildlife-sample-status" role="status" aria-live="polite"></p>
+</div>
 <ul class="video-library" id="video-library" aria-label="Available media"></ul>
 <div class="video-asset-controls"><button type="button" data-video="add-media">＋ Add selected to timeline</button><button type="button" data-video="record-voice">● Record voiceover</button></div>
 <p class="video-small">Select or drag media into a timeline track. Media is edited on your device. Save the project and keep its source files together when transferring projects.</p>

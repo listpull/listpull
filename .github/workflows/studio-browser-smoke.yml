@@ -4,11 +4,9 @@ on:
     branches: [feature/unified-creative-media-studio]
   pull_request:
     paths:
-      - 'index.html'
+      - '**/*.html'
       - 'assets/**'
-      - 'studio/**'
-      - 'studio.html'
-      - 'contact/**'
+      - 'sitemap.xml'
       - 'tests/**'
       - '.github/workflows/studio-browser-smoke.yml'
   workflow_dispatch:
@@ -33,4 +31,4 @@ jobs:
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/listpull-http.log 2>&1 &
           sleep 2
-          npx playwright test tests/studio-browser.spec.cjs tests/navigation-browser.spec.cjs --reporter=line --workers=1
+          npx playwright test tests/studio-browser.spec.cjs tests/navigation-browser.spec.cjs tests/production-browser.spec.cjs --reporter=line --workers=1
