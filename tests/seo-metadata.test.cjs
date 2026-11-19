@@ -159,3 +159,42 @@ test('every indexable or legacy HTML page includes its own navigation source', (
   assert.equal(fs.existsSync(path.join(root, 'assets/listpull-navigation.js')), false,
     'the navigation injection file is deleted');
 });
+
+
+test('Studio applications identify themselves as free limited versions in HTML and metadata', () => {
+  const applications = [
+    'studio/image-editor.html', 'studio/video-editor.html',
+    'studio/ai.html', 'studio/strategy.html', 'studio/forecast.html'
+  ];
+  for (const file of applications) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    const pageDesc = content(tags(html, 'description')[0]);
+    assert.match(pageDesc, /free, limited version/i, file + ': page description');
+    const ogDesc = content(tags(html, 'og:description', 'property')[0]);
+    assert.equal(ogDesc, pageDesc, file + ': matching social description');
+    const visible = html.replace(/<script\b[\s\S]*?<\/script>/gi, '')
+      .replace(/<style\b[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    assert.match(visible, /free limited version/i, file + ': visible application label');
+    const schemas = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)]
+      .map(match => JSON.parse(match[1]));
+    const nodes = schemas.flatMap(schema => schema['@graph'] || [schema]);
+    const app = nodes.find(node => node['@type'] === 'SoftwareApplication');
+    assert.ok(app, file + ': software application data');
+    assert.match(app.description, /free, limited version/i, file + ': software description');
+  }
+});
+
+test('marketing pages describe the applications without claiming why they are free', () => {
+  for (const file of ['index.html', 'studio.html', 'labs.html', 'solutions.html', 'engineering.html']) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    const visible = html.replace(/<script\b[\s\S]*?<\/script>/gi, '')
+      .replace(/<style\b[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    assert.match(visible, /\blimited versions?\b/i, file + ': limited applications explained');
+    assert.doesNotMatch(visible, /\b(?:sales pitch|showcase for clients|marketing demo|lead generation)\b/i,
+      file + ': no explanation of promotional intent');
+    assert.doesNotMatch(visible, /\b(?:try our tools|free browser tools|choose a tool)\b/i,
+      file + ': application labels instead of generic tool labels');
+  }
+});
