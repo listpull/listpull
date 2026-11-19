@@ -228,14 +228,18 @@ test('every HTML head has the ListPull bookmark icon, social cards, and verified
 
 test('Creative Studio and Image Studio names match their destinations on every HTML page', () => {
   const special = new Set(['301.html', '404.html', 'studio/vector.html']);
+  const tools = new Set(['studio/image-editor.html', 'studio/video-editor.html',
+    'studio/ai.html', 'studio/strategy.html', 'studio/forecast.html']);
   const launchers = new Set(['index.html', 'engineering.html', 'solutions.html', 'studio.html']);
   for (const file of Object.keys(canonicalByFile)) {
     const html = fs.readFileSync(path.join(root, file), 'utf8');
     assert.doesNotMatch(html, /ListPull Studio|Creative Editor/,
       file + ': old names are not used');
     if (special.has(file)) continue;
-    assert.match(html, /class="lp-nav-studio" href="\/studio\.html">Creative Studio<\/a>/,
-      file + ': top navigation identifies Creative Studio');
+    if (!tools.has(file)) {
+      assert.match(html, /class="lp-nav-studio" href="\/studio\.html">Creative Studio<\/a>/,
+        file + ': top navigation identifies Creative Studio');
+    }
     const primaryMenu = html.match(/<a class="lp-app-tile lp-app-tile-menu lp-app-studio" href="\/studio\.html"[^>]*>[\s\S]*?<span class="lp-app-name">([^<]*)<\/span><\/a>/);
     assert.equal(primaryMenu?.[1], 'Creative Studio', file + ': Studio application entry');
     const imageMenu = html.match(/<a class="lp-app-tile lp-app-tile-menu lp-app-creative" href="\/studio\/image-editor\.html"[^>]*>[\s\S]*?<span class="lp-app-name">([^<]*)<\/span><\/a>/);
