@@ -1,0 +1,25 @@
+name: Generate wildlife production media from source video
+on:
+  push:
+    branches:
+      - feature/wildlife-production-and-engineering-proof
+    paths:
+      - .github/workflows/production-frames.yml
+permissions:
+  contents: write
+jobs:
+  inspect-video:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect video and render contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          video="listpull_production_before_and_after_editing.mp4"
+          ffprobe -v error -show_entries format=duration,size:stream=index,codec_type,width,height,avg_frame_rate -of default=noprint_wrappers=1 "$video"
+          ffmpeg -hide_banner -loglevel error -y -i "$video" -vf "fps=1/4,scale=360:-2,tile=3x3:padding=8:margin=12" -frames:v 1 -q:v 7 /tmp/production-contact.jpg
+          echo "CONTACT_SHEET_BASE64_BEGIN"
+          base64 -w0 /tmp/production-contact.jpg
+          echo
+          echo "CONTACT_SHEET_BASE64_END"
