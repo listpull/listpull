@@ -294,6 +294,7 @@ test('official LinkedIn and visitor routes are consistent with ListPull identity
     'no old social URLs remain');
   assert.match(home, /Explore Creative Studio/, 'clear link to Creative Studio');
   assert.match(home, /Explore Blobby gameplay guide/, 'clear link to Blobby instructions');
+  assert.match(home, /<section class="wildlife-section" id="wildlife">/, 'wildlife card leads to an existing section');
 });
 
 test('Blobby metadata links to a real landing page while preserving app downloads', () => {
