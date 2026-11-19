@@ -78,20 +78,20 @@ test('Video Studio adds optional original wildlife footage without replacing the
 });
 
 
-// TEMP VISUAL AUDIT - remove after inspecting rendered production layouts
-test('visual audit snapshots the real production page across viewports',async({page})=>{
-  for(const [name,url,width,height,selector] of [
-    ['DESKTOP','/wildlife-production.html',1300,850,'.production-hero'],
-    ['MOBILE','/wildlife-production.html',390,844,'.production-hero'],
-    ['HOMEPROMO','/',1280,900,'#wildlife-production']
-  ]){
-    await page.setViewportSize({width,height});
-    await page.goto(url);
-    const target=page.locator(selector);
-    await target.scrollIntoViewIfNeeded();
-    const screenshot=await page.screenshot({type:'jpeg',quality:45,animations:'disabled'});
-    console.log('VISUAL_' + name + '_BEGIN');
-    console.log(screenshot.toString('base64'));
-    console.log('VISUAL_' + name + '_END');
-  }
+test('production experience remains discoverable and useful with JavaScript disabled',async({browser})=>{
+  const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
+  const page=await context.newPage();
+  const response=await page.goto('/wildlife-production.html');
+  expect(response.status()).toBe(200);
+  await expect(page.locator('h1')).toContainText('Real wildlife');
+  await expect(page.locator('.production-poster')).toBeVisible();
+  await expect(page.locator('.production-preview-video source'))
+    .toHaveAttribute('src','/listpull_production_before_and_after_editing.mp4');
+  await expect(page.locator('[data-production-compare] img')).toHaveCount(2);
+  const comparison=page.locator('[data-production-compare]').first();
+  await expect(comparison.locator('input[type="range"]')).toHaveValue('50');
+  await expect(page.locator('a[href="/engineering/projects.html"]').first()).toBeVisible();
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+  expect(overflow).toBe(false);
+  await context.close();
 });
