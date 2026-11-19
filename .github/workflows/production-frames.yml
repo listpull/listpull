@@ -20,7 +20,7 @@ jobs:
           set -euo pipefail
           video="listpull_production_before_and_after_editing.mp4"
           ffprobe -v error -show_entries format=duration,size:stream=index,codec_type,width,height,avg_frame_rate -of default=noprint_wrappers=1 "$video"
-          ffmpeg -hide_banner -loglevel error -y -i "$video" -vf "fps=1/4,scale=360:-2,tile=3x3:padding=8:margin=12" -frames:v 1 -q:v 7 /tmp/production-contact.jpg
+          ffmpeg -hide_banner -loglevel error -y -i "$video" -vf "fps=1,scale=250:-2,tile=4x2:padding=8:margin=12" -frames:v 1 -q:v 7 /tmp/production-contact.jpg
           echo "CONTACT_SHEET_BASE64_BEGIN"
           base64 -w0 /tmp/production-contact.jpg
           echo
