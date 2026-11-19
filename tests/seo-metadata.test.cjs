@@ -197,3 +197,62 @@ test('marketing pages describe the applications without claiming why they are fr
       file + ': application labels instead of generic tool labels');
   }
 });
+
+
+test('every HTML head has the ListPull bookmark icon, social cards, and verified social profiles', () => {
+  const profiles = [
+    'https://www.youtube.com/@listpull',
+    'https://www.instagram.com/listpull/',
+    'https://www.facebook.com/listpull',
+    'https://www.tiktok.com/@listpull'
+  ];
+  for (const file of Object.keys(canonicalByFile)) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    const head = html.split(/<\/head\s*>/i)[0];
+    const icons = [...head.matchAll(/<link\b[^>]*\brel="icon"[^>]*>/gi)];
+    assert.equal(icons.length, 1, file + ': one bookmark icon');
+    assert.match(icons[0][0], /type="image\/x-icon"/, file + ': correct ICO type');
+    assert.match(icons[0][0], /href="\/favicon\.ico"/, file + ': root icon URL');
+    const identities = [...head.matchAll(/<link\b[^>]*\brel="me"[^>]*>/gi)].map(m => m[0]);
+    assert.equal(identities.length, profiles.length, file + ': all official social accounts');
+    for (const url of profiles) {
+      assert.ok(identities.some(link => link.includes('href="' + url + '"')),
+        file + ': social link ' + url);
+    }
+    assert.match(content(tags(html, 'og:image', 'property')[0]), /^https:\/\/listpull\.com\//,
+      file + ': Open Graph image for sharing');
+    assert.match(content(tags(html, 'twitter:image')[0]), /^https:\/\/listpull\.com\//,
+      file + ': social card image');
+  }
+});
+
+test('Creative Studio and Image Studio names match their destinations on every HTML page', () => {
+  const special = new Set(['301.html', '404.html', 'studio/vector.html']);
+  const launchers = new Set(['index.html', 'engineering.html', 'solutions.html', 'studio.html']);
+  for (const file of Object.keys(canonicalByFile)) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.doesNotMatch(html, /ListPull Studio|Creative Editor/,
+      file + ': old names are not used');
+    if (special.has(file)) continue;
+    assert.match(html, /class="lp-nav-studio" href="\/studio\.html">Creative Studio<\/a>/,
+      file + ': top navigation identifies Creative Studio');
+    const primaryMenu = html.match(/<a class="lp-app-tile lp-app-tile-menu lp-app-studio" href="\/studio\.html"[^>]*>[\s\S]*?<span class="lp-app-name">([^<]*)<\/span><\/a>/);
+    assert.equal(primaryMenu?.[1], 'Creative Studio', file + ': Studio application entry');
+    const imageMenu = html.match(/<a class="lp-app-tile lp-app-tile-menu lp-app-creative" href="\/studio\/image-editor\.html"[^>]*>[\s\S]*?<span class="lp-app-name">([^<]*)<\/span><\/a>/);
+    assert.equal(imageMenu?.[1], 'Image Studio', file + ': image application entry');
+    if (launchers.has(file)) {
+      const strip = html.match(/<a class="lp-app-tile lp-app-tile-strip lp-app-studio" href="\/studio\.html"[^>]*>[\s\S]*?<span class="lp-app-name">([^<]*)<\/span><\/a>/);
+      assert.equal(strip?.[1], 'Creative Studio', file + ': overview strip');
+    }
+  }
+  const studio = fs.readFileSync(path.join(root, 'studio.html'), 'utf8');
+  const image = fs.readFileSync(path.join(root, 'studio/image-editor.html'), 'utf8');
+  const about = fs.readFileSync(path.join(root, 'about-listpull/index.html'), 'utf8');
+  assert.match(studio, /<h1>Make something with <span class="accent-orange">Creative Studio\.<\/span><\/h1>/);
+  assert.match(image, /<h1>Image Studio<\/h1>/);
+  assert.match(image, /<title>Image Studio \| Free Image &amp; SVG Editor by ListPull<\/title>/);
+  assert.match(image, /"name":"Image Studio","description":/);
+  assert.match(studio, /"name":"Creative Studio","item":"https:\/\/listpull\.com\/studio\.html"/);
+  assert.match(about, /href="\/studio\.html">Explore Creative Studio<\/a>/);
+  assert.match(about, /href="\/solutions\.html">Explore ListPull Solutions<\/a>/);
+});
