@@ -119,15 +119,14 @@ test('every indexable page has a clear visible page heading', () => {
     assert.ok(headings[0][1].replace(/<[^>]*>/g, '').trim().length > 8, file + ': meaningful heading');
   }
 });
-test('error and redirect files are noindex', () => {
-  for (const file of ['301.html', '404.html', 'studio/vector.html']) {
+test('all HTML pages permit search indexing', () => {
+  for (const file of Object.keys(canonicalByFile)) {
     const html = fs.readFileSync(path.join(root, file), 'utf8');
-    assert.match(content(tags(html, 'robots')[0]), /\bnoindex\b/, file);
-  }
-  for (const [file, url] of Object.entries(canonicalByFile)) {
-    if (!primary.includes(url) || ['301.html', '404.html', 'studio/vector.html'].includes(file)) continue;
-    const html = fs.readFileSync(path.join(root, file), 'utf8');
-    assert.doesNotMatch(content(tags(html, 'robots')[0]), /\bnoindex\b/, file);
+    const directives = tags(html, 'robots');
+    assert.equal(directives.length, 1, file + ': one robots directive');
+    assert.match(content(directives[0]), /^index,\s*follow\b/i,
+      file + ': indexing allowed');
+    assert.doesNotMatch(html, /\bnoindex\b/i, file + ': no blocking directive');
   }
 });
 
