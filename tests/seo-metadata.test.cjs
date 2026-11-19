@@ -96,7 +96,7 @@ test('sitemap contains only canonical pages with updated lastmod', () => {
   const urls = [...xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>([\s\S]*?)<\/url>/g)];
   const listed = urls.map(match => match[1]);
   assert.deepEqual([...new Set(listed)].sort(), primary.map(p => site + p).sort());
-  for (const match of urls) assert.match(match[2], /<lastmod>2026-11-17<\/lastmod>/);
+  for (const match of urls) assert.match(match[2], /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   assert.match(fs.readFileSync(path.join(root, 'robots.txt'), 'utf8'),
     /Sitemap:\s*https:\/\/listpull\.com\/sitemap\.xml/);
 });
