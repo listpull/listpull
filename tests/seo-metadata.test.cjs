@@ -331,7 +331,7 @@ test('Studio applications identify themselves as free limited versions in HTML a
       .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
     assert.match(visible, /free limited version/i, file + ': visible application label');
     const schemas = html.split('<script type="application/ld+json">').slice(1)
-      .map(part => JSON.parse(part.split('</script>')[0])).flatMap(data => data['@graph'] || [data]);
+      .map(part => JSON.parse(part.split('</script>')[0]));
     const nodes = schemas.flatMap(schema => schema['@graph'] || [schema]);
     const app = nodes.find(node => node['@type'] === 'SoftwareApplication');
     assert.ok(app, file + ': software application data');
@@ -573,8 +573,8 @@ test('restored wildlife library and all 48 articles have complete real-source me
     const image = 'assets/wildlife/' + slug + '.svg';
     assert.ok(fs.existsSync(path.join(root, image)), route + ': local art asset exists');
     assert.ok(html.includes('src="/' + image + '"'), route + ': local art used');
-    const schemas = [...html.matchAll(/<script\\b[^>]*type="application\\/ld\\+json"[^>]*>([\\s\\S]*?)<\\/script>/gi)]
-      .map(match => JSON.parse(match[1])).flatMap(data => data['@graph'] || [data]);
+    const schemas = html.split('<script type="application/ld+json">').slice(1)
+      .map(part => JSON.parse(part.split('</script>')[0])).flatMap(data => data['@graph'] || [data]);
     const article = schemas.find(node => node['@type'] === 'Article');
     assert.ok(article, route + ': Article JSON-LD');
     assert.match(article.datePublished, /^2024-\d{2}-\d{2}T/, route + ': original published date');
