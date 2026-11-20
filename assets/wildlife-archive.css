@@ -1,0 +1,56 @@
+/* Native HTML wildlife archive. Matches ListPull Labs' compact responsive card layout. */
+.wildlife-archive{background:linear-gradient(145deg,#071320,#11172b 50%,#07121c);color:#f2f4ff}
+.wildlife-archive .lp-app-strip{margin-bottom:0}
+.wildlife-directory-hero,.wildlife-directory-section,.wildlife-directory-closer,.wildlife-article-main,.wildlife-links-page{max-width:1160px;margin:auto;padding:38px 24px}
+.wildlife-directory-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:35px;align-items:center;min-height:360px}
+.wildlife-directory-hero>img{border-radius:26px;aspect-ratio:4/3;width:100%;object-fit:cover;border:1px solid #435773}
+.wildlife-eyebrow{display:block;font-size:12px;letter-spacing:.14em;font-weight:850;text-transform:uppercase;color:#a7f2e2}
+.wildlife-directory-hero h1,.wildlife-links-page h1{font-size:clamp(2.5rem,6vw,5.5rem);line-height:1.04;letter-spacing:-.055em;color:white;margin:15px 0}
+.wildlife-directory-hero h1 em,.wildlife-links-page h1 em{font-style:normal;background:linear-gradient(110deg,#ffc08a,#c28fff,#7ad9f2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wildlife-directory-hero p,.wildlife-links-page>p{font-size:1.13rem;line-height:1.7;color:#c2c7da;max-width:570px}
+.wildlife-actions{display:flex;gap:11px;flex-wrap:wrap;margin:20px 0}
+.wildlife-btn{display:inline-block;border-radius:100px;padding:12px 17px;border:1px solid #5a5a85;text-decoration:none;color:#f5eeff;font-weight:750;font-size:.9rem;background:rgba(69,56,93,.25)}
+.wildlife-btn-hot{background:linear-gradient(90deg,#ff982e,#ff6c21);border-color:transparent;color:white}
+.wildlife-directory-title{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:19px}
+.wildlife-directory-title h2,.wildlife-more h2{font-size:clamp(1.8rem,3.2vw,2.9rem);letter-spacing:-.04em;line-height:1.15;margin:12px 0 0;color:#fff}
+.wildlife-directory-title p{max-width:280px;color:#aeb9d2;margin:0}
+.wildlife-filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:20px}
+.wildlife-filters a{border:1px solid #465575;border-radius:100px;color:#d3e6f7;padding:7px 13px;text-decoration:none;font-size:.8rem}
+.wildlife-masonry{columns:3 260px;column-gap:14px}
+.wildlife-story-card{display:block;break-inside:avoid;margin-bottom:14px;border-radius:18px;overflow:hidden;background:linear-gradient(150deg,#26334e,#1a223a);border:1px solid #47536c;color:white;text-decoration:none;box-shadow:0 12px 25px #0003;transition:transform .2s}
+.wildlife-story-card:hover{transform:translateY(-3px)}
+.wildlife-story-card img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:#172b34}
+.wildlife-story-card:nth-child(5n + 2) img{aspect-ratio:4/4.8}.wildlife-story-card:nth-child(6n + 3) img{aspect-ratio:4/3.7}
+.wildlife-story-body{display:flex;flex-direction:column;padding:16px;gap:9px}
+.wildlife-story-body small{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#b9cbeb;font-weight:850}
+.wildlife-story-body strong{font-size:1.15rem;line-height:1.25}
+.wildlife-story-body span{font-size:.81rem;color:#bfc8dd;line-height:1.5}
+.wildlife-story-body em{font-style:normal;font-size:.8rem;font-weight:800;color:#ffd1a5}
+.wildlife-article-main{max-width:1220px}.wildlife-article{width:min(100%,820px);margin:auto}
+.wildlife-breadcrumbs{font-size:.84rem;color:#bdd1e0;margin:7px 0 30px}.wildlife-breadcrumbs a{color:#a2e9db}
+.wildlife-article-header h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:1.1;letter-spacing:-.045em;color:white;margin:12px 0 17px}
+.wildlife-byline{color:#abb8d0;font-size:.86rem}.wildlife-deck{font-size:1.14rem;line-height:1.7;color:#d8dfed;margin:20px 0}
+.wildlife-feature{margin:22px 0 35px}.wildlife-feature img{width:100%;height:auto;border:1px solid #536383;border-radius:22px}.wildlife-feature figcaption{font-size:.76rem;color:#9bacc3;margin-top:7px}
+.wildlife-article-body{font-size:1.04rem;line-height:1.83;color:#dce5f3}.wildlife-article-body p{margin:0 0 1.15rem}.wildlife-article-body h2{font-size:1.65rem;line-height:1.24;margin:2.5rem 0 .8rem;color:#fff}.wildlife-article-body a{color:#a9ebe0;text-decoration:underline}
+.wildlife-article-extras{margin:40px auto 0}.wildlife-article-extras .production-promo,.wildlife-directory-closer .production-promo{max-width:100%;margin:32px auto}
+.wildlife-game-cta{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:center;padding:20px;border:1px solid #65527e;border-radius:20px;background:linear-gradient(130deg,#352545,#20374d)}
+.wildlife-game-cta img{width:100%;height:auto;border-radius:15px}.wildlife-game-cta h2{font-size:1.75rem;line-height:1.2;margin:8px 0}.wildlife-game-cta p{color:#c3cde0;line-height:1.6}
+.wildlife-more{margin:38px 0;padding:20px 0}.wildlife-more p{color:#b5c6db}.wildlife-more .lp-app-strip{max-width:100%;width:100%}
+.wildlife-social{padding:20px;border:1px solid #3c5265;border-radius:18px;margin:30px 0;background:#112637}.wildlife-social h2{font-size:1.3rem;margin:0 0 8px}.wildlife-social p{color:#bacadd}
+.wildlife-pill{display:inline-flex;padding:9px 13px;border-radius:100px;border:1px solid #678599;color:#a7e8e8;text-decoration:none;font-size:.82rem}
+.wildlife-links-page{max-width:800px;padding-top:65px;padding-bottom:85px}.wildlife-links-grid{display:grid;gap:12px;margin-top:28px}
+.wildlife-quick-link{display:grid;grid-template-columns:42px 1fr auto;column-gap:16px;align-items:center;background:linear-gradient(110deg,#312840,#193449);padding:18px;border:1px solid #5b5073;border-radius:18px;text-decoration:none}
+.wildlife-quick-num{grid-row:span 2;color:#a8e2d8;font-weight:900}.wildlife-quick-link strong{font-size:1.17rem}.wildlife-quick-link span:nth-of-type(2){font-size:.81rem;color:#b0c5da}.wildlife-quick-link b{grid-column:3;grid-row:span 2;color:#ffca99}.wildlife-social-links{display:flex;flex-wrap:wrap;gap:14px;margin:30px 0}.wildlife-social-links a{color:#a0dcdc;text-decoration:underline}
+@media(max-width:780px){.wildlife-directory-hero{grid-template-columns:1fr}.wildlife-directory-hero>img{max-height:300px}.wildlife-directory-title{align-items:start;flex-direction:column}.wildlife-game-cta{grid-template-columns:1fr}.wildlife-game-cta img{max-width:330px}.wildlife-masonry{columns:2 185px}}
+@media(max-width:520px){.wildlife-directory-hero,.wildlife-directory-section,.wildlife-directory-closer,.wildlife-article-main,.wildlife-links-page{padding:25px 13px}.wildlife-directory-hero h1{font-size:2.75rem}.wildlife-masonry{columns:2 135px;column-gap:10px}.wildlife-story-card{margin-bottom:10px}.wildlife-story-body{padding:12px;gap:6px}.wildlife-story-body strong{font-size:.96rem}.wildlife-story-body span{font-size:.76rem}.wildlife-links-page h1{font-size:2.85rem}}
+@media(prefers-reduced-motion:reduce){.wildlife-story-card{transition:none}}
+
+.wildlife-filter-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.wildlife-filters{display:flex;flex-wrap:wrap;gap:9px}
+.wildlife-filters button{border:1px solid #465575;border-radius:100px;color:#d3e6f7;background:transparent;padding:9px 13px;font-size:.82rem;cursor:pointer}
+.wildlife-filters button[aria-pressed=true]{background:#425174;border-color:#9f92d0;color:white}
+.wildlife-search-label{display:flex;align-items:center;gap:10px;font-size:.82rem;color:#bacde1}
+.wildlife-search-label input{min-width:175px;background:#141e31;color:#fff;border:1px solid #51627e;border-radius:100px;padding:9px 14px}
+.wildlife-search-label input:focus-visible,.wildlife-filters button:focus-visible{outline:3px solid #8df4d0;outline-offset:2px}
+.wildlife-story-card[hidden]{display:none!important}
+.wildlife-results-count{color:#a6bcd4;font-size:.82rem;margin:0 0 15px}

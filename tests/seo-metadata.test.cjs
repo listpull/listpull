@@ -12,6 +12,55 @@ const primary = [
   '/studio/ai.html', '/studio/forecast.html', '/studio/image-editor.html',
   '/studio/strategy.html', '/studio/video-editor.html',
   '/policies/privacy-policy/', '/policies/terms-of-service/',
+  '/wildlife/', '/links/',
+  '/wildlife/articles/sea-turtles-navigators-of-the-oceans-mysteries.html',
+  '/wildlife/articles/hummingbirds-the-dazzling-aerial-acrobats-of-the-bird-world.html',
+  '/wildlife/articles/discovering-the-northern-saw-whet-owl-natures-tiny-nocturnal-hunter.html',
+  '/wildlife/articles/the-charming-world-of-the-tufted-titmouse-a-closer-look-at-these-backyard-favorites.html',
+  '/wildlife/articles/the-bald-eagle-a-symbol-of-resilience-and-conservation-triumph.html',
+  '/wildlife/articles/the-majestic-male-lion-king-of-the-pride.html',
+  '/wildlife/articles/discover-the-elusive-leopard-natures-master-of-stealth-and-beauty.html',
+  '/wildlife/articles/the-fascinating-world-of-lion-cubs-a-glimpse-into-their-early-life.html',
+  '/wildlife/articles/the-cheetah-natures-speedster-and-conservation-icon.html',
+  '/wildlife/articles/the-amur-leopard-conservation-efforts-for-the-worlds-rarest-big-cat.html',
+  '/wildlife/articles/the-fascinating-world-of-pandas-gentle-giants-of-the-bamboo-forest.html',
+  '/wildlife/articles/understanding-the-rusty-spotted-cat-the-worlds-smallest-feline-marvel.html',
+  '/wildlife/articles/dolphins-the-playful-ambassadors-of-the-ocean.html',
+  '/wildlife/articles/butterflies-natures-delicate-dancers.html',
+  '/wildlife/articles/the-enchanting-world-of-baby-lynx-natures-little-mysteries.html',
+  '/wildlife/articles/koalas-australias-beloved-tree-huggers.html',
+  '/wildlife/articles/understanding-the-ermine-a-guide-to-the-elusive-weasel.html',
+  '/wildlife/articles/discover-the-margay-the-master-climber-of-the-cat-world.html',
+  '/wildlife/articles/understanding-tigers-majestic-predators-of-the-wild.html',
+  '/wildlife/articles/discover-the-majestic-snowy-owl-the-arctics-iconic-bird.html',
+  '/wildlife/articles/exploring-the-wonders-of-underwater-wildlife-marine-mammals-fish-and-ocean-ecosystems.html',
+  '/wildlife/articles/unveiling-the-mysteries-of-the-king-cobra-natures-majestic-predator.html',
+  '/wildlife/articles/the-fascinating-world-of-catfish-natures-whiskered-wonders.html',
+  '/wildlife/articles/the-fascinating-world-of-ants-tiny-architects-of-the-earth.html',
+  '/wildlife/articles/polar-bears-giants-of-the-arctic-ice.html',
+  '/wildlife/articles/discover-the-fascinating-world-of-tree-frogs.html',
+  '/wildlife/articles/unveiling-the-world-of-leopard-geckos-a-beginners-guide.html',
+  '/wildlife/articles/salamanders-natures-fascinating-amphibians.html',
+  '/wildlife/articles/discover-the-world-of-beetles-natures-ingenious-insects.html',
+  '/wildlife/articles/chameleons-the-colorful-communicators-of-the-reptile-world.html',
+  '/wildlife/articles/unveiling-the-secrets-of-ulua-the-mighty-predators-of-the-ocean.html',
+  '/wildlife/articles/axolotls-the-fascinating-underwater-marvels.html',
+  '/wildlife/articles/bearded-dragons-the-ultimate-pet-lizard.html',
+  '/wildlife/articles/capybaras-gentle-giants-of-the-waterways.html',
+  '/wildlife/articles/african-forest-elephants-gentle-giants-of-the-forest.html',
+  '/wildlife/articles/unveiling-the-mystique-of-the-black-panther-natures-shadowy-marvel.html',
+  '/wildlife/articles/the-clouded-leopard-a-mysterious-marvel-of-the-wild.html',
+  '/wildlife/articles/the-southern-brazilian-ocelot-a-hidden-jewel-of-the-wild.html',
+  '/wildlife/articles/the-enigmatic-white-lions-a-glimpse-into-their-world.html',
+  '/wildlife/articles/the-truth-about-white-tigers-understanding-their-unique-existence.html',
+  '/wildlife/articles/discovering-the-marbled-cat-a-hidden-gem-of-the-forest.html',
+  '/wildlife/articles/exploring-the-world-of-the-brown-arctic-fox.html',
+  '/wildlife/articles/grizzly-bears-the-mighty-wanderers-of-the-wild.html',
+  '/wildlife/articles/discover-the-european-wildcat-a-mysterious-forest-dweller.html',
+  '/wildlife/articles/meet-the-american-pine-marten-the-forests-furry-acrobat.html',
+  '/wildlife/articles/snow-leopards-the-ghosts-of-the-mountains.html',
+  '/wildlife/articles/discover-the-asian-small-clawed-otter-natures-playful-paddler.html',
+  '/wildlife/articles/kangaroos-the-hopping-marvels-of-australia.html',
   '/wildlife-production.html', '/engineering/ai-applications.html',
   '/engineering/cloud-integration.html', '/engineering/custom-software.html',
   '/engineering/projects.html'
@@ -27,6 +76,104 @@ const canonicalByFile = {
   'engineering/cloud-integration.html': '/engineering/cloud-integration.html',
   'engineering/custom-software.html': '/engineering/custom-software.html',
   'engineering/projects.html': '/engineering/projects.html',
+  'wildlife/index.html': '/wildlife/',
+  'links/index.html': '/links/',
+  'wildlife/articles/sea-turtles-navigators-of-the-oceans-mysteries.html': '/wildlife/articles/sea-turtles-navigators-of-the-oceans-mysteries.html',
+  'sea-turtles-navigators-of-the-oceans-mysteries/index.html': '/wildlife/articles/sea-turtles-navigators-of-the-oceans-mysteries.html',
+  'wildlife/articles/hummingbirds-the-dazzling-aerial-acrobats-of-the-bird-world.html': '/wildlife/articles/hummingbirds-the-dazzling-aerial-acrobats-of-the-bird-world.html',
+  'hummingbirds-the-dazzling-aerial-acrobats-of-the-bird-world/index.html': '/wildlife/articles/hummingbirds-the-dazzling-aerial-acrobats-of-the-bird-world.html',
+  'wildlife/articles/discovering-the-northern-saw-whet-owl-natures-tiny-nocturnal-hunter.html': '/wildlife/articles/discovering-the-northern-saw-whet-owl-natures-tiny-nocturnal-hunter.html',
+  'discovering-the-northern-saw-whet-owl-natures-tiny-nocturnal-hunter/index.html': '/wildlife/articles/discovering-the-northern-saw-whet-owl-natures-tiny-nocturnal-hunter.html',
+  'wildlife/articles/the-charming-world-of-the-tufted-titmouse-a-closer-look-at-these-backyard-favorites.html': '/wildlife/articles/the-charming-world-of-the-tufted-titmouse-a-closer-look-at-these-backyard-favorites.html',
+  'the-charming-world-of-the-tufted-titmouse-a-closer-look-at-these-backyard-favorites/index.html': '/wildlife/articles/the-charming-world-of-the-tufted-titmouse-a-closer-look-at-these-backyard-favorites.html',
+  'wildlife/articles/the-bald-eagle-a-symbol-of-resilience-and-conservation-triumph.html': '/wildlife/articles/the-bald-eagle-a-symbol-of-resilience-and-conservation-triumph.html',
+  'the-bald-eagle-a-symbol-of-resilience-and-conservation-triumph/index.html': '/wildlife/articles/the-bald-eagle-a-symbol-of-resilience-and-conservation-triumph.html',
+  'wildlife/articles/the-majestic-male-lion-king-of-the-pride.html': '/wildlife/articles/the-majestic-male-lion-king-of-the-pride.html',
+  'the-majestic-male-lion-king-of-the-pride/index.html': '/wildlife/articles/the-majestic-male-lion-king-of-the-pride.html',
+  'wildlife/articles/discover-the-elusive-leopard-natures-master-of-stealth-and-beauty.html': '/wildlife/articles/discover-the-elusive-leopard-natures-master-of-stealth-and-beauty.html',
+  'discover-the-elusive-leopard-natures-master-of-stealth-and-beauty/index.html': '/wildlife/articles/discover-the-elusive-leopard-natures-master-of-stealth-and-beauty.html',
+  'wildlife/articles/the-fascinating-world-of-lion-cubs-a-glimpse-into-their-early-life.html': '/wildlife/articles/the-fascinating-world-of-lion-cubs-a-glimpse-into-their-early-life.html',
+  'the-fascinating-world-of-lion-cubs-a-glimpse-into-their-early-life/index.html': '/wildlife/articles/the-fascinating-world-of-lion-cubs-a-glimpse-into-their-early-life.html',
+  'wildlife/articles/the-cheetah-natures-speedster-and-conservation-icon.html': '/wildlife/articles/the-cheetah-natures-speedster-and-conservation-icon.html',
+  'the-cheetah-natures-speedster-and-conservation-icon/index.html': '/wildlife/articles/the-cheetah-natures-speedster-and-conservation-icon.html',
+  'wildlife/articles/the-amur-leopard-conservation-efforts-for-the-worlds-rarest-big-cat.html': '/wildlife/articles/the-amur-leopard-conservation-efforts-for-the-worlds-rarest-big-cat.html',
+  'the-amur-leopard-conservation-efforts-for-the-worlds-rarest-big-cat/index.html': '/wildlife/articles/the-amur-leopard-conservation-efforts-for-the-worlds-rarest-big-cat.html',
+  'wildlife/articles/the-fascinating-world-of-pandas-gentle-giants-of-the-bamboo-forest.html': '/wildlife/articles/the-fascinating-world-of-pandas-gentle-giants-of-the-bamboo-forest.html',
+  'the-fascinating-world-of-pandas-gentle-giants-of-the-bamboo-forest/index.html': '/wildlife/articles/the-fascinating-world-of-pandas-gentle-giants-of-the-bamboo-forest.html',
+  'wildlife/articles/understanding-the-rusty-spotted-cat-the-worlds-smallest-feline-marvel.html': '/wildlife/articles/understanding-the-rusty-spotted-cat-the-worlds-smallest-feline-marvel.html',
+  'understanding-the-rusty-spotted-cat-the-worlds-smallest-feline-marvel/index.html': '/wildlife/articles/understanding-the-rusty-spotted-cat-the-worlds-smallest-feline-marvel.html',
+  'wildlife/articles/dolphins-the-playful-ambassadors-of-the-ocean.html': '/wildlife/articles/dolphins-the-playful-ambassadors-of-the-ocean.html',
+  'dolphins-the-playful-ambassadors-of-the-ocean/index.html': '/wildlife/articles/dolphins-the-playful-ambassadors-of-the-ocean.html',
+  'wildlife/articles/butterflies-natures-delicate-dancers.html': '/wildlife/articles/butterflies-natures-delicate-dancers.html',
+  'butterflies-natures-delicate-dancers/index.html': '/wildlife/articles/butterflies-natures-delicate-dancers.html',
+  'wildlife/articles/the-enchanting-world-of-baby-lynx-natures-little-mysteries.html': '/wildlife/articles/the-enchanting-world-of-baby-lynx-natures-little-mysteries.html',
+  'the-enchanting-world-of-baby-lynx-natures-little-mysteries/index.html': '/wildlife/articles/the-enchanting-world-of-baby-lynx-natures-little-mysteries.html',
+  'wildlife/articles/koalas-australias-beloved-tree-huggers.html': '/wildlife/articles/koalas-australias-beloved-tree-huggers.html',
+  'koalas-australias-beloved-tree-huggers/index.html': '/wildlife/articles/koalas-australias-beloved-tree-huggers.html',
+  'wildlife/articles/understanding-the-ermine-a-guide-to-the-elusive-weasel.html': '/wildlife/articles/understanding-the-ermine-a-guide-to-the-elusive-weasel.html',
+  'understanding-the-ermine-a-guide-to-the-elusive-weasel/index.html': '/wildlife/articles/understanding-the-ermine-a-guide-to-the-elusive-weasel.html',
+  'wildlife/articles/discover-the-margay-the-master-climber-of-the-cat-world.html': '/wildlife/articles/discover-the-margay-the-master-climber-of-the-cat-world.html',
+  'discover-the-margay-the-master-climber-of-the-cat-world/index.html': '/wildlife/articles/discover-the-margay-the-master-climber-of-the-cat-world.html',
+  'wildlife/articles/understanding-tigers-majestic-predators-of-the-wild.html': '/wildlife/articles/understanding-tigers-majestic-predators-of-the-wild.html',
+  'understanding-tigers-majestic-predators-of-the-wild/index.html': '/wildlife/articles/understanding-tigers-majestic-predators-of-the-wild.html',
+  'wildlife/articles/discover-the-majestic-snowy-owl-the-arctics-iconic-bird.html': '/wildlife/articles/discover-the-majestic-snowy-owl-the-arctics-iconic-bird.html',
+  'discover-the-majestic-snowy-owl-the-arctics-iconic-bird/index.html': '/wildlife/articles/discover-the-majestic-snowy-owl-the-arctics-iconic-bird.html',
+  'wildlife/articles/exploring-the-wonders-of-underwater-wildlife-marine-mammals-fish-and-ocean-ecosystems.html': '/wildlife/articles/exploring-the-wonders-of-underwater-wildlife-marine-mammals-fish-and-ocean-ecosystems.html',
+  'exploring-the-wonders-of-underwater-wildlife-marine-mammals-fish-and-ocean-ecosystems/index.html': '/wildlife/articles/exploring-the-wonders-of-underwater-wildlife-marine-mammals-fish-and-ocean-ecosystems.html',
+  'wildlife/articles/unveiling-the-mysteries-of-the-king-cobra-natures-majestic-predator.html': '/wildlife/articles/unveiling-the-mysteries-of-the-king-cobra-natures-majestic-predator.html',
+  'unveiling-the-mysteries-of-the-king-cobra-natures-majestic-predator/index.html': '/wildlife/articles/unveiling-the-mysteries-of-the-king-cobra-natures-majestic-predator.html',
+  'wildlife/articles/the-fascinating-world-of-catfish-natures-whiskered-wonders.html': '/wildlife/articles/the-fascinating-world-of-catfish-natures-whiskered-wonders.html',
+  'the-fascinating-world-of-catfish-natures-whiskered-wonders/index.html': '/wildlife/articles/the-fascinating-world-of-catfish-natures-whiskered-wonders.html',
+  'wildlife/articles/the-fascinating-world-of-ants-tiny-architects-of-the-earth.html': '/wildlife/articles/the-fascinating-world-of-ants-tiny-architects-of-the-earth.html',
+  'the-fascinating-world-of-ants-tiny-architects-of-the-earth/index.html': '/wildlife/articles/the-fascinating-world-of-ants-tiny-architects-of-the-earth.html',
+  'wildlife/articles/polar-bears-giants-of-the-arctic-ice.html': '/wildlife/articles/polar-bears-giants-of-the-arctic-ice.html',
+  'polar-bears-giants-of-the-arctic-ice/index.html': '/wildlife/articles/polar-bears-giants-of-the-arctic-ice.html',
+  'wildlife/articles/discover-the-fascinating-world-of-tree-frogs.html': '/wildlife/articles/discover-the-fascinating-world-of-tree-frogs.html',
+  'discover-the-fascinating-world-of-tree-frogs/index.html': '/wildlife/articles/discover-the-fascinating-world-of-tree-frogs.html',
+  'wildlife/articles/unveiling-the-world-of-leopard-geckos-a-beginners-guide.html': '/wildlife/articles/unveiling-the-world-of-leopard-geckos-a-beginners-guide.html',
+  'unveiling-the-world-of-leopard-geckos-a-beginners-guide/index.html': '/wildlife/articles/unveiling-the-world-of-leopard-geckos-a-beginners-guide.html',
+  'wildlife/articles/salamanders-natures-fascinating-amphibians.html': '/wildlife/articles/salamanders-natures-fascinating-amphibians.html',
+  'salamanders-natures-fascinating-amphibians/index.html': '/wildlife/articles/salamanders-natures-fascinating-amphibians.html',
+  'wildlife/articles/discover-the-world-of-beetles-natures-ingenious-insects.html': '/wildlife/articles/discover-the-world-of-beetles-natures-ingenious-insects.html',
+  'discover-the-world-of-beetles-natures-ingenious-insects/index.html': '/wildlife/articles/discover-the-world-of-beetles-natures-ingenious-insects.html',
+  'wildlife/articles/chameleons-the-colorful-communicators-of-the-reptile-world.html': '/wildlife/articles/chameleons-the-colorful-communicators-of-the-reptile-world.html',
+  'chameleons-the-colorful-communicators-of-the-reptile-world/index.html': '/wildlife/articles/chameleons-the-colorful-communicators-of-the-reptile-world.html',
+  'wildlife/articles/unveiling-the-secrets-of-ulua-the-mighty-predators-of-the-ocean.html': '/wildlife/articles/unveiling-the-secrets-of-ulua-the-mighty-predators-of-the-ocean.html',
+  'unveiling-the-secrets-of-ulua-the-mighty-predators-of-the-ocean/index.html': '/wildlife/articles/unveiling-the-secrets-of-ulua-the-mighty-predators-of-the-ocean.html',
+  'wildlife/articles/axolotls-the-fascinating-underwater-marvels.html': '/wildlife/articles/axolotls-the-fascinating-underwater-marvels.html',
+  'axolotls-the-fascinating-underwater-marvels/index.html': '/wildlife/articles/axolotls-the-fascinating-underwater-marvels.html',
+  'wildlife/articles/bearded-dragons-the-ultimate-pet-lizard.html': '/wildlife/articles/bearded-dragons-the-ultimate-pet-lizard.html',
+  'bearded-dragons-the-ultimate-pet-lizard/index.html': '/wildlife/articles/bearded-dragons-the-ultimate-pet-lizard.html',
+  'wildlife/articles/capybaras-gentle-giants-of-the-waterways.html': '/wildlife/articles/capybaras-gentle-giants-of-the-waterways.html',
+  'capybaras-gentle-giants-of-the-waterways/index.html': '/wildlife/articles/capybaras-gentle-giants-of-the-waterways.html',
+  'wildlife/articles/african-forest-elephants-gentle-giants-of-the-forest.html': '/wildlife/articles/african-forest-elephants-gentle-giants-of-the-forest.html',
+  'african-forest-elephants-gentle-giants-of-the-forest/index.html': '/wildlife/articles/african-forest-elephants-gentle-giants-of-the-forest.html',
+  'wildlife/articles/unveiling-the-mystique-of-the-black-panther-natures-shadowy-marvel.html': '/wildlife/articles/unveiling-the-mystique-of-the-black-panther-natures-shadowy-marvel.html',
+  'unveiling-the-mystique-of-the-black-panther-natures-shadowy-marvel/index.html': '/wildlife/articles/unveiling-the-mystique-of-the-black-panther-natures-shadowy-marvel.html',
+  'wildlife/articles/the-clouded-leopard-a-mysterious-marvel-of-the-wild.html': '/wildlife/articles/the-clouded-leopard-a-mysterious-marvel-of-the-wild.html',
+  'the-clouded-leopard-a-mysterious-marvel-of-the-wild/index.html': '/wildlife/articles/the-clouded-leopard-a-mysterious-marvel-of-the-wild.html',
+  'wildlife/articles/the-southern-brazilian-ocelot-a-hidden-jewel-of-the-wild.html': '/wildlife/articles/the-southern-brazilian-ocelot-a-hidden-jewel-of-the-wild.html',
+  'the-southern-brazilian-ocelot-a-hidden-jewel-of-the-wild/index.html': '/wildlife/articles/the-southern-brazilian-ocelot-a-hidden-jewel-of-the-wild.html',
+  'wildlife/articles/the-enigmatic-white-lions-a-glimpse-into-their-world.html': '/wildlife/articles/the-enigmatic-white-lions-a-glimpse-into-their-world.html',
+  'the-enigmatic-white-lions-a-glimpse-into-their-world/index.html': '/wildlife/articles/the-enigmatic-white-lions-a-glimpse-into-their-world.html',
+  'wildlife/articles/the-truth-about-white-tigers-understanding-their-unique-existence.html': '/wildlife/articles/the-truth-about-white-tigers-understanding-their-unique-existence.html',
+  'the-truth-about-white-tigers-understanding-their-unique-existence/index.html': '/wildlife/articles/the-truth-about-white-tigers-understanding-their-unique-existence.html',
+  'wildlife/articles/discovering-the-marbled-cat-a-hidden-gem-of-the-forest.html': '/wildlife/articles/discovering-the-marbled-cat-a-hidden-gem-of-the-forest.html',
+  'discovering-the-marbled-cat-a-hidden-gem-of-the-forest/index.html': '/wildlife/articles/discovering-the-marbled-cat-a-hidden-gem-of-the-forest.html',
+  'wildlife/articles/exploring-the-world-of-the-brown-arctic-fox.html': '/wildlife/articles/exploring-the-world-of-the-brown-arctic-fox.html',
+  'exploring-the-world-of-the-brown-arctic-fox/index.html': '/wildlife/articles/exploring-the-world-of-the-brown-arctic-fox.html',
+  'wildlife/articles/grizzly-bears-the-mighty-wanderers-of-the-wild.html': '/wildlife/articles/grizzly-bears-the-mighty-wanderers-of-the-wild.html',
+  'grizzly-bears-the-mighty-wanderers-of-the-wild/index.html': '/wildlife/articles/grizzly-bears-the-mighty-wanderers-of-the-wild.html',
+  'wildlife/articles/discover-the-european-wildcat-a-mysterious-forest-dweller.html': '/wildlife/articles/discover-the-european-wildcat-a-mysterious-forest-dweller.html',
+  'discover-the-european-wildcat-a-mysterious-forest-dweller/index.html': '/wildlife/articles/discover-the-european-wildcat-a-mysterious-forest-dweller.html',
+  'wildlife/articles/meet-the-american-pine-marten-the-forests-furry-acrobat.html': '/wildlife/articles/meet-the-american-pine-marten-the-forests-furry-acrobat.html',
+  'meet-the-american-pine-marten-the-forests-furry-acrobat/index.html': '/wildlife/articles/meet-the-american-pine-marten-the-forests-furry-acrobat.html',
+  'wildlife/articles/snow-leopards-the-ghosts-of-the-mountains.html': '/wildlife/articles/snow-leopards-the-ghosts-of-the-mountains.html',
+  'snow-leopards-the-ghosts-of-the-mountains/index.html': '/wildlife/articles/snow-leopards-the-ghosts-of-the-mountains.html',
+  'wildlife/articles/discover-the-asian-small-clawed-otter-natures-playful-paddler.html': '/wildlife/articles/discover-the-asian-small-clawed-otter-natures-playful-paddler.html',
+  'discover-the-asian-small-clawed-otter-natures-playful-paddler/index.html': '/wildlife/articles/discover-the-asian-small-clawed-otter-natures-playful-paddler.html',
+  'wildlife/articles/kangaroos-the-hopping-marvels-of-australia.html': '/wildlife/articles/kangaroos-the-hopping-marvels-of-australia.html',
+  'kangaroos-the-hopping-marvels-of-australia/index.html': '/wildlife/articles/kangaroos-the-hopping-marvels-of-australia.html',
   'wildlife-production.html': '/wildlife-production.html',
   'labs.html': '/labs.html',
   'solutions.html': '/solutions.html',
@@ -160,8 +307,10 @@ test('every indexable or legacy HTML page includes its own navigation source', (
     } else {
       assert.match(html, /class="lp-site-header"/, file + ': full website navbar');
     }
-    assert.equal(html.includes('id="lp-app-strip"'), launchers.has(file),
-      file + ': launcher only on the four overview pages');
+    const showcase = file === 'wildlife/index.html' || file === 'links/index.html'
+      || file.startsWith('wildlife/articles/');
+    assert.equal(html.includes('id="lp-app-strip"'), launchers.has(file) || showcase,
+      file + ': only overviews and wildlife content include the static launcher');
   }
   assert.equal(fs.existsSync(path.join(root, 'assets/listpull-navigation.js')), false,
     'the navigation injection file is deleted');
@@ -183,8 +332,8 @@ test('Studio applications identify themselves as free limited versions in HTML a
       .replace(/<style\b[\s\S]*?<\/style>/gi, '')
       .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
     assert.match(visible, /free limited version/i, file + ': visible application label');
-    const schemas = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)]
-      .map(match => JSON.parse(match[1]));
+    const schemas = html.split('<script type="application/ld+json">').slice(1)
+      .map(part => JSON.parse(part.split('</script>')[0]));
     const nodes = schemas.flatMap(schema => schema['@graph'] || [schema]);
     const app = nodes.find(node => node['@type'] === 'SoftwareApplication');
     assert.ok(app, file + ': software application data');
@@ -358,6 +507,7 @@ test('wildlife production uses the original video, real stills, schema, and Blob
   const videoSchema = schema.find(node => node['@type'] === 'VideoObject');
   assert.ok(videoSchema, 'video structured data');
   assert.equal(videoSchema.contentUrl, site + '/' + video, 'video data refers to the real MP4');
+  assert.equal(videoSchema.uploadDate, '2026-11-19', 'first website publication date is recorded');
   assert.equal(videoSchema.thumbnailUrl[0], site + '/' + stills[1], 'thumbnail refers to the real video');
   const sampleScript = fs.readFileSync(path.join(root, 'assets/production-sample.js'), 'utf8');
   assert.ok(sampleScript.includes("'/assets/production/fox-cubs-editor-sample.mp4'"),
@@ -406,5 +556,37 @@ test('media and B2B pathways are directly linked and remain fully indexable', ()
       file + ': direct Media Production menu link');
     assert.ok(menu.includes('<a href="/engineering/projects.html">Selected Work</a>'),
       file + ': direct Selected Work menu link');
+  }
+});
+
+test('restored wildlife library and all 48 articles have complete real-source metadata and local imagery', () => {
+  const articleRoutes = primary.filter(url => url.startsWith('/wildlife/articles/'));
+  assert.equal(articleRoutes.length, 48, 'all published original articles are represented');
+  const directory = fs.readFileSync(path.join(root, 'wildlife/index.html'), 'utf8');
+  assert.equal((directory.match(/class="wildlife-story-card"/g) || []).length, 48, '48 static cards in the index');
+  assert.ok(directory.includes('href="/wildlife-production.html"'), 'media production is reachable');
+  assert.ok(directory.includes('href="/blobby.html"'), 'Blobby is directly accessible');
+  for (const route of articleRoutes) {
+    const html = fs.readFileSync(path.join(root, route.slice(1)), 'utf8');
+    const slug = route.split('/').at(-1).replace('.html', '');
+    assert.ok(html.includes('href="/blobby.html"'), route + ': Blobby promotion');
+    assert.ok(html.includes('class="production-promo"'), route + ': original production comparison');
+    assert.ok(html.includes('id="lp-app-strip"'), route + ': static 12-app strip');
+    assert.ok(html.includes('class="wildlife-article-body"'), route + ': article body');
+    const image = 'assets/wildlife/' + slug + '.svg';
+    assert.ok(fs.existsSync(path.join(root, image)), route + ': local art asset exists');
+    assert.ok(html.includes('src="/' + image + '"'), route + ': local art used');
+    const schemas = html.split('<script type="application/ld+json">').slice(1)
+      .map(part => JSON.parse(part.split('</script>')[0])).flatMap(data => data['@graph'] || [data]);
+    const article = schemas.find(node => node['@type'] === 'Article');
+    assert.ok(article, route + ': Article JSON-LD');
+    assert.match(article.datePublished, /^2024-\d{2}-\d{2}T/, route + ': original published date');
+    assert.match(article.dateModified, /^2024-\d{2}-\d{2}T/, route + ': original modified date');
+    assert.equal(article.mainEntityOfPage['@id'], site + route + '#webpage');
+    for (const video of schemas.filter(node => node['@type'] === 'VideoObject')) {
+      assert.ok(video.uploadDate, route + ': video uploadDate must be sourced');
+      assert.ok(video.thumbnailUrl?.length, route + ': video thumbnail required');
+      assert.ok(video.name && video.description, route + ': video name/description required');
+    }
   }
 });

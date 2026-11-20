@@ -13,7 +13,7 @@ test('public pages have one sticky site nav; only overview pages have an app str
  const overviewRoutes=new Set(['/','/studio.html','/engineering.html','/solutions.html']);
  const expected=['/studio.html','/studio/image-editor.html','/studio/video-editor.html',
   '/studio/ai.html#assistant','/studio/ai.html#code-editor','/studio/strategy.html',
-  '/studio/forecast.html','/blobby.html','/labs.html#wildlife','/',
+  '/studio/forecast.html','/blobby.html','/wildlife/','/',
   '/engineering.html','/labs.html'];
  for(const route of routes){
   await page.goto(route);
@@ -188,7 +188,7 @@ test('Labs is a product directory rather than a duplicate Studio hub',async({pag
  '/studio/ai.html#assistant','/studio/ai.html#code-editor',
  '/studio/strategy.html','/studio/forecast.html']);
  await expect(page.locator('#blobby')).toHaveAttribute('href','/blobby.html');
- await expect(page.locator('#wildlife')).toHaveAttribute('href','https://www.youtube.com/@listpull');
+ await expect(page.locator('#wildlife')).toHaveAttribute('href','/wildlife/');
  await expect(page.locator('.lp-labs-action').first()).toHaveAttribute('href','/studio.html');
  await page.locator('.lp-labs-app-card').first().click();
  await expect(page).toHaveURL(/\/studio\/image-editor\.html$/);
