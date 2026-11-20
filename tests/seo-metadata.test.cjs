@@ -307,8 +307,10 @@ test('every indexable or legacy HTML page includes its own navigation source', (
     } else {
       assert.match(html, /class="lp-site-header"/, file + ': full website navbar');
     }
-    assert.equal(html.includes('id="lp-app-strip"'), launchers.has(file),
-      file + ': launcher only on the four overview pages');
+    const showcase = file === 'wildlife/index.html' || file === 'links/index.html'
+      || file.startsWith('wildlife/articles/');
+    assert.equal(html.includes('id="lp-app-strip"'), launchers.has(file) || showcase,
+      file + ': only overviews and wildlife content include the static launcher');
   }
   assert.equal(fs.existsSync(path.join(root, 'assets/listpull-navigation.js')), false,
     'the navigation injection file is deleted');
