@@ -94,3 +94,11 @@ test('all wildlife pages use local WebP photos with source credits and valid inl
     }
   }
 });
+
+test('wildlife discovery cards on other pages link to ListPull rather than a social platform',async({page})=>{
+  await page.goto('/');
+  await expect(page.locator('.wildlife-card .wildlife-link').last()).toHaveAttribute('href','/wildlife/');
+  await page.goto('/labs.html');
+  await expect(page.locator('.lp-labs-actions a[href*="instagram.com"]')).toHaveCount(0);
+  await expect(page.locator('.lp-labs-actions a[href="/wildlife/"]')).toHaveCount(1);
+});

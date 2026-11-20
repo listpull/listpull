@@ -465,14 +465,22 @@ def update_contextual_links() -> int:
             # discovery calls-to-action to an owned, indexable landing page.
             if re.search(r"follow|subscribe|Instagram profile|YouTube channel", visible, re.I):
                 return tag
-            if not re.search(r"wildlife|animal|nature|reel", visible, re.I):
+            homepage_wildlife = (relative == "index.html" and 'class="wildlife-link"' in tag
+                                 and "youtube.com/@listpull" in href)
+            if not homepage_wildlife and not re.search(r"wildlife|animal|nature|reel", visible, re.I):
                 return tag
             updates += 1
             tag = tag.replace(url_match.group(0), 'href="/wildlife/"')
             tag = re.sub(r'\s+target="_blank"', "", tag)
             tag = re.sub(r'\s+rel="noopener noreferrer"', "", tag)
+            if homepage_wildlife:
+                tag = tag.replace("Watch on YouTube", "Explore wildlife stories")
             return tag
         new = re.sub(r'<a\b[^>]*>.*?</a>', change, old, flags=re.S | re.I)
+        if relative == "labs.html":
+            new = new.replace(
+                '<a class="lp-labs-action secondary" href="/wildlife/">Wildlife on Instagram ↗</a>', ''
+            )
         if new != old:
             path.write_text(new, encoding="utf-8")
     return updates
@@ -501,7 +509,7 @@ def update_tests() -> None:
         "  await expect(page.locator('.wildlife-social a[href*=\"instagram.com/reel/\"]')).toHaveCount(1);",
         "  await expect(page.locator('.wildlife-social a[href*=\"instagram.com/reel/\"]')).toHaveCount(1);"
     )
-    if "license attribution" not in text:
+    if "all wildlife pages use local WebP photos with source credits and valid inline citations" not in text:
         text += """
 test('all wildlife pages use local WebP photos with source credits and valid inline citations',async({page})=>{
   const fs=require('fs'),path=require('path');
