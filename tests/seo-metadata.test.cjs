@@ -507,6 +507,7 @@ test('wildlife production uses the original video, real stills, schema, and Blob
   const videoSchema = schema.find(node => node['@type'] === 'VideoObject');
   assert.ok(videoSchema, 'video structured data');
   assert.equal(videoSchema.contentUrl, site + '/' + video, 'video data refers to the real MP4');
+  assert.equal(videoSchema.uploadDate, '2026-11-19', 'first website publication date is recorded');
   assert.equal(videoSchema.thumbnailUrl[0], site + '/' + stills[1], 'thumbnail refers to the real video');
   const sampleScript = fs.readFileSync(path.join(root, 'assets/production-sample.js'), 'utf8');
   assert.ok(sampleScript.includes("'/assets/production/fox-cubs-editor-sample.mp4'"),
