@@ -221,7 +221,7 @@
     section { scroll-margin-top:90px; margin-bottom:54px; }
     h2 { margin:0 0 .8rem; font-size:clamp(1.7rem,3vw,2.4rem); letter-spacing:-.025em; }
     h3 { margin:0 0 .35rem; font-size:1.18rem; }
-    .intro { color:var(--muted); font-size:1.08rem; max-width:820px; }
+    .intro { color: #ffffff; font-size:1.08rem; max-width:820px; }
     .callout { background:linear-gradient(135deg,#fff5dc,#ffeedf); border:1px solid #f3c285; border-radius:var(--radius); padding:1.2rem 1.3rem; margin:1.2rem 0 1.45rem; }
     .callout strong { color:#75320e; }
     .mode-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:1.4rem; }
@@ -413,7 +413,9 @@
   }
 }
 
-
+    .lp-has-global-nav{
+    background: radial-gradient(circle at 80% 10%, rgba(84, 181, 255, .42), transparent 27%), radial-gradient(circle at 12% 42%, rgba(255, 154, 89, .31), transparent 24%), linear-gradient(130deg, #152136, #777f8c 57%, #0d234b00);
+}
     .details { background:#fff; border:1px solid var(--line); border-radius:14px; margin:.75rem 0; overflow:hidden; }
     summary { cursor:pointer; padding:1rem 1.05rem; font-weight:800; }
     details p { padding:0 1.05rem 1rem; margin:0; color:var(--muted); }
@@ -421,7 +423,6 @@
     .toc h2 { font-size:1.05rem; margin-bottom:.55rem; }
     .toc a { display:block; padding:.35rem 0; color:#526176; text-decoration:none; font-size:.91rem; }
     .toc a:hover { color:#a64d20; }
-    .meta { margin-top:1rem; font-size:.84rem; color:var(--muted); }
     footer { color:#dbe9ff; background:#091a37; padding:30px 0; }
     footer p { margin:.3rem 0; }
     @media (max-width:900px) { .hero-grid,.layout { grid-template-columns:1fr; } .hero-grid { padding-top:52px; } .quick-nav { grid-template-columns:repeat(2,1fr); } .toc { display:none; } }
@@ -723,7 +724,7 @@
           <h2>Animal Match Mode</h2>
           <p class="intro">The Animal Match board is the main game mode shown when Blobby’s Woodland Wonder opens. Animals appear on a 3D arrangement of glowing cube tiles, with nearby islands showing the surrounding habitat and upcoming activity.</p>
           <h3>Goal</h3>
-          <p>Create matches of three or more identical animals to remove them from the board, clear room for new moves, and progress through the level.</p>
+          <p class="intro">Create matches of three or more identical animals to remove them from the board, clear room for new moves, and progress through the level.</p>
           <div class="tips">
             <article class="tip"><h3>Build larger matches</h3><p>Before making the first available move, scan the board for an opportunity to connect four or more compatible animals.</p></article>
             <article class="tip"><h3>Protect open tiles</h3><p>Do not fill your only easy-access tiles with animals that cannot be matched soon. Keeping space open makes recovery easier.</p></article>
@@ -736,14 +737,14 @@
           <h2>Animal Sort Mode</h2>
           <p class="intro">Access Animal Sort from the second button in the main-screen bottom menu. The game takes place in a village barn and plays like a ball-sort puzzle, except each vertical stack is made from animal-themed segments.</p>
           <figure style="margin-top:1.2rem"><img src="assets/images/blobby/IMG_0162-14-11.webp" loading="lazy" alt="Animal Sort level 1 in a village barn"><figcaption>Animal Sort begins with a smaller number of mixed stacks and develops into more complex layouts.</figcaption></figure>
-          <h3>How to solve a board</h3>
+          <h3>How to beat a level</h3>
           <ol class="steps">
-            <li><strong>Identify the top segment.</strong> You can move only the exposed top segment from a stack.</li>
-            <li><strong>Move it to a legal destination.</strong> Use an empty stack or place it onto a compatible animal segment when permitted by the board.</li>
-            <li><strong>Complete a stack.</strong> Keep moving segments until every finished stack contains the parts of one animal only.</li>
+            <li><strong>Find the top animal part.</strong> You can only move top animal part from a stack.</li>
+            <li><strong>Move the top animal part to a stack from the same animal.</strong> Use an empty stack or place it onto a compatible animal body when permitted by the board.</li>
+            <li><strong>Complete a stack.</strong> Keep moving animal parts until every finished stack contains the parts of one animal only.</li>
           </ol>
-          <h3>Strategy for advanced levels</h3>
-          <p>As layouts become denser, treat one open stack as a buffer. Avoid filling every available stack immediately: an empty destination is often the difference between a solvable board and a dead end. On higher levels, work from the most constrained animals first and try to expose needed segments without burying them under unrelated pieces.</p>
+          <h2>Strategy for advanced levels</h2>
+          <p class="intro">As layouts become denser, treat one open stack as a buffer or has a temporary placeholder. Avoid filling every available stack immediately: an empty destination is often the difference between a solvable board and a dead end. On higher levels, work from the most constrained animals first and try to expose needed body without burying them under unrelated pieces.</p>
           <figure style="margin-top:1.2rem"><img src="assets/images/blobby/IMG_4909-7-12.webp" loading="lazy" alt="Advanced Animal Sort level 60 with many animal stacks"><figcaption>Level 60 demonstrates the larger number of stacks and animal types found in advanced Animal Sort play.</figcaption></figure>
         </section>
 
@@ -751,7 +752,7 @@
           <h2>Power-Ups and Board Tools</h2>
           <p class="intro">Tools are designed to recover from blocked layouts without removing the satisfaction of planning the puzzle yourself.</p>
           <h3>Remove Animal</h3>
-          <p>Tap the Remove Animal button, then select an animal on the board to clear it. This is most effective when the selected animal blocks a large match, occupies a critical tile, or has become isolated from compatible pieces.</p>
+          <p class="intro">Tap the Remove Animal button, then select an animal on the board to clear it. This is most effective when the selected animal blocks a large match, occupies a critical tile, or has become isolated from compatible pieces.</p>
           <div class="gallery" style="grid-template-columns:repeat(2,minmax(0,1fr))">
             <figure><img src="assets/images/blobby/IMG_0160-13-13.webp" loading="lazy" alt="Remove Animal tutorial highlighting an owl on the puzzle board"><figcaption>Select the Remove Animal tool, then choose the blocking animal.</figcaption></figure>
             <figure><img src="assets/images/blobby/IMG_0169-5.webp" loading="lazy" alt="Blobby puzzle world and village interface"><figcaption>Return to your puzzle world after clearing space and continue building matches.</figcaption></figure>
@@ -793,7 +794,6 @@
             </a> and for Android devices through <a href="https://play.google.com/store/apps/details?id=com.listpull.matchblock4" target="_blank" rel="noopener noreferrer" class="btn-store google" aria-label="Get Blobby's Woodland Wonder on Google Play">
             Google Play
             </a>.</p></details>
-          <p class="meta">Last updated: September 2026 · Published by ListPull · This guide is intended for players of Blobby’s Woodland Wonder.</p>
         </section>
       </article>
 
