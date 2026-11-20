@@ -32,7 +32,7 @@ test('wildlife article is readable, indexable, includes related video and the pr
   await expect(page.locator('.wildlife-social a[href*="youtube.com/watch"]')).toHaveCount(1);
   await expect(page.locator('.wildlife-game-cta a[href="/blobby.html"]')).toBeVisible();
   await expect(page.locator('.production-promo')).toHaveCount(1);
-  await expect(page.locator('#lp-app-strip .lp-app-tile')).toHaveCount(24);
+  await expect(page.locator('#lp-app-strip .lp-app-tile')).toHaveCount(12);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content',/index, follow/);
   const articleSchema=await page.locator('script[type="application/ld+json"]').textContent();
   const graph=JSON.parse(articleSchema)['@graph'];
