@@ -201,7 +201,8 @@ const canonicalByFile = {
 };
 function collectHtml(dir, prefix = '') {
   return fs.readdirSync(dir, {withFileTypes: true}).flatMap(entry => {
-    if (entry.name === 'node_modules' || entry.name === '.git') return [];
+    // Jekyll layouts are templates; _site is checked independently after building.
+    if (['node_modules', '.git', '_site', '_layouts'].includes(entry.name)) return [];
     const relative = prefix ? prefix + '/' + entry.name : entry.name;
     if (entry.isDirectory()) return collectHtml(path.join(dir, entry.name), relative);
     return entry.name.endsWith('.html') ? [relative] : [];

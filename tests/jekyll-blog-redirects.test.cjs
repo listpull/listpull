@@ -53,3 +53,31 @@ test('Jekyll build preserves important static site content', () => {
     assert.ok(fs.existsSync(path.join(output, filename)), filename + ' survives the Jekyll build');
   }
 });
+
+
+test('no published HTML page contains a noindex directive, including Jekyll-generated redirects', () => {
+  // Audit actual deployment output: source-only tests miss HTML created by plugins.
+  const htmlFiles = [];
+  function walk(directory) {
+    for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
+      const filename = path.join(directory, item.name);
+      if (item.isDirectory()) walk(filename);
+      else if (item.isFile() && item.name.toLowerCase().endsWith('.html')) htmlFiles.push(filename);
+    }
+  }
+  walk(output);
+  assert.ok(htmlFiles.length >= 48 + 48, 'build includes wildlife articles and their new redirects');
+  for (const filename of htmlFiles) {
+    const route = path.relative(output, filename);
+    const html = fs.readFileSync(filename, 'utf8');
+    assert.doesNotMatch(html, /\bnoindex\b/i, route + ': no blocking indexing directive');
+  }
+  for (const slug of slugs) {
+    const page = path.join(output, 'blogs/blog', slug, 'index.html');
+    const rendered = fs.readFileSync(page, 'utf8');
+    assert.match(rendered, /<meta\s+name=["']robots["']\s+content=["']index,\s*follow/i,
+      slug + ': generated redirect explicitly permits indexing');
+    assert.ok(rendered.includes('rel="canonical" href="https://listpull.com/' + slug + '"'),
+      slug + ': redirect canonical matches the requested root page');
+  }
+});

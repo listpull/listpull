@@ -6,6 +6,7 @@ on:
     paths:
       - '_config.yml'
       - 'blogs/blog/**'
+      - '_layouts/**'
       - '.github/workflows/static.yml'
       - '.github/workflows/verify-jekyll-redirects.yml'
       - 'tests/jekyll-blog-redirects.test.cjs'
@@ -29,5 +30,5 @@ jobs:
         with:
           source: ./
           destination: ./_site
-      - name: Verify redirect outputs and preserved wildlife pages
-        run: node --test tests/jekyll-blog-redirects.test.cjs
+      - name: Verify every generated HTML file permits indexing and all redirects work
+        run: node --test tests/seo-metadata.test.cjs tests/jekyll-blog-redirects.test.cjs
