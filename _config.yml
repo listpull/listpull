@@ -1,0 +1,15 @@
+# ListPull is published at the domain root through GitHub Pages.
+# The redirect plugin emits client-side redirects; GitHub Pages cannot set custom HTTP 301s.
+title: ListPull
+url: "https://listpull.com"
+baseurl: ""
+plugins:
+  - jekyll-redirect-from
+include:
+  - .well-known
+exclude:
+  - .github
+  - scripts
+  - tests
+redirect_from:
+  json: false

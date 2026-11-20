@@ -1,0 +1,33 @@
+name: Verify wildlife Jekyll redirects
+on:
+  push:
+    branches: [feature/jekyll-wildlife-blog-redirects]
+  pull_request:
+    paths:
+      - '_config.yml'
+      - 'blogs/blog/**'
+      - '.github/workflows/static.yml'
+      - '.github/workflows/verify-jekyll-redirects.yml'
+      - 'tests/jekyll-blog-redirects.test.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  jekyll-redirects:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build Jekyll with jekyll-redirect-from
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Verify redirect outputs and preserved wildlife pages
+        run: node --test tests/jekyll-blog-redirects.test.cjs
