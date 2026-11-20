@@ -357,7 +357,11 @@ def update_article(path: Path, credit: dict) -> int:
         lambda m: social_aside(m.group()), result, count=1, flags=re.S
     )
     if not count:
-        raise ValueError(f"Missing social aside in {path}")
+        # Some imported posts never contained related social media. Give these a
+        # first-party archive link instead of inventing a third-party embed.
+        result, inserted = re.subn(r'</article>', social_aside('') + '</article>', result, count=1)
+        if not inserted:
+            raise ValueError(f"Missing article closing tag in {path}")
     if "Wildlife illustration created for this ListPull article." in result:
         raise ValueError(f"Literal placeholder text survived in {path}")
     path.write_text(result, encoding="utf-8")
