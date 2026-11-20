@@ -429,7 +429,7 @@
         }
     }
     @media (max-width: 900px) {
-        .tutorial-grid, {
+        .tutorial-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -440,7 +440,14 @@
     .button-secondary { color:#fff; border:1px solid rgba(255,255,255,.42); background:rgba(255,255,255,.08); }
        .eyebrow { display:inline-flex; padding:.35rem .72rem; border:1px solid rgba(255,255,255,.28); border-radius:999px; background:rgba(255,255,255,.12); color:#fff1d4; font-size:.79rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
     .wiki-title { line-height:1.16; font-size:clamp(2.45rem,5.8vw,4.8rem); margin:.8rem 0 1rem; letter-spacing:-.045em; }
-    
+    figure {
+     margin: 0;
+     overflow: hidden;
+     background: #fff;
+     border: 1px solid var(--line);
+     border-radius: 18px;
+     box-shadow: 0 8px 24px rgba(10, 33, 73, .07);
+ }
    @media (max-width: 620px) {
        figure img {
            height: auto;
