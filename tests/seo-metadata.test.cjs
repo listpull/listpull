@@ -573,9 +573,11 @@ test('restored wildlife library and all 48 articles have complete real-source me
     assert.ok(html.includes('class="production-promo"'), route + ': original production comparison');
     assert.ok(html.includes('id="lp-app-strip"'), route + ': static 12-app strip');
     assert.ok(html.includes('class="wildlife-article-body"'), route + ': article body');
-    const image = 'assets/wildlife/' + slug + '.svg';
-    assert.ok(fs.existsSync(path.join(root, image)), route + ': local art asset exists');
-    assert.ok(html.includes('src="/' + image + '"'), route + ': local art used');
+    const image = 'assets/wildlife/photos/' + slug + '.webp';
+    assert.ok(fs.existsSync(path.join(root, image)), route + ': local WebP photograph exists');
+    assert.equal(fs.readFileSync(path.join(root, image)).subarray(0, 4).toString('ascii'), 'RIFF', route + ': real raster image');
+    assert.ok(html.includes('src="/' + image + '"'), route + ': local WebP photograph used');
+    assert.ok(html.includes('class="wildlife-photo-credit"'), route + ': photographer attribution');
     const schemas = html.split('<script type="application/ld+json">').slice(1)
       .map(part => JSON.parse(part.split('</script>')[0])).flatMap(data => data['@graph'] || [data]);
     const article = schemas.find(node => node['@type'] === 'Article');
