@@ -417,7 +417,11 @@
        .tutorial p { max-width:650px; margin:0; color:#e6f0ff; font-size:1.12rem; }
     .tutorial-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1.65rem; }
        .tutorial-image { margin:0; filter:drop-shadow(0 28px 32px rgba(0,0,0,.28)); }
-    .tutorial-image img { width:100%; max-height:445px; object-fit:cover; object-position:center; border-radius:30px; border:5px solid rgba(255,255,255,.24); display:block; }v
+    .tutorial-image img { width:100%; max-height:445px; object-fit:cover; object-position:center; border-radius:30px; border:5px solid rgba(255,255,255,.24); display:block; }
+       .button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:.7rem 1.05rem; border-radius:999px; text-decoration:none; font-weight:850; transition:transform .18s ease,box-shadow .18s ease; }
+    .button:hover { transform:translateY(-2px); }
+    .button-primary { background:linear-gradient(135deg,#ffd56e,#ee7e39); color:#35200f; box-shadow:0 8px 24px rgba(0,0,0,.22); }
+    .button-secondary { color:#fff; border:1px solid rgba(255,255,255,.42); background:rgba(255,255,255,.08); }
     @keyframes pulse {
       0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
       100% { transform: translate(-50%, -50%) scale(1.18); opacity: 0.95; }
@@ -999,7 +1003,7 @@
         </div>
       </div>
       <figure class="tutorial-image">
-        <img src="assets/images/blobby/IMG_0159-12-8.webp" fetchpriority="high" alt="Blobby’s Woodland Wonder main animal puzzle board with floating forest islands">
+        <img src="/assets/images/blobby/IMG_0159-12-8.webp" fetchpriority="high" alt="Blobby’s Woodland Wonder main animal puzzle board with floating forest islands">
       </figure>
     </div>
   </section>
