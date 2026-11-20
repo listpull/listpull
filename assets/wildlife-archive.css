@@ -44,3 +44,13 @@
 @media(max-width:780px){.wildlife-directory-hero{grid-template-columns:1fr}.wildlife-directory-hero>img{max-height:300px}.wildlife-directory-title{align-items:start;flex-direction:column}.wildlife-game-cta{grid-template-columns:1fr}.wildlife-game-cta img{max-width:330px}.wildlife-masonry{columns:2 185px}}
 @media(max-width:520px){.wildlife-directory-hero,.wildlife-directory-section,.wildlife-directory-closer,.wildlife-article-main,.wildlife-links-page{padding:25px 13px}.wildlife-directory-hero h1{font-size:2.75rem}.wildlife-masonry{columns:2 135px;column-gap:10px}.wildlife-story-card{margin-bottom:10px}.wildlife-story-body{padding:12px;gap:6px}.wildlife-story-body strong{font-size:.96rem}.wildlife-story-body span{font-size:.76rem}.wildlife-links-page h1{font-size:2.85rem}}
 @media(prefers-reduced-motion:reduce){.wildlife-story-card{transition:none}}
+
+.wildlife-filter-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.wildlife-filters{display:flex;flex-wrap:wrap;gap:9px}
+.wildlife-filters button{border:1px solid #465575;border-radius:100px;color:#d3e6f7;background:transparent;padding:9px 13px;font-size:.82rem;cursor:pointer}
+.wildlife-filters button[aria-pressed=true]{background:#425174;border-color:#9f92d0;color:white}
+.wildlife-search-label{display:flex;align-items:center;gap:10px;font-size:.82rem;color:#bacde1}
+.wildlife-search-label input{min-width:175px;background:#141e31;color:#fff;border:1px solid #51627e;border-radius:100px;padding:9px 14px}
+.wildlife-search-label input:focus-visible,.wildlife-filters button:focus-visible{outline:3px solid #8df4d0;outline-offset:2px}
+.wildlife-story-card[hidden]{display:none!important}
+.wildlife-results-count{color:#a6bcd4;font-size:.82rem;margin:0 0 15px}
