@@ -577,8 +577,8 @@ test('restored wildlife library and all 48 articles have complete real-source me
       .map(match => JSON.parse(match[1])).flatMap(data => data['@graph'] || [data]);
     const article = schemas.find(node => node['@type'] === 'Article');
     assert.ok(article, route + ': Article JSON-LD');
-    assert.match(article.datePublished, /^2024-\\d{2}-\\d{2}T/, route + ': original published date');
-    assert.match(article.dateModified, /^2024-\\d{2}-\\d{2}T/, route + ': original modified date');
+    assert.match(article.datePublished, /^2024-\d{2}-\d{2}T/, route + ': original published date');
+    assert.match(article.dateModified, /^2024-\d{2}-\d{2}T/, route + ': original modified date');
     assert.equal(article.mainEntityOfPage['@id'], site + route + '#webpage');
     for (const video of schemas.filter(node => node['@type'] === 'VideoObject')) {
       assert.ok(video.uploadDate, route + ': video uploadDate must be sourced');
