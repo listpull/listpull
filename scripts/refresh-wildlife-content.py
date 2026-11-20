@@ -385,17 +385,18 @@ def update_directory() -> None:
         'alt="Two fox cubs in the finished ListPull wildlife film">'
         '<strong>See our wildlife production ↗</strong></a></div>'
     )
-    text, n = re.subn(
-        r'(<section class="wildlife-directory-hero">.*?)<img src="/wildlife\.webp"[^>]*>(</section>)',
-        lambda m: m.group(1) + hero + m.group(2),
-        text, count=1, flags=re.S
-    )
-    if n != 1:
-        raise ValueError("Unable to replace original Wildlife hero image")
+    if 'class="wildlife-hero-art"' not in text:
+        text, n = re.subn(
+            r'(<section class="wildlife-directory-hero">.*?)<img src="/wildlife\.webp"[^>]*>(</section>)',
+            lambda m: m.group(1) + hero + m.group(2),
+            text, count=1, flags=re.S
+        )
+        if n != 1:
+            raise ValueError("Unable to replace original Wildlife hero image")
     for slug in MANIFEST:
         old = "/assets/wildlife/" + slug + ".svg"
         new = "/assets/wildlife/photos/" + slug + ".webp"
-        if old not in text:
+        if old not in text and new not in text:
             raise ValueError(f"Missing wildlife card for {slug}")
         text = text.replace(old, new)
     text = text.replace('alt="Illustration: ', 'alt="Wildlife photograph: ')
@@ -525,6 +526,25 @@ test('all wildlife pages use local WebP photos with source credits and valid inl
 });
 """
     path.write_text(text, encoding="utf-8")
+    seo_path = ROOT / "tests" / "seo-metadata.test.cjs"
+    seo = seo_path.read_text(encoding="utf-8")
+    old_asset = "const image = 'assets/wildlife/' + slug + '.svg';"
+    new_asset = "const image = 'assets/wildlife/photos/' + slug + '.webp';"
+    if old_asset in seo:
+        seo = seo.replace(old_asset, new_asset)
+        seo = seo.replace("local art asset exists", "local WebP photograph exists")
+        seo = seo.replace("local art used", "local WebP photograph used")
+        seo = seo.replace(
+            "assert.ok(fs.existsSync(path.join(root, image)), route + ': local WebP photograph exists');",
+            "assert.ok(fs.existsSync(path.join(root, image)), route + ': local WebP photograph exists');\n"
+            "    assert.equal(fs.readFileSync(path.join(root, image)).subarray(0, 4).toString('ascii'), 'RIFF', route + ': real raster image');"
+        )
+        seo = seo.replace(
+            "assert.ok(html.includes('src=\"/' + image + '\"'), route + ': local WebP photograph used');",
+            "assert.ok(html.includes('src=\"/' + image + '\"'), route + ': local WebP photograph used');\n"
+            "    assert.ok(html.includes('class=\"wildlife-photo-credit\"'), route + ': photographer attribution');"
+        )
+        seo_path.write_text(seo, encoding="utf-8")
 
 
 def main() -> None:
