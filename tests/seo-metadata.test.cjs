@@ -330,8 +330,8 @@ test('Studio applications identify themselves as free limited versions in HTML a
       .replace(/<style\b[\s\S]*?<\/style>/gi, '')
       .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
     assert.match(visible, /free limited version/i, file + ': visible application label');
-    const schemas = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)]
-      .map(match => JSON.parse(match[1]));
+    const schemas = html.split('<script type="application/ld+json">').slice(1)
+      .map(part => JSON.parse(part.split('</script>')[0])).flatMap(data => data['@graph'] || [data]);
     const nodes = schemas.flatMap(schema => schema['@graph'] || [schema]);
     const app = nodes.find(node => node['@type'] === 'SoftwareApplication');
     assert.ok(app, file + ': software application data');
