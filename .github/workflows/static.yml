@@ -32,8 +32,8 @@ jobs:
         with:
           source: ./
           destination: ./_site
-      - name: Verify all generated blog redirects
-        run: node --test tests/jekyll-blog-redirects.test.cjs
+      - name: Verify all published HTML permits indexing, and all blog redirects work
+        run: node --test tests/seo-metadata.test.cjs tests/jekyll-blog-redirects.test.cjs
       - name: Upload Jekyll output
         uses: actions/upload-pages-artifact@v3
         with:

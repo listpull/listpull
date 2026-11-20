@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redirecting to ListPull</title>
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta http-equiv="refresh" content="0; url={{ page.redirect.to | escape }}">
+  <link rel="canonical" href="{{ page.redirect.to | escape }}">
+  <script>
+    window.location.replace({{ page.redirect.to | jsonify }});
+  </script>
+</head>
+<body>
+  <main>
+    <h1>Redirecting to ListPull</h1>
+    <p>You're being redirected to the requested page.
+      <a href="{{ page.redirect.to | escape }}">Continue to ListPull</a>.
+    </p>
+  </main>
+</body>
+</html>
