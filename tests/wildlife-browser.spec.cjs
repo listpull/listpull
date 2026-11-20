@@ -6,6 +6,9 @@ test.setTimeout(90000);
 test('wildlife directory has 48 real HTML article cards and responsive filters',async({page})=>{
   await page.goto('/wildlife/');
   await expect(page.locator('h1')).toContainText('Nature has');
+  await expect(page.locator('.wildlife-hero-art img')).toHaveCount(3);
+  await expect(page.locator('.wildlife-hero-production')).toHaveAttribute('href','/wildlife-production.html');
+  await expect(page.locator('.wildlife-story-card img[src$=".webp"]')).toHaveCount(48);
   await expect(page.locator('.wildlife-story-card')).toHaveCount(48);
   await expect(page.locator('#wildlife-results-count')).toHaveText('48 stories');
   await expect(page.locator('.wildlife-story-card:visible')).toHaveCount(48);
@@ -26,8 +29,11 @@ test('wildlife directory has 48 real HTML article cards and responsive filters',
 test('wildlife article is readable, indexable, includes related video and the production comparison',async({page})=>{
   await page.goto('/wildlife/articles/sea-turtles-navigators-of-the-oceans-mysteries.html');
   await expect(page.locator('h1')).toContainText('Sea Turtles');
-  await expect(page.locator('.wildlife-feature img')).toHaveAttribute('src',/\/assets\/wildlife\/sea-turtles.*\.svg/);
+  await expect(page.locator('.wildlife-feature img')).toHaveAttribute('src',/\/assets\/wildlife\/photos\/sea-turtles.*\.webp/);
   await expect(page.locator('.wildlife-article-body')).toContainText('sea turtles');
+  await expect(page.locator('.wildlife-social iframe')).toHaveCount(2);
+  await expect(page.locator('.wildlife-feature img')).toHaveAttribute('width','1200');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content',/sea-turtles.*\.webp/);
   await expect(page.locator('.wildlife-social a[href*="instagram.com/reel/"]')).toHaveCount(1);
   await expect(page.locator('.wildlife-social a[href*="youtube.com/watch"]')).toHaveCount(1);
   await expect(page.locator('.wildlife-game-cta a[href="/blobby.html"]')).toBeVisible();
@@ -65,4 +71,34 @@ test('visitor link page has tracked destinations without redirecting to social p
     expect(url).toContain('utm_medium=bio');
     expect(url.startsWith('/')).toBe(true);
   }
+});
+
+test('all wildlife pages use local WebP photos with source credits and valid inline citations',async({page})=>{
+  const fs=require('fs'),path=require('path');
+  const root=path.resolve(__dirname,'..');
+  const articles=fs.readdirSync(path.join(root,'wildlife/articles')).filter(f=>f.endsWith('.html'));
+  expect(articles).toHaveLength(48);
+  for(const file of articles){
+    const source=fs.readFileSync(path.join(root,'wildlife/articles',file),'utf8');
+    const slug=file.replace(/\.html$/,'');
+    const raster=path.join(root,'assets','wildlife','photos',slug+'.webp');
+    expect(fs.existsSync(raster),slug).toBe(true);
+    expect(fs.readFileSync(raster).subarray(0,4).toString('ascii')).toBe('RIFF');
+    expect(source).toContain('/assets/wildlife/photos/'+slug+'.webp');
+    expect(source).not.toContain('Wildlife illustration created for this ListPull article.');
+    expect(source).not.toMatch(/\[caption[^\]]*\]/);
+    expect(source).toContain('wildlife-photo-credit');
+    expect(source).toContain('og:image');
+    for(const match of source.matchAll(/href="#wildlife-ref-(\d+)"/g)){
+      expect(source).toContain('id="wildlife-ref-'+match[1]+'"');
+    }
+  }
+});
+
+test('wildlife discovery cards on other pages link to ListPull rather than a social platform',async({page})=>{
+  await page.goto('/');
+  await expect(page.locator('.wildlife-card .wildlife-link').last()).toHaveAttribute('href','/wildlife/');
+  await page.goto('/labs.html');
+  await expect(page.locator('.lp-labs-actions a[href*="instagram.com"]')).toHaveCount(0);
+  await expect(page.locator('.lp-labs-actions a[href="/wildlife/"]')).toHaveCount(1);
 });

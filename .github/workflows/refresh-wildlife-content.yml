@@ -1,0 +1,32 @@
+name: Build wildlife photographs and repair archive
+on:
+  push:
+    branches:
+      - fix/wildlife-photo-citations-embeds
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  rebuild-wildlife:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install photo processing and HTML helpers
+        run: python -m pip install pillow beautifulsoup4
+      - name: Retrieve properly attributed photographs, convert to WebP, repair article HTML
+        run: python scripts/refresh-wildlife-content.py
+      - name: Validate static SEO markup
+        run: node --test tests/seo-metadata.test.cjs
+      - name: Commit generated site assets and article markup
+        run: |
+          git add -A
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Build 48 wildlife WebP photos, embed media, fix citations and archive hero"
+            git push
+          fi
