@@ -393,25 +393,21 @@
       animation: pulse 4s ease-in-out infinite alternate;
     }
     .tutorial { 
-          color:#fff;   
-          background: 
-          radial-gradient(circle at 80% 10%, rgba(84,181,255,.42), transparent 27%),
-          radial-gradient(circle at 12% 42%, rgba(255,154,89,.31), transparent 24%),
-          linear-gradient(130deg, #07162f, #16396a 57%, #0d234b);
-          -webkit-mask-image: linear-gradient(
-            to bottom, 
-            transparent 0%, 
-            black 15%, 
-            black 85%, 
-            transparent 100%
-          );
-          mask-image: linear-gradient(
-            to bottom, 
-            transparent 0%, 
-            black 15%, 
-            black 85%, 
-            transparent 100%
-          ); 
+         background: 
+           radial-gradient(circle at 80% 10%, rgba(84, 181, 255, 0.42), transparent 27%),
+           radial-gradient(circle at 12% 42%, rgba(255, 154, 89, 0.31), transparent 24%),
+           linear-gradient(130deg, #07162f, #16396a 57%, #0d234b);
+       
+         /* Fades top/bottom (15% fade zone) and left/right (15% fade zone) */
+         -webkit-mask-image: 
+           linear-gradient(to bottom, transparent, black 15%, black 85%, transparent),
+           linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+         -webkit-mask-composite: source-in;
+         
+         mask-image: 
+           linear-gradient(to bottom, transparent, black 15%, black 85%, transparent),
+           linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+         mask-composite: intersect;
         }
     .tutorial-grid { min-height:500px; padding:72px 0 52px; display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:42px; }
        .tutorial p { max-width:650px; margin:0; color:#e6f0ff; font-size:1.12rem; }
